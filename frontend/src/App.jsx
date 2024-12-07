@@ -4,6 +4,7 @@ import Navbar from './components/Navbar'
 import CreatePage from './pages/CreatePage'
 import HomePage from './pages/HomePage'
 import { Route, Routes } from 'react-router-dom'
+import BlogCard from './components/BlogCard'
 
 function App() {
 
