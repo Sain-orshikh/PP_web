@@ -9,7 +9,9 @@ function BlogCard() {
             <h2 className="text-xl font-bold">Welcome to my blog</h2>
             <p>Sample from the blog</p>
             <Button>
-                <Link to={'/create'}>Read More</Link>
+                <Link to={'/create'} className="text-black hover:text-gray-500">
+                  Read More
+                </Link>
             </Button>
         </Box>
       </>

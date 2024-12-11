@@ -23,16 +23,21 @@ function Navbar() {
         </Box>
         <Box className="mr-5">
           <Button>
-            <Link to={'/'}>
+            <Link to={'/'} className="text-sky-500 hover:text-black">
               Home
             </Link>
           </Button>
           <Button>
-            <Link to={'/create'}>
+            <Link to={'/create'} className="text-emerald-500 hover:text-black">{/* text-amber-500 */}
               Create
             </Link>
           </Button>
           <Button>
+            <Link to={'/create'} className='text-amber-500 hover:text-black'>
+              About
+            </Link>
+          </Button>
+          <Button className=''>
             <Link to={'/sign_in'}>
               <FaUserCircle className='' fontSize={'20'}/>
             </Link>

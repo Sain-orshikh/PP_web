@@ -1,7 +1,7 @@
 import { useState } from 'react'
-import { ButtonGroup, Button, Box, Input, Table, TableRow, Typography, TableHead, TableBody } from '@mui/material'
+import { ButtonGroup, Button, Box, Input, Table, TableRow, Typography, TableHead, TableBody, TableFooter } from '@mui/material'
 import { CiSearch } from "react-icons/ci";
-import BGpic from "../assets/BGpic.png"
+import BGpic from "../assets/background.avif"
 import BlogCard from '../components/BlogCard';
 function HomePage() {
 
@@ -19,7 +19,7 @@ function HomePage() {
                   <h1 className="text-white text-4xl font-bold">Welcome to My Website</h1>
                 </div>*/}
                 <div className='w-[75rem] h-[10rem] rounded bg-blue-500 bg-cover bg-center' style={{ backgroundImage: `url(${BGpic})` }}>
-                  <h1 className='text-black text-4xl font-bold'>READ OUR BLOG</h1>
+                  <h1 className='text-black text-5xl font-bold mt-20 ml-40'>READ OUR BLOG</h1>
                 </div>
               </div>
             </TableRow>
@@ -32,13 +32,14 @@ function HomePage() {
                     Weekly Articles with insight into the weekend's message
                   </Typography>
                 </div>
-                <div className="my-auto">
-                  <Input
-                    placeholder='Search for blogs'
-                  />
-                  <Button>
+                <div className="my-auto bg-white border">
+                  <Button className=''>
                     <CiSearch/>
                   </Button>
+                  <Input
+                    placeholder='Search for blogs'
+                    className='w-[70%]'
+                  />
                   {/*<img
                     alt="search"
                     onClick={() => searchMovies(searchTerm)}
@@ -62,9 +63,22 @@ function HomePage() {
               <BlogCard/>
             </div>
           </TableRow>
+          <TableRow>
+            <div className='flex justify-evenly '>
+              <ButtonGroup>
+                <Button sx={{ borderColor: "black", ":hover": { borderColor: "gray" } }}><text className='text-black'>Previous</text></Button>
+                <Button sx={{ borderColor: "black", ":hover": { borderColor: "gray" } }}><text className='text-black'>1</text></Button>
+                <Button sx={{ borderColor: "black", ":hover": { borderColor: "gray" } }}><text className='text-black'>2</text></Button>
+                <Button sx={{ borderColor: "black", ":hover": { borderColor: "gray" } }}><text className='text-black'>3</text></Button>
+                <Button sx={{ borderColor: "black", ":hover": { borderColor: "gray" } }}><text className='text-black'>...</text></Button>
+                <Button sx={{ borderColor: "black", ":hover": { borderColor: "gray" } }}><text className='text-black'>Next</text></Button>
+              </ButtonGroup>
+            </div>
+          </TableRow>
         </TableBody>
         </Table>
       </Box>
+      {/*<div className='flex flex-row h-[5rem] w-full bg-white'></div>*/}
     </>
   )
 }
