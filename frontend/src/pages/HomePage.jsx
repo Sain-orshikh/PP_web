@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { ButtonGroup, Button, Box, Input, Table, TableRow, Typography, TableHead, TableBody, TableFooter } from '@mui/material'
 import { CiSearch } from "react-icons/ci";
-import BGpic from "../assets/background.avif"
+import BGpic from "../assets/starry night.jpg"
 import BlogCard from '../components/BlogCard';
 function HomePage() {
 
@@ -19,7 +19,7 @@ function HomePage() {
                   <h1 className="text-white text-4xl font-bold">Welcome to My Website</h1>
                 </div>*/}
                 <div className='w-[75rem] h-[10rem] rounded bg-blue-500 bg-cover bg-center' style={{ backgroundImage: `url(${BGpic})` }}>
-                  <h1 className='text-black text-5xl font-bold mt-20 ml-40'>READ OUR BLOG</h1>
+                  <h1 className='text-white text-5xl font-bold mt-20 ml-40'>Read Our Blog</h1>
                 </div>
               </div>
             </TableRow>
@@ -57,21 +57,35 @@ function HomePage() {
             </div>
           </TableRow>
           <TableRow>
-            <div className='flex flex-row justify-evenly w-[80%] mx-auto mt-10'>
+            <div className='flex flex-row justify-evenly w-[90%] mx-auto mt-10'>
               <BlogCard/>
               <BlogCard/>
               <BlogCard/>
             </div>
           </TableRow>
           <TableRow>
-            <div className='flex justify-evenly '>
+            <div className='flex flex-row justify-evenly w-[90%] mx-auto mt-10'>
+              <BlogCard/>
+              <BlogCard/>
+              <BlogCard/>
+            </div>
+          </TableRow>
+          <TableRow>
+            <div className='flex flex-row justify-evenly w-[90%] mx-auto mt-10'>
+              <BlogCard/>
+              <BlogCard/>
+              <BlogCard/>
+            </div>
+          </TableRow>
+          <TableRow>
+            <div className='flex justify-evenly mt-10'>
               <ButtonGroup>
-                <Button sx={{ borderColor: "black", ":hover": { borderColor: "gray" } }}><text className='text-black'>Previous</text></Button>
+                <Button sx={{ borderColor: "black", ":hover": { borderColor: "gray" } }}><text className='text-black'>&lt; Previous</text></Button>
                 <Button sx={{ borderColor: "black", ":hover": { borderColor: "gray" } }}><text className='text-black'>1</text></Button>
                 <Button sx={{ borderColor: "black", ":hover": { borderColor: "gray" } }}><text className='text-black'>2</text></Button>
                 <Button sx={{ borderColor: "black", ":hover": { borderColor: "gray" } }}><text className='text-black'>3</text></Button>
                 <Button sx={{ borderColor: "black", ":hover": { borderColor: "gray" } }}><text className='text-black'>...</text></Button>
-                <Button sx={{ borderColor: "black", ":hover": { borderColor: "gray" } }}><text className='text-black'>Next</text></Button>
+                <Button sx={{ borderColor: "black", ":hover": { borderColor: "gray" } }}><text className='text-black'>Next &gt;</text></Button>
               </ButtonGroup>
             </div>
           </TableRow>
