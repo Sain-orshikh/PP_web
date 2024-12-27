@@ -5,18 +5,17 @@ import { CgAddR } from "react-icons/cg";
 import { TiAdjustBrightness, TiWeatherSunny } from "react-icons/ti";
 import { FaUserCircle } from "react-icons/fa";
 import { CiSearch } from "react-icons/ci";
+import pp_logo from "../assets/pp-logo.png"
 //import IsSmallScreen from '../modes/isSmallScreen'
 
 function Navbar() {
 
   return (
     <>
-      <div className="flex justify-between items-center w-full bg-white p-1 shadow-md z-10">
-        <Box className="">
+      <div className="flex justify-between items-center w-full bg-white p-1 shadow-md z-10 ">
+        <Box className="flex justify-between items-center">
           {/*<img>Passion project logo has to go here</img>*/}
-          <text>
-            Logo
-          </text>
+          <img src={pp_logo} className=""/>
           <text className='text-xl text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500 font-bold ml-5'>
             Passion Project MAIS
           </text>
@@ -28,12 +27,17 @@ function Navbar() {
             </Link>
           </Button>
           <Button>
+            <Link to={'/blog'} className="text-indigo-500 hover:text-black">
+              Blog
+            </Link>
+          </Button>
+          <Button>
             <Link to={'/create'} className="text-emerald-500 hover:text-black">{/* text-amber-500 */}
               Create
             </Link>
           </Button>
           <Button>
-            <Link to={'/create'} className='text-amber-500 hover:text-black'>
+            <Link to={'/about'} className='text-amber-500 hover:text-black'>
               About
             </Link>
           </Button>
