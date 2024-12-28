@@ -8,6 +8,8 @@ import BlogCard from './components/BlogCard'
 import SignInPage from './pages/SignInPage'
 import BlogPage from './pages/BlogPage'
 import AboutPage from './pages/AboutPage'
+import CreateBlogPage from './pages/CreateBlogPage'
+import CreateProjectPage from './pages/CreateProjectPage'
 
 function App() {
 
@@ -23,6 +25,8 @@ function App() {
           <Route path='/sign_in' element={ <SignInPage/>}/>
           <Route path='/blog' element={ <BlogPage/>}/>
           <Route path='/about' element={ <AboutPage/>}/>
+          <Route path='/create/project' element={ <CreateProjectPage/>}/>
+          <Route path='/create/blog' element={ <CreateBlogPage/>}/>
         </Routes> 
       </Box>
     </>

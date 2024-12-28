@@ -71,13 +71,6 @@ function BlogPage() {
             </div>
           </TableRow>
           <TableRow>
-            <div className='flex flex-row justify-evenly w-[90%] mx-auto mt-10'>
-              <BlogCard/>
-              <BlogCard/>
-              <BlogCard/>
-            </div>
-          </TableRow>
-          <TableRow>
             <div className='flex justify-evenly mt-10'>
               <ButtonGroup>
                 <Button sx={{ borderColor: "black", ":hover": { borderColor: "gray" } }}><text className='text-black'>&lt; Previous</text></Button>

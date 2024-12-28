@@ -4,9 +4,8 @@ function AboutPage() {
 
     return (
       <>
-        <div className="w-full">This is about us</div>
+        <div className="w-full">Create project page</div>
         <div>Waiting for further information from the directors</div>
-        <img src={pp_logo}></img>
       </>
     )
   }

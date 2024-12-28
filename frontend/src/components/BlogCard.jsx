@@ -7,7 +7,9 @@ function BlogCard() {
       <>
         <Box className="w-[20rem]">
           {/*<img src="" className="max-w-full h-[5rem] bg-blue-500"></img>*/}
-          <div className="w-full h-[5rem] bg-blue-500"></div>
+          <div className="w-full h-[10rem] bg-blue-500">
+            <img src={BCpic} className="w-full h-full"/>
+          </div>
           <div className="w-[90%] mx-auto">  
             <h6 className="">March 15, 2024</h6>
             <h2 className="text-2xl font-bold">Welcome to</h2>
