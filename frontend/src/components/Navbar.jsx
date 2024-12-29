@@ -20,8 +20,8 @@ function Navbar() {
             Passion Project MAIS
           </text>
         </Box>
-        <Box className="mr-5">
-          <Button>
+        <Box className="flex mr-10 space-x-4">
+          <Button className=''>
             <Link to={'/'} className="text-sky-500 hover:text-black">
               Home
             </Link>
@@ -39,11 +39,6 @@ function Navbar() {
           <Button>
             <Link to={'/about'} className='text-amber-500 hover:text-black'>
               About
-            </Link>
-          </Button>
-          <Button className=''>
-            <Link to={'/sign_in'}>
-              <FaUserCircle className='' fontSize={'20'}/>
             </Link>
           </Button>
         </Box>
