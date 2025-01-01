@@ -4,7 +4,7 @@ import { CiSearch } from "react-icons/ci";
 import BGpic from "../assets/starry night.jpg"
 import BlogCard from '../components/BlogCard';
 function BlogPage() {
-
+  const [searchTerm, setsearchTerm] = useState('');
   return (
     <>
       <Box className="flex flex-col sm:flex-row justify-between w-full min-h-screen bg-gray-100 p-3">
@@ -37,6 +37,8 @@ function BlogPage() {
                     <CiSearch/>
                   </Button>
                   <Input
+                    value={searchTerm}
+                    onChange={(e) => setsearchTerm(e.target.value)}
                     placeholder='Search for blogs'
                     className='w-[70%]'
                   />

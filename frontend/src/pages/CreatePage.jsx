@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { ButtonGroup, Button, Box } from '@mui/material'
 import { Link } from 'react-router-dom'
 import blog_bg from "../assets/blogbg.jpg"
-import project_bg from "../assets/projectbg.jpg"
+import project_bg from "../assets/orangeproject_bg.png"
 
 function CreatePage() {
 
