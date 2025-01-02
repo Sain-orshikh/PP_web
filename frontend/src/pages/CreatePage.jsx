@@ -41,7 +41,7 @@ function CreatePage() {
             <h2 className="text-white text-5xl font-bold mb-4">Create Blog</h2>
             <p className="text-gray-200 text-xl max-w-md mx-auto mb-4">Share your thoughts and stories</p>
             <Button>
-              <Link to="/create/project" className="bg-white text-black px-4 py-2 font-semibold transition-all duration-300 hover:bg-gray-100 rounded normal-case">
+              <Link to="/create/blog" className="bg-white text-black px-4 py-2 font-semibold transition-all duration-300 hover:bg-gray-100 rounded normal-case">
                 Start Writing 🖋
               </Link>
             </Button>
