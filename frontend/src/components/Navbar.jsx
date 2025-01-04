@@ -5,6 +5,7 @@ import { CgAddR } from "react-icons/cg";
 import { TiAdjustBrightness, TiWeatherSunny } from "react-icons/ti";
 import { FaUserCircle } from "react-icons/fa";
 import { CiSearch } from "react-icons/ci";
+import { VscSignIn } from "react-icons/vsc";
 import pp_logo from "../assets/pp-logo.png"
 //import IsSmallScreen from '../modes/isSmallScreen'
 
@@ -39,6 +40,11 @@ function Navbar() {
           <Button>
             <Link to={'/about'} className='text-amber-500 hover:text-black'>
               About
+            </Link>
+          </Button>
+          <Button>
+            <Link to={'/signin'} className='text-black hover:text-blue-500'>
+              <VscSignIn fontSize={30}/>
             </Link>
           </Button>
         </Box>

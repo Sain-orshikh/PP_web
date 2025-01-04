@@ -83,9 +83,7 @@ function AboutPage() {
               <div className='flex items-center mt-1 mb-5 w-full h-[7.5rem] border border-dashed border-gray-400 rounded'>
                 <div className='mx-auto'>
                   <div className='flex justify-center items-center'>
-                    <button>
-                      <MdCloudUpload fontSize={50}/>
-                    </button>
+                    <MdCloudUpload fontSize={50}/>
                   </div>
                   <div>
                     <label htmlFor="file-upload" className='cursor-pointer font-medium'>
