@@ -1,4 +1,4 @@
-import Blog from "./models/product.js";
+import Blog from "../models/blog.model.js";
 import mongoose from "mongoose";
 
 export const getBlog = async (req,res) => {

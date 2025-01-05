@@ -1,7 +1,7 @@
 import express from "express";
-import { createBlog, deleteBlog, getBlog, updatedBlog } from "../controller/product.controller.js";
+import { createBlog, deleteBlog, getBlog, updatedBlog } from "../controller/blog.controller.js";
 
-const router = express.Router;
+const router = express.Router();
 
 router.get("/", getBlog);
 router.post("/", createBlog);
