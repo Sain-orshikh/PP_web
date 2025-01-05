@@ -1,15 +1,19 @@
 import mongoose from "mongoose";
 
-const productSchema = new mongoose.Schema({
-    name: {
+const blogSchema = new mongoose.Schema({
+    title: {
         type: String,
         required: true
     },
-    price: {
-        type: Number,
+    prompt: {
+        type: String,
         required: true
     },
-    Image: {
+    content: {
+        type: String,
+        required: true
+    },
+    image: {
         type: String,
         required: true
     }
@@ -18,6 +22,6 @@ const productSchema = new mongoose.Schema({
 }
 )
 
-const Product = mongoose.model('Product', productSchema);
+const Blog = mongoose.model('Blog', blogSchema);
 
-export default Product;
+export default Blog;

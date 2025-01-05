@@ -4,22 +4,25 @@ import { FaSave, FaEye, FaRegPaperPlane } from "react-icons/fa";
 import { IoLinkSharp } from "react-icons/io5";
 import { BiNotepad } from "react-icons/bi";
 import { MdCloudUpload } from "react-icons/md";
+import { useBlogStore } from '../store/blog';
 
 function AboutPage() {
 
-    const [file,setFile] = useState(null);
-    const [fileUrl, setfileUrl] = useState(null);
-    const handleFileChange = (event) => {
-      const uploadedFile = event.target.files[0];
-      if(uploadedFile) {
-        setFile(uploadedFile);
-        setfileUrl(URL.createObjectURL(uploadedFile));
-      }
+    const [newBlog, setnewBlog] = useState({
+      title: "",
+      prompt: "",
+      content: "",
+      image: "",
+    });
+
+    const { createBlog } = useBlogStore();
+
+    const handlePublishBlog = async() => {
+      const {success, message} = await createBlog(newBlog);
+      console.log("Success:",success);
+      console.log("Message:",message);
     };
 
-    const [blogTitle, setblogTitle] = useState('');
-    const [promptText, setpromptText] = useState('');
-    const [contentText, setcontentText] = useState('');
     return (
       <>
         <div className="flex flex-col bg-gray-100 w-full h-full ">
@@ -33,8 +36,8 @@ function AboutPage() {
               </div>
               <div className="mt-1">
                 <input
-                  value={blogTitle}
-                  onChange={(e) => setblogTitle(e.target.value)}
+                  value={newBlog.title}
+                  onChange={(e) => setnewBlog({ ...newBlog, title: e.target.value})}
                   placeholder=" Enter your blog title"
                   className="w-full h-8 pb-1 border rounded"
                 />
@@ -44,8 +47,8 @@ function AboutPage() {
               </div>
               <div className="mt-1">
                 <textarea
-                  value={promptText}
-                  onChange={(e) => setpromptText(e.target.value)}
+                  value={newBlog.prompt}
+                  onChange={(e) => setnewBlog({ ...newBlog, prompt: e.target.value})}
                   placeholder=" Enter your blog prompt"
                   className="w-full h-20 text-left border rounded"
                 />
@@ -70,8 +73,8 @@ function AboutPage() {
                     </button>
                   </div>
                   <textarea
-                    value={contentText}
-                    onChange={(e) => setcontentText(e.target.value)}
+                    value={newBlog.content}
+                    onChange={(e) => setnewBlog({ ...newBlog, content: e.target.value})}
                     placeholder=" Write your blog content here..."
                     className="w-full h-60 text-left border-b border-l border-r rounded rounded-t-none focus:outline-none"
                   />
@@ -80,7 +83,15 @@ function AboutPage() {
               <div className='mt-3'>
                 Featured Image
               </div>
-              <div className='flex items-center mt-1 mb-5 w-full h-[7.5rem] border border-dashed border-gray-400 rounded'>
+              <div className='mt-1 mb-5'>
+                <input
+                  value={newBlog.image}
+                  onChange={(e) => setnewBlog({ ...newBlog, image: e.target.value})}
+                  placeholder=" Enter url of the featured image"
+                  className="w-full h-8 pb-1 border rounded"
+                />
+              </div>
+              {/*<div className='flex items-center mt-1 mb-5 w-full h-[7.5rem] border border-dashed border-gray-400 rounded'>
                 <div className='mx-auto'>
                   <div className='flex justify-center items-center'>
                     <MdCloudUpload fontSize={50}/>
@@ -100,7 +111,7 @@ function AboutPage() {
                     <text className='text-gray-500 mx-auto'>PNG, JPG, GIF up to 10MB</text>
                   </div>
                 </div>
-              </div>
+              </div>*/}
             </div>
           </div>
           <div className='flex flox-row items-center justify-between w-full h-[3rem] bg-white border-t'>
@@ -119,7 +130,7 @@ function AboutPage() {
               </div>
             </div>
             <div className='text-white bg-black rounded mr-5'>
-              <Button>
+              <Button onClick={handlePublishBlog}>
                 <span className='text-white'><FaRegPaperPlane/></span>
                 <span className='text-white capitalize ml-1'>Publish</span>
               </Button>
