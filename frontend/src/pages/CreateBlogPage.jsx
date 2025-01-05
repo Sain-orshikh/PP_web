@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import { Button } from '@mui/material';
+import { Alert, Button, Snackbar } from '@mui/material';
 import { FaSave, FaEye, FaRegPaperPlane } from "react-icons/fa";
 import { IoLinkSharp } from "react-icons/io5";
 import { BiNotepad } from "react-icons/bi";
 import { MdCloudUpload } from "react-icons/md";
 import { useBlogStore } from '../store/blog';
+import ErrorAlert from '../components/ErrorAlert';
 
 function AboutPage() {
 
@@ -17,10 +18,25 @@ function AboutPage() {
 
     const { createBlog } = useBlogStore();
 
+    const [open, setOpen] = useState(false);
+    const [severityType, setseverityType] = useState("");
+    const [alertMessage, setalertMessage] = useState("");
+
     const handlePublishBlog = async() => {
       const {success, message} = await createBlog(newBlog);
       console.log("Success:",success);
       console.log("Message:",message);
+      if (success === false) {
+        setOpen(true);
+        setseverityType("error");
+        setalertMessage("Please fill in all fields!");
+      }
+      else {
+        setOpen(true);
+        setseverityType("success");
+        setalertMessage("Published a blog with success!");
+      }
+
       setnewBlog({ title: "", prompt: "", content: "", image: "",});
     };
 
@@ -138,6 +154,16 @@ function AboutPage() {
             </div>
           </div>
         </div>
+        <Snackbar
+        open={open}
+        autoHideDuration={5000} 
+        onClose={() => {setOpen(false)}}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert onClose={() => {setOpen(false)}} variant="filled" severity={severityType}>
+          {alertMessage}
+        </Alert>
+      </Snackbar>
       </>
     )
   }
