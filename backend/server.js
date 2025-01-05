@@ -15,7 +15,7 @@ app.use("/api/blogs", blogRoutes);
 
 app.listen(5000, () => {
     connectDB();
-    console.log("Server started at http://localhost:"+ PORT);
+    //console.log("Server started at http://localhost:"+ PORT);
 });
 
 //bjI5A945rV0ZU65A

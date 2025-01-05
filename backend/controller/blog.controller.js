@@ -55,7 +55,7 @@ export const deleteBlog = async (req,res) =>{
     }
     
     try {
-        Blog.findByIdAndDelete(id);
+        await Blog.findByIdAndDelete(id);
         res.status(200).json({success: true, message: "Product deleted"});
     } catch (error){
         console.log("Error in deleting product", error.message);

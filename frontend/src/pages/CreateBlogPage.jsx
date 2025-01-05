@@ -21,6 +21,7 @@ function AboutPage() {
       const {success, message} = await createBlog(newBlog);
       console.log("Success:",success);
       console.log("Message:",message);
+      setnewBlog({ title: "", prompt: "", content: "", image: "",});
     };
 
     return (
@@ -87,7 +88,7 @@ function AboutPage() {
                 <input
                   value={newBlog.image}
                   onChange={(e) => setnewBlog({ ...newBlog, image: e.target.value})}
-                  placeholder=" Enter url of the featured image"
+                  placeholder=" Enter url of the image"
                   className="w-full h-8 pb-1 border rounded"
                 />
               </div>

@@ -12,10 +12,10 @@ export const useBlogStore = create((set) => ({
             headers:{
                 "Content-Type":"application/json",
             },
-            body:JSON.stringify(newBlog),
+            body: JSON.stringify(newBlog),
         });
         const data = await res.json();
-        set((state) => ({blogs:[...state.blogs, data.data]}));
+        set((state) => ({ blogs: [...state.blogs, data.data] }));
         return {success: true, message: "Blog created successfully"};
     },
 }));
