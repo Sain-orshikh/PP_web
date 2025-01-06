@@ -131,7 +131,7 @@ function AboutPage() {
               </div>*/}
             </div>
           </div>
-          <div className='flex flox-row items-center justify-between w-full h-[3rem] bg-white border-t'>
+          <div className='flex flex-row items-center justify-between w-full h-[3rem] bg-white border-t'>
             <div className='flex flex-row ml-5 space-x-4'>
               <div className='border rounded'>
                 <Button>
