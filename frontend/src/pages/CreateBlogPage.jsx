@@ -132,25 +132,19 @@ function AboutPage() {
             </div>
           </div>
           <div className='flex flex-row items-center justify-between w-full h-[3rem] bg-white border-t'>
-            <div className='flex flex-row ml-5 space-x-4'>
-              <div className='border rounded'>
-                <Button>
-                  <span className='text-black'><FaSave/></span>
-                  <span className='text-black capitalize ml-1'> Save Draft</span>
-                </Button>
-              </div>
-              <div className='border rounded'>
+            <div className='flex flex-row ml-auto'>
+              <div className='border rounded mr-5 bg-gray-100'>
                 <Button>
                   <span className='text-black'><FaEye/></span>
                   <span className="text-black capitalize ml-1">Preview</span>
                 </Button>
               </div>
-            </div>
-            <div className='text-white bg-black rounded mr-5'>
-              <Button onClick={handlePublishBlog}>
-                <span className='text-white'><FaRegPaperPlane/></span>
-                <span className='text-white capitalize ml-1'>Publish</span>
-              </Button>
+              <div className='text-white bg-black rounded mr-10'>
+                <Button onClick={handlePublishBlog}>
+                  <span className='text-white'><FaRegPaperPlane/></span>
+                  <span className='text-white capitalize ml-1'>Publish</span>
+                </Button>
+              </div>
             </div>
           </div>
         </div>

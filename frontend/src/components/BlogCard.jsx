@@ -23,24 +23,25 @@ function BlogCard({blog}) {
       const { success, message } = await updateBlog(bid, updatedBlog)
       setmodalOpen(false)
     };
+
+    const [viewBlogModal, setviewBlogModal] = useState(false);
+
     return (
       <>
           <Box className="w-[18rem] min-h-[15rem] rounded border border-gray-500 transition-transform transform hover:-translate-y-1.5">
           {/*<img src="" className="max-w-full h-[5rem] bg-blue-500"></img>*/}
-            <button className="w-full">
-              <Link to={"/create"}>
-                <div className="w-full h-[13rem] border-b border-gray-500">
-                  <img
-                    src={blog.image}
-                    alt="Blog image"
-                    className="w-full h-full"
-                    onError={(e) => {
-                      e.target.onerror = null; // Prevent infinite loop if fallback fails
-                      e.target.src = "https://images.unsplash.com/photo-1488998427799-e3362cec87c3?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NTZ8fGRlZmF1bHQlMjBibG9nfGVufDB8fDB8fHww"; // Fallback image URL
-                    }}
-                  />
-                </div>
-              </Link>
+            <button onClick={() => {setviewBlogModal(true)}} className="w-full h-[13rem] border-b border-gray-500">
+              <div className="w-full h-[13rem] border-b border-gray-500">
+                <img
+                  src={blog.image}
+                  alt="Blog image"
+                  className="w-full h-full"
+                  onError={(e) => {
+                    e.target.onerror = null; // Prevent infinite loop if fallback fails
+                    e.target.src = "https://images.unsplash.com/photo-1488998427799-e3362cec87c3?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NTZ8fGRlZmF1bHQlMjBibG9nfGVufDB8fDB8fHww"; // Fallback image URL
+                  }}
+                />
+              </div>
             </button>
           <div className="flex flex-row">
             <div><button onClick={() => {setmodalOpen(true)}} className="ml-2"><FaRegEdit fontSize={20}/></button></div>  
@@ -124,6 +125,15 @@ function BlogCard({blog}) {
               </div>
             </div>
           </div>
+        </Modal>
+        <Modal
+          open={viewBlogModal}
+          onClose={() => {setviewBlogModal(false)}}
+        >
+          <div className="w-[50%] h-[25%] mx-auto bg-white">
+            Title: {blog.title}
+          </div>
+
         </Modal>
       </>
     )
