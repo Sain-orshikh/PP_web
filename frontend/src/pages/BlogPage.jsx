@@ -1,9 +1,15 @@
-import { useState } from 'react'
-import { ButtonGroup, Button, Box, Input, Table, TableRow, Typography, TableHead, TableBody, TableFooter } from '@mui/material'
+import { useEffect, useState } from 'react'
+import { ButtonGroup, Button, Box, Input, Table, TableRow, Typography, TableHead, TableBody, TableFooter, Grid, Grid2 } from '@mui/material'
 import { CiSearch } from "react-icons/ci";
 import BGpic from "../assets/starry night.jpg"
 import BlogCard from '../components/BlogCard';
+import { useBlogStore } from '../store/blog';
 function BlogPage() {
+  const { fetchBlogs, blogs} = useBlogStore();
+  useEffect(() => {
+    fetchBlogs();
+  }, [fetchBlogs]);
+  console.log("blogs", blogs);
   const [searchTerm, setsearchTerm] = useState('');
   return (
     <>
@@ -18,7 +24,7 @@ function BlogPage() {
                 >
                   <h1 className="text-white text-4xl font-bold">Welcome to My Website</h1>
                 </div>*/}
-                <div className='w-[75rem] h-[10rem] rounded bg-blue-500 bg-cover bg-center' style={{ backgroundImage: `url(${BGpic})` }}>
+                <div className='w-[90%] h-[10rem] rounded bg-blue-500 bg-cover bg-center' style={{ backgroundImage: `url(${BGpic})` }}>
                   <h1 className='text-white text-5xl font-bold mt-20 ml-40'>Read Our Blog</h1>
                 </div>
               </div>
@@ -39,7 +45,7 @@ function BlogPage() {
                   <Input
                     value={searchTerm}
                     onChange={(e) => setsearchTerm(e.target.value)}
-                    placeholder='Search for blogs'
+                    placeholder='May Remove'
                     className='w-[70%]'
                   />
                   {/*<img
@@ -60,16 +66,18 @@ function BlogPage() {
           </TableRow>
           <TableRow>
             <div className='flex flex-row justify-evenly w-[90%] mx-auto mt-10'>
-              <BlogCard/>
-              <BlogCard/>
-              <BlogCard/>
-            </div>
-          </TableRow>
-          <TableRow>
-            <div className='flex flex-row justify-evenly w-[90%] mx-auto mt-10'>
-              <BlogCard/>
-              <BlogCard/>
-              <BlogCard/>
+              <Grid2 container spacing={2} columns={12} minHeight={290}>
+                {blogs.map((blog) => (
+                <Grid2 
+                  xs={12} // 1 column on extra-small screens
+                  sm={4}  // 2 columns on small screens and up
+                  key={blog._id}
+                >
+                  <BlogCard blog={blog} />
+                </Grid2>
+                ))}
+              </Grid2>
+              
             </div>
           </TableRow>
           <TableRow>

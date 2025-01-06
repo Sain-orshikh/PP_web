@@ -18,4 +18,33 @@ export const useBlogStore = create((set) => ({
         set((state) => ({ blogs: [...state.blogs, data.data] }));
         return {success: true, message: "Blog created successfully"};
     },
+    fetchBlogs: async () => {
+        const res = await fetch("/api/blogs");
+        const data = await res.json();
+        set ({blogs: data.data});
+    },
+    deleteBlog: async (bid) => {
+        const res = await fetch(`/api/blogs/${bid}`, {method: "DELETE",});
+        const data = await res.json();
+        if(!data.success) return {success: false, message: data.message};
+
+        set(state => ({ blogs: state.blogs.filter(blog => blog._id !==bid) }));
+        return {success: true, message: data.message};
+    },
+    updateBlog: async (pid, updatedBlog) => {
+		const res = await fetch(`/api/blogs/${pid}`, {
+			method: "PUT",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(updatedBlog),
+		});
+		const data = await res.json();
+		if (!data.success) return { success: false, message: data.message };
+		set((state) => ({
+			blogs: state.blogs.map((blog) => (blog._id === pid ? data.data : blog)),
+		}));
+
+		return { success: true, message: data.message };
+	},
 }));
