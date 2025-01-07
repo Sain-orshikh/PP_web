@@ -59,17 +59,6 @@ function AboutPage() {
                   className="w-full h-8 pb-1 border rounded"
                 />
               </div>
-              <div className="mt-3">
-                Promt
-              </div>
-              <div className="mt-1">
-                <textarea
-                  value={newBlog.prompt}
-                  onChange={(e) => setnewBlog({ ...newBlog, prompt: e.target.value})}
-                  placeholder=" Enter your blog prompt"
-                  className="w-full h-20 text-left border rounded"
-                />
-              </div>
               <div>
                 <div className='mt-3'>
                   Content

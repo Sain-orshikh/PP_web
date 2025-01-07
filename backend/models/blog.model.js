@@ -5,10 +5,6 @@ const blogSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    prompt: {
-        type: String,
-        required: true
-    },
     content: {
         type: String,
         required: true

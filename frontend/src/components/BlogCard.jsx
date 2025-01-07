@@ -73,14 +73,6 @@ function BlogCard({blog}) {
                 className="w-full h-8 pb-1 mt-1 border rounded"
               />
             </div>
-            <div className="mt-1 mx-1">
-              <textarea
-                value={updatedBlog.prompt}
-                onChange={(e) => setupdatedBlog({ ...updatedBlog, prompt: e.target.value})}
-                placeholder=" Enter new blog prompt"
-                className="w-full h-20 text-left border rounded"
-              />
-            </div>
             <div className='focus-within:border-blue-600 focus-within:ring-2 focus-within:ring-blue-600 rounded mx-1 mt-1'>
               <div className='flex items-center w-full bg-gray-100 rounded rounded-b-none border '>
                 <button className='ml-2 w-[1rem] font-greek text-gray-700 hover:text-black'>
@@ -144,17 +136,16 @@ function BlogCard({blog}) {
       onClose={() => {setviewBlogModal(false)}}
       className="overflow-y-auto" 
     >
-      <div className="relative w-[80%] min-h-[80%] mx-auto my-10 bg-white shadow-lg rounded-lg">
-        <div
-          className="relative h-64 bg-cover bg-center"
-          style={{
-            backgroundImage: `url(${backgroundImage})`,
-            backgroundSize: 'contain',
-            backgroundRepeat: "no-repeat",
-            backgroundPosition: "center",
-            
-          }}
-        >
+      <div className="relative w-[70%] min-h-[80%] mx-auto my-10 bg-white shadow-lg rounded-lg">
+        <div className="relative h-80 bg-cover bg-center">
+          <img 
+            src={blog.image}
+            className="w-full h-full"
+            onError={(e) => {
+              e.target.onerror = null; // Prevent infinite loop if fallback fails
+              e.target.src = fallbackImage; // Fallback image URL
+            }}
+          />
           <div className="absolute inset-0 bg-gradient-to-b from-black/60 to-black/30"></div>
           <button
             className="absolute top-4 right-4 text-white hover:text-gray-300"

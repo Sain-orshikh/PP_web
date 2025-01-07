@@ -4,7 +4,7 @@ export const useBlogStore = create((set) => ({
     blogs: [],
     setBlogs: (blogs) => set({ blogs }),
     createBlog: async (newBlog) => {
-        if (!newBlog.title || !newBlog.prompt || !newBlog.content || !newBlog.image) {
+        if (!newBlog.title || !newBlog.content || !newBlog.image) {
             return {success: false, message: "Please fill in all fields."};
         }
         const res = await fetch("/api/blogs", {
