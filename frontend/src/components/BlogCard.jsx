@@ -2,7 +2,7 @@ import { Button, Box, Alert, Snackbar, Modal } from "@mui/material"
 import { Link } from "react-router-dom"
 import { FaRegEdit } from "react-icons/fa";
 import { useBlogStore } from "../store/blog";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { IoLinkSharp } from "react-icons/io5";
 import { BiNotepad } from "react-icons/bi";
 function BlogCard({blog}) {
@@ -25,27 +25,40 @@ function BlogCard({blog}) {
     };
 
     const [viewBlogModal, setviewBlogModal] = useState(false);
+    const [backgroundImage, setBackgroundImage] = useState(blog.image);
+    const fallbackImage = "https://images.unsplash.com/photo-1488998427799-e3362cec87c3?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NTZ8fGRlZmF1bHQlMjBibG9nfGVufDB8fDB8fHww"; // Fallback image URL
+  
+    const checkImage = (url) => {
+      const img = new Image();
+      img.onload = () => setBackgroundImage(url); 
+      img.onerror = () => setBackgroundImage(fallbackImage); 
+      img.src = url;
+    };
+  
+    useEffect(() => {
+      checkImage(blog.image); 
+    }, [blog.image]);
 
     return (
       <>
-          <Box className="w-[18rem] min-h-[15rem] rounded border border-gray-500 transition-transform transform hover:-translate-y-1.5">
+          <Box className="w-[22rem] min-h-[14rem] rounded border border-gray-500 transition-transform transform hover:-translate-y-1.5">
           {/*<img src="" className="max-w-full h-[5rem] bg-blue-500"></img>*/}
-            <button onClick={() => {setviewBlogModal(true)}} className="w-full h-[13rem] border-b border-gray-500">
-              <div className="w-full h-[13rem] border-b border-gray-500">
+            <button onClick={() => {setviewBlogModal(true)}} className="w-full h-[12rem] border-b border-gray-500">
+              <div className="w-full h-[12rem] border-b border-gray-500">
                 <img
                   src={blog.image}
                   alt="Blog image"
                   className="w-full h-full"
                   onError={(e) => {
                     e.target.onerror = null; // Prevent infinite loop if fallback fails
-                    e.target.src = "https://images.unsplash.com/photo-1488998427799-e3362cec87c3?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NTZ8fGRlZmF1bHQlMjBibG9nfGVufDB8fDB8fHww"; // Fallback image URL
+                    e.target.src = fallbackImage; // Fallback image URL
                   }}
                 />
               </div>
             </button>
           <div className="flex flex-row">
             <div><button onClick={() => {setmodalOpen(true)}} className="ml-2"><FaRegEdit fontSize={20}/></button></div>  
-            <div><h6 className="mx-1 mb-1">{blog.title}</h6 ></div>
+            <div className=""><h6 className="mx-1 mb-1">{blog.title}</h6></div>
           </div>
         </Box>
         <Modal
@@ -127,14 +140,40 @@ function BlogCard({blog}) {
           </div>
         </Modal>
         <Modal
-          open={viewBlogModal}
-          onClose={() => {setviewBlogModal(false)}}
+      open={viewBlogModal}
+      onClose={() => {setviewBlogModal(false)}}
+      className="overflow-y-auto" 
+    >
+      <div className="relative w-[80%] min-h-[80%] mx-auto my-10 bg-white shadow-lg rounded-lg">
+        <div
+          className="relative h-64 bg-cover bg-center"
+          style={{
+            backgroundImage: `url(${backgroundImage})`,
+            backgroundSize: 'contain',
+            backgroundRepeat: "no-repeat",
+            backgroundPosition: "center",
+            
+          }}
         >
-          <div className="w-[50%] h-[25%] mx-auto bg-white">
-            Title: {blog.title}
+          <div className="absolute inset-0 bg-gradient-to-b from-black/60 to-black/30"></div>
+          <button
+            className="absolute top-4 right-4 text-white hover:text-gray-300"
+            onClick={() => {setviewBlogModal(false)}}
+          >
+            <i className="fas fa-times text-2xl"></i>
+          </button>
+          <div className="absolute bottom-0 left-0 right-0 p-6 break-words whitespace-normal">
+            <h2 className="text-4xl font-bold text-white">{blog.title}</h2>
           </div>
+        </div>
 
-        </Modal>
+        <div className="p-8">
+          <div className="break-words whitespace-normal">
+            <p className="text-lg leading-relaxed mb-6">{blog.content}</p>
+          </div>
+        </div>
+      </div>
+    </Modal>
       </>
     )
   }

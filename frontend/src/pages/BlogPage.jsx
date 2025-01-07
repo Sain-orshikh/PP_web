@@ -65,18 +65,19 @@ function BlogPage() {
             </div>
           </TableRow>
           <TableRow>
-            <div className='flex flex-row justify-evenly w-[90%] mx-auto mt-10'>
-              <Grid2 container spacing={2} columns={12} minHeight={290}>
+            <div className='flex flex-row justify-evenly space-around w-[90%] mx-auto mt-10'>
+              <div className=''><Grid2 container spacing={2} columns={12} minHeight={290} >
                 {blogs.map((blog) => (
                 <Grid2 
                   xs={12} // 1 column on extra-small screens
                   sm={4}  // 2 columns on small screens and up
                   key={blog._id}
+                  className="mx-auto"
                 >
                   <BlogCard blog={blog} />
                 </Grid2>
                 ))}
-              </Grid2>
+              </Grid2></div>
               
             </div>
           </TableRow>
