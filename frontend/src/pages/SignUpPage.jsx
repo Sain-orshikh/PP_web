@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useUserStore } from "../store/user";
 import { Button, Snackbar, Alert } from "@mui/material";
 import { FaGoogle, FaFacebookF, FaApple, FaLock } from "react-icons/fa";
 import { IoMdMail } from "react-icons/io";
@@ -6,6 +7,22 @@ import { MdAccountCircle } from "react-icons/md";
 import { Link } from "react-router-dom";
 
 function SignUpPage() {
+
+  const [newUser, setnewUser] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
+
+  const { createUser } = useUserStore();
+
+  const handleSignUp = async() => {
+    const {success, message} = await createUser(newUser);
+    console.log("Success:", success);
+    console.log("Message:",message);
+    setnewUser({name: "", email: "", password: "",});
+  };
+
 
   return (
     <>
@@ -24,6 +41,8 @@ function SignUpPage() {
                 <IoMdMail fontSize={20}/>
               </div>
               <input
+                value={newUser.email}
+                onChange={(e) => setnewUser({...newUser, email: e.target.value})}
                 placeholder=" Enter your email"
                 className="w-full h-[2.5rem] border-t border-b border-r border-gray-300 focus:outline-none"
               />
@@ -38,6 +57,8 @@ function SignUpPage() {
                 <MdAccountCircle fontSize={25}/>
               </div>
               <input
+                value={newUser.name}
+                onChange={(e) => setnewUser({...newUser, name: e.target.value})}
                 placeholder=" Choose a username"
                 className="w-full h-[2.5rem] border-t border-b border-r border-gray-300 focus:outline-none"
               />
@@ -52,27 +73,15 @@ function SignUpPage() {
                 <FaLock fontSize={20}/>
               </div>
               <input
+                value={newUser.password}
+                onChange={(e) => setnewUser({...newUser, password: e.target.value})}
                 placeholder=" Create a password"
                 className="w-full h-[2.5rem] border-t border-b border-r border-gray-300 focus:outline-none"
               />
             </div>
           </div>
-          <div className="w-full mt-3">
-            <div className="text-gray-800">
-              Current password
-            </div>
-            <div className="flex flex-row w-full mt-1 focus-within:border-blue-600 focus-within:ring-2 focus-within:ring-blue-600">
-              <div className="flex items-center justify-center w-[2.5rem] h-[2.5rem] text-gray-500 bg-white border-t border-b border-l border-gray-300">
-                <FaLock fontSize={20}/>
-              </div>
-              <input
-                placeholder=" Confirm your password"
-                className="w-full h-[2.5rem] border-t border-b border-r border-gray-300 focus:outline-none"
-              />
-            </div>
-          </div>
           <div className="w-full my-7">
-            <button className="w-full h-[2.5rem] bg-black rounded hover:bg-gray-800">
+            <button onClick={handleSignUp} className="w-full h-[2.5rem] bg-black rounded hover:bg-gray-800">
               <span className="block text-center text-white">
                 Sign up
               </span>
