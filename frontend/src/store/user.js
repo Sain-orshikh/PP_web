@@ -18,7 +18,7 @@ export const useUserStore = create((set) => ({
         set((state) => ({ users: [...state.users, data.data] }));
         return {success: true, message: "Account created successfully"};
     },
-    fetchBlogs: async () => {
+    fetchUsers: async () => {
         const res = await fetch("/api/users");
         const data = await res.json();
         set ({users: data.data});

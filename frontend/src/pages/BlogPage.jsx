@@ -11,7 +11,6 @@ function BlogPage() {
   useEffect(() => {
     fetchBlogs();
   }, [fetchBlogs]);
-  console.log("blogs", blogs);
 
   const [visibleBlogs, setVisibleBlogs] = useState(6);
 

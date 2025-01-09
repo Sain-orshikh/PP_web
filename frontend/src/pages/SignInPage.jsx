@@ -1,14 +1,34 @@
-import { ButtonGroup, Button, Box, Input } from '@mui/material'
-import { useState } from 'react'
+import { ButtonGroup, Button, Box, Input, Snackbar, Alert } from '@mui/material'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import pp_logo from "../assets/pp-logo.png"
 import { FcGoogle } from "react-icons/fc";
 import { TfiFacebook } from "react-icons/tfi";
 import { FaApple } from "react-icons/fa";
+import { useUserStore } from '../store/user';
+import { useAuth } from '../components/AuthContext';
 
 function SignInPage() {
     
-    const [email,setEmail] = useState('');
+    const { isSignedIn,setIsSignedIn } = useAuth();
+
+    useEffect(() => {
+      // This will log the updated state after it has changed and the component re-renders
+      console.log("Updated state inside useEffect:", isSignedIn);
+    }, [isSignedIn]);
+    const [currentusername,setcurrentusername] = useState('');
+    const [currentpassword, setcurrentpassword] = useState('');
+
+    const { fetchUsers, users } = useUserStore();
+    useEffect(() => {fetchUsers();
+    },[fetchUsers]);
+
+    const checkPasswordByUsername = () => {
+      const user = users.find(user => user.name === currentusername);
+      
+      setIsSignedIn(user ? user.password === currentpassword : false);
+      console.log("User found:",user ? true : false);
+    };
 
     return (
       <>
@@ -17,6 +37,11 @@ function SignInPage() {
             <span className='text-6xl font-bold mx-auto mt-5'>
               Log In
             </span>
+            {isSignedIn === false && (
+              <div className='text-red'>
+                Hello!
+              </div>
+            )}
             <span className='mt-3 mx-auto text-xl'>
               Don't have an account? <button className='text-blue-500'><Link to={'/signup'}>Sign Up</Link></button>
             </span>
@@ -25,18 +50,20 @@ function SignInPage() {
             <div className='w-[75%] sm:w-[50%] border-b sm:border-b-0 sm:border-r border-black'>
               <div className='w-[90%] sm:w-[50%] mx-auto'>
                 <span className='mx-auto text-md text-gray-500'>
-                Email address
+                  User information
                 </span>
               </div>
               <div className='flex flex-col w-full mt-1'>
                 <input
-                  value={email}
-                  onChange={(e) => {setEmail(e.target.value)}}
-                  placeholder='Email'
+                  value={currentusername}
+                  onChange={(e) => {setcurrentusername(e.target.value)}}
+                  placeholder='Username'
                   className='p-2 w-[90%] sm:w-[50%]  mx-auto bg-white border-b-2 border-black-700 hover:border-black focus:border-none'
                 />
                 <input
-                  placeholder='Passwork'
+                  value={currentpassword}
+                  onChange={(e) => {setcurrentpassword(e.target.value)}}
+                  placeholder='Password'
                   className='p-2 w-[90%] sm:w-[50%]  mx-auto bg-white border-b-2 border-black-700 hover:border-black focus:border-none mt-3'
                 />
                 <div className='flex flex-row w-[90%] sm:w-[50%] mx-auto mt-1'>
@@ -45,13 +72,13 @@ function SignInPage() {
                     </button>
                     <span className='ml-1 text-gray-7 00'>Remember me</span>
                   </div>
-                  <button className='mt-0 underline ml-auto'>
-                    Forgot Email?
+                  <button className='underline ml-auto'>
+                    Forgot Password?
                   </button>
                 </div>
                 <div className='my-7 w-[90%] sm:w-[50%]  mx-auto'>
-                  <button className='w-full h-[2.5rem] rounded-md border-2 border-cyan bg-black hover:bg-gray-500 flex items-center justify-center'> 
-                    <span className='text-white'>Continue with Email   &gt;</span>
+                  <button onClick={checkPasswordByUsername} className='w-full h-[2.5rem] rounded-md border-2 border-cyan bg-black hover:bg-gray-500 flex items-center justify-center'> 
+                    <span className='text-white'>Continue</span>
                   </button>
                 </div>
               </div>
