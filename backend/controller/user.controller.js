@@ -29,3 +29,20 @@ export const createUser = async (req,res) => {
         res.status(500).json({ success:false, message: "Server error"});
     }
 };
+
+export const updatedUser = async (req,res) =>{
+    const { id } = req.params;
+
+    const user = req.body;
+
+    if(!mongoose.Types.ObjectId.isValid(id)){
+        return res.status(404).json({success: false, message: "Invalid id"});
+    }
+
+    try{
+        const updatedUser = await User.findByIdAndUpdate(id, user, {new: true});
+        res.status(200).json({success: true, data: updatedUser});
+    } catch(error){
+        res.status(500).json({success: false, message: "Server error"});
+    }
+};

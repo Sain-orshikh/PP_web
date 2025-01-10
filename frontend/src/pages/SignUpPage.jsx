@@ -1,12 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useUserStore } from "../store/user";
 import { Button, Snackbar, Alert } from "@mui/material";
 import { FaGoogle, FaFacebookF, FaApple, FaLock } from "react-icons/fa";
 import { IoMdMail } from "react-icons/io";
 import { MdAccountCircle } from "react-icons/md";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from '../components/AuthContext';
 
 function SignUpPage() {
+
+
+  const { setusername, setIsSignedIn, isSignedIn } = useAuth();
+  const navigate = useNavigate();
 
   const [newUser, setnewUser] = useState({
     name: "",
@@ -20,8 +25,18 @@ function SignUpPage() {
     const {success, message} = await createUser(newUser);
     console.log("Success:", success);
     console.log("Message:",message);
-    setnewUser({name: "", email: "", password: "",});
+    if(success) {
+      setusername(newUser.name);
+      setIsSignedIn(true);
+    };
+    setnewUser({name: "John", email: "", password: "",});
   };
+
+      useEffect(() => {
+        if(isSignedIn) {
+          navigate("/signin/success");
+        };
+      },[isSignedIn]);
 
 
   return (

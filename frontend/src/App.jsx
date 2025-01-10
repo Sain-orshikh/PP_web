@@ -11,6 +11,7 @@ import AboutPage from './pages/AboutPage'
 import CreateBlogPage from './pages/CreateBlogPage'
 import CreateProjectPage from './pages/CreateProjectPage'
 import SignUpPage from './pages/SignUpPage'
+import SignInSuccessPage from './pages/SignInSuccessPage'
 import { AuthProvider } from './components/AuthContext'
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
             <Route path='/create/blog' element={ <CreateBlogPage/>}/>
             <Route path='/signin' element={ <SignInPage/>}/>
             <Route path='/signup' element={ <SignUpPage/>}/>
+            <Route path='/signin/success' element={ <SignInSuccessPage/>}/>
           </Routes> 
         </Box>
       </AuthProvider>

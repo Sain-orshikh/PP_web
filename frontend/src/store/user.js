@@ -23,4 +23,20 @@ export const useUserStore = create((set) => ({
         const data = await res.json();
         set ({users: data.data});
     },
+    updateUser: async (pid, updatedUser) => {
+		const res = await fetch(`/api/users/${pid}`, {
+			method: "PUT",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(updatedUser),
+		});
+		const data = await res.json();
+		if (!data.success) return { success: false, message: data.message };
+		set((state) => ({
+			users: state.users.map((user) => (user._id === pid ? data.data : user)),
+		}));
+
+		return { success: true, message: data.message };
+	},
 }));

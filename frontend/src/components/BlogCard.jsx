@@ -98,7 +98,7 @@ function BlogCard({blog}) {
             </div>
             <div className='flex flex-row items-center justify-between w-full h-[3rem] bg-white border-t rounded-t rounded-xl'>
               <div className='flex flex-row ml-5 space-x-4'>
-                <div className='bg-gray-300 border rounded'>
+                <div className='bg-gray-300 border rounded-md'>
                   <Button onClick={() => {setpreviewModalBodyOpen(true)}}>
                     <span className="text-black capitalize ml-1">Preview</span>
                   </Button>
@@ -110,7 +110,7 @@ function BlogCard({blog}) {
                 </div>
               </div>
               <div className='flex flex-row mr-5 space-x-4'>
-                <div className='border rounded-md' style={{ backgroundColor: 'red' }}>
+                <div className='border-2 rounded-md' style={{ backgroundColor: 'red' }}>
                   <Button onClick={() => {handleDeleteBlog(blog._id)}}>
                     <span className="text-black capitalize ml-1">Delete</span>
                   </Button>
