@@ -143,7 +143,7 @@ function SignInSuccessPage() {
           onClose={() => setmodalOpen(false)}
           className="flex items-center"
         >
-          <div className="w-[30%] h-[12rem] mx-auto bg-white rounded-md p-3">
+          <div className="w-[50%] sm:w-[30%] h-[12rem] mx-auto bg-white rounded-md p-3">
             <div className="mt-2">
               <input
                 value={updatedUser.name}
@@ -167,7 +167,6 @@ function SignInSuccessPage() {
                 placeholder={password}
                 className="w-full border border-black p-1"
               />
-              {/* check out responsiveness for modals */}
             </div>
             <div className="flex mt-3">
               <button onClick={() => {handleUpdateUser(id, updatedUser)}} className="bg-black rounded ml-auto p-1">

@@ -1,16 +1,31 @@
+import * as React from 'react';
 import { useState } from 'react'
-import { ButtonGroup, Button, Box, Typography, Input } from '@mui/material'
+import { ButtonGroup, Button, Box, Menu, MenuItem } from '@mui/material'
 import { Link } from 'react-router-dom'
-import { CgAddR } from "react-icons/cg";
-import { TiAdjustBrightness, TiWeatherSunny } from "react-icons/ti";
-import { FaUserCircle } from "react-icons/fa";
-import { CiSearch } from "react-icons/ci";
+import { FaUserCircle, FaHome, FaPenSquare,  } from "react-icons/fa";
+import { FaBookOpen } from "react-icons/fa6";
+import { BsFillInfoSquareFill } from "react-icons/bs";
 import { VscSignIn } from "react-icons/vsc";
+import { MdMenu } from "react-icons/md";
 import pp_logo from "../assets/pp-logo.png"
+import { useAuth } from '../components/AuthContext';
 //import IsSmallScreen from '../modes/isSmallScreen'
 
 function Navbar() {
 
+  const {isSignedIn} = useAuth();
+
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [open, setOpen] = useState(false);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget); // Set the button as the anchor
+    setOpen(true); // Open the menu
+  };
+
+  const handleClose = () => {
+    setOpen(false); // Close the menu
+  };
   return (
     <>
       <div className="flex justify-between items-center w-full bg-white p-1 shadow-md z-10 ">
@@ -21,7 +36,7 @@ function Navbar() {
             Passion Project MAIS
           </text>
         </Box>
-        <Box className="flex mr-10 space-x-4">
+        <Box className="flex mr-10 space-x-4 hidden sm:block">
           <Button className=''>
             <Link to={'/'} className="text-sky-500 hover:text-black">
               Home
@@ -44,11 +59,53 @@ function Navbar() {
           </Button>
           <Button>
             <Link to={'/signin'} className='text-black hover:text-blue-500'>
+            {isSignedIn ? (
+              <FaUserCircle fontSize={30} />
+            ) : (
               <VscSignIn fontSize={30}/>
+            )}
             </Link>
           </Button>
         </Box>
-        
+        <Box className="flex items-center text-black block sm:hidden">
+          <Button
+            aria-controls="basic-menu"
+            aria-haspopup="true"
+            onClick={handleClick}>
+            <MdMenu fontSize={40} className='mr-5'/>
+          </Button>
+        </Box>
+      <Menu
+        id="basic-menu"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        MenuListProps={{
+          'aria-labelledby': 'basic-button',
+        }}
+      >
+        <MenuItem onClick={handleClose}>
+          <Link to={"/"} className='text-sky-500'><FaHome fontSize={30}/></Link>
+        </MenuItem>
+        <MenuItem onClick={handleClose}>
+          <Link to={"/blog"} className='text-indigo-500'><FaBookOpen fontSize={30}/></Link>
+        </MenuItem>
+        <MenuItem onClick={handleClose}>
+          <Link to={"/create"} className='text-emerald-500'><FaPenSquare fontSize={30}/></Link>
+        </MenuItem>
+        <MenuItem onClick={handleClose}>
+          <Link to={"/about"} className='text-amber-500'><BsFillInfoSquareFill fontSize={30}/></Link>
+        </MenuItem>
+        <MenuItem onClick={handleClose}>
+          <Link to={"/signin"}>
+          {isSignedIn ? (
+            <FaUserCircle fontSize={30} />
+          ) : (
+            <VscSignIn fontSize={30}/>
+          )}
+          </Link>
+        </MenuItem>
+      </Menu>
       </div>
     </>
   )
