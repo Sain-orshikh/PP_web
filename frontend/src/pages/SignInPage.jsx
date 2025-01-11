@@ -10,7 +10,7 @@ import { useAuth } from '../components/AuthContext';
 
 function SignInPage() {
     
-    const { isSignedIn, setIsSignedIn, setusername, setemail, setpassword } = useAuth();
+    const { isSignedIn, setIsSignedIn, setusername, setemail, setpassword, setid } = useAuth();
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -39,6 +39,7 @@ function SignInPage() {
         setusername(user.name);
         setpassword(user.password);
         setemail(user.email);
+        setid(user._id);
       };
     };
 

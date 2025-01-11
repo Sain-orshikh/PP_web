@@ -4,11 +4,12 @@ import { useAuth } from '../components/AuthContext';
 import { Link, useNavigate } from "react-router-dom";
 import { Modal } from "@mui/material";
 import { FaHome, FaBookReader, FaRegEdit, FaLongArrowAltRight } from "react-icons/fa";
+import { useUserStore } from "../store/user";
 
 function SignInSuccessPage() {
 
     const navigate = useNavigate();
-    const { username, setusername, email, setemail, password, setpassword, isSignedIn, setIsSignedIn } = useAuth();
+    const { username, setusername, email, setemail, password, setpassword, isSignedIn, setIsSignedIn, id } = useAuth();
     useEffect(() => {
         if(isSignedIn === false) {
             navigate("/signin");
@@ -22,7 +23,23 @@ function SignInSuccessPage() {
         setIsSignedIn(false);
     };
 
+    const {updateUser} = useUserStore()
+
     const [modalOpen, setmodalOpen] = useState(false);
+    const [updatedUser, setupdatedUser] =  useState({
+      name: username,
+      email: email,
+      password: password
+    }); 
+    const handleUpdateUser = async(uid, updatedUser) => {
+      const {success, message} = await updateUser(uid, updatedUser)
+      if(success) {
+        setusername(updatedUser.name);
+        setemail(updatedUser.email);
+        setpassword(updatedUser.password);
+      };
+      setmodalOpen(false)
+    };
 
     return (
       <>
@@ -126,24 +143,36 @@ function SignInSuccessPage() {
           onClose={() => setmodalOpen(false)}
           className="flex items-center"
         >
-          <div className="w-[30%] h-[10rem] mx-auto bg-white rounded-md p-3">
+          <div className="w-[30%] h-[12rem] mx-auto bg-white rounded-md p-3">
             <div className="mt-2">
               <input
+                value={updatedUser.name}
+                onChange={(e) => setupdatedUser({ ...updatedUser, name: e.target.value})}
                 placeholder={username}
                 className="w-full border border-black p-1"
               />
             </div>
             <div className="mt-2">
               <input
+                value={updatedUser.email}
+                onChange={(e) => setupdatedUser({ ...updatedUser, email: e.target.value})}
                 placeholder={email}
                 className="w-full border border-black p-1"
               />
             </div>
             <div className="mt-2">
               <input
+                value={updatedUser.password}
+                onChange={(e) => setupdatedUser({ ...updatedUser, password: e.target.value})}
                 placeholder={password}
                 className="w-full border border-black p-1"
               />
+              {/* check out responsiveness for modals */}
+            </div>
+            <div className="flex mt-3">
+              <button onClick={() => {handleUpdateUser(id, updatedUser)}} className="bg-black rounded ml-auto p-1">
+                <span className="text-white mx-1">Update</span>
+              </button>
             </div>
           </div>
         </Modal>

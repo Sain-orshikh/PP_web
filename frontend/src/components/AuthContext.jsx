@@ -11,6 +11,7 @@ export const AuthProvider = ({ children }) => {
   const [username, setusername] = useState('');
   const [email, setemail] = useState('');
   const [password, setpassword] = useState('');
+  const [id, setid] = useState('');
   return (
     <AuthContext.Provider value={{ 
       isSignedIn,
@@ -21,6 +22,8 @@ export const AuthProvider = ({ children }) => {
       setemail,
       password,
       setpassword,
+      id,
+      setid,
     }}
     >
       {children}
