@@ -33,8 +33,8 @@ function BlogPage() {
                 >
                   <h1 className="text-white text-4xl font-bold">Welcome to My Website</h1>
                 </div>*/}
-                <div className='w-[90%] h-[10rem] rounded bg-blue-500 bg-cover bg-center' style={{ backgroundImage: `url(${BGpic})` }}>
-                  <h1 className='text-white text-5xl font-bold mt-20 ml-40'>Read Our Blog</h1>
+                <div className='flex items-center w-[90%] h-[10rem] rounded bg-blue-500 bg-cover bg-center' style={{ backgroundImage: `url(${BGpic})` }}>
+                  <h1 className='w-[80%] ml-auto text-white text-4xl sm:text-5xl font-bold mt-10'>Read Our Blog</h1>
                 </div>
               </div>
             </TableRow>
@@ -42,10 +42,8 @@ function BlogPage() {
           <TableBody className=''>
             <TableRow className='h-[5rem]'>
               <div className='flex flex-row items-center justify-between w-[80%] mx-auto mt-10'>
-                <div className='flex mx-auto'>
-                  <Typography variant='h3'>
-                    Latest Blog Posts
-                  </Typography>
+                <div className='flex mx-auto text-4xl sm:text-5xl'>
+                  Latest Blog Posts
                 </div>
               </div>
             </TableRow>
@@ -53,7 +51,7 @@ function BlogPage() {
               <div className='flex w-[80%] mx-auto mt-5 '>
                 <div className='mx-auto'>
                   <Typography variant='h6' className='text-gray-500'>
-                  Discover our latest thoughts, ideas and insights about the world
+                   Discover our latest thoughts, ideas and insights about the world
                   </Typography>
                 </div>
               </div>

@@ -1,16 +1,16 @@
-import { useState } from 'react'
-import { ButtonGroup, Button, Box } from '@mui/material'
-import { Link } from 'react-router-dom'
-import blog_bg from "../assets/blogbg.jpg"
-import project_bg from "../assets/orangeproject_bg.png"
+import { useState } from 'react';
+import { ButtonGroup, Button, Box } from '@mui/material';
+import { Link } from 'react-router-dom';
+import blog_bg from "../assets/blogbg.jpg";
+import project_bg from "../assets/orangeproject_bg.png";
 
 function CreatePage() {
-
   return (
     <>
-      <div className="flex flex-row w-full min-h-screen bg-gray-100">
+      <div className="flex flex-col md:flex-row w-full min-h-screen bg-gray-100">
+        {/* First Section - Project */}
         <div
-          className="group relative w-[50%] h-full bg-no-repeat bg-center transition-all duration-300 hover:w-[55%] overflow-hidden"
+          className="group relative w-full md:w-[50%] h-[50%] md:h-full bg-no-repeat bg-center transition-all duration-300 hover:w-[55%] overflow-hidden"
           style={{
             backgroundImage: `url(${project_bg})`,
             backgroundSize: 'cover',
@@ -28,8 +28,10 @@ function CreatePage() {
             </Button>
           </div>
         </div>
+
+        {/* Second Section - Blog */}
         <div
-          className="group relative w-[50%] h-full bg-no-repeat bg-center transition-all duration-300 hover:w-[55%] overflow-hidden"
+          className="group relative w-full md:w-[50%] h-[50%] md:h-full bg-no-repeat bg-center transition-all duration-300 hover:w-[55%] overflow-hidden"
           style={{
             backgroundImage: `url(${blog_bg})`,
             backgroundSize: 'cover', 
@@ -49,7 +51,7 @@ function CreatePage() {
         </div>
       </div>
     </>
-  )
+  );
 }
 
-export default CreatePage
+export default CreatePage;
