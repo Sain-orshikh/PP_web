@@ -5,8 +5,11 @@ import { useBlogStore } from "../store/blog";
 import { useState, useEffect } from "react";
 import { IoLinkSharp } from "react-icons/io5";
 import { BiNotepad } from "react-icons/bi";
+import { useAuth } from "./AuthContext";
 
 function BlogCard({blog}) {
+
+    const {id, isSignedIn, username, password, email} = useAuth();
 
     const [modalOpen, setmodalOpen] = useState(false);
 
@@ -32,6 +35,26 @@ function BlogCard({blog}) {
     const [previewThumbnailOpen, setpreviewThumbnailOpen] = useState(false);
     const [fullversion, setfullversion] = useState(true);
 
+    const [alertopen, setalertOpen] = useState(false);
+    const [severityType, setseverityType] = useState('');
+    const [alertMessage, setalertMessage] = useState('');
+
+    const handleEditOpen = () => {
+      if(isSignedIn === false){
+        setalertOpen(true);
+        setseverityType('warning');
+        setalertMessage('Please Sign in before editing!');
+      }
+      else if(isSignedIn && blog.owner_id === id){
+        setmodalOpen(true);
+      }
+      else{
+        setalertOpen(true);
+        setseverityType('error');
+        setalertMessage('You can only edit your blog!')
+      }
+    };
+
     return (
       <>
           <Box className="w-[22rem] min-h-[14rem] rounded border border-gray-500 transition-transform transform hover:-translate-y-1.5">
@@ -50,7 +73,7 @@ function BlogCard({blog}) {
               </div>
             </button>
           <div className="flex flex-row">
-            <div><button onClick={() => {setmodalOpen(true)}} className="ml-2"><FaRegEdit fontSize={25}/></button></div>  
+            <div><button onClick={handleEditOpen} className="ml-2"><FaRegEdit fontSize={25}/></button></div>  
             <div className=""><h6 className="mx-1 mb-1 text-xl">{blog.title}</h6></div>
           </div>
         </Box>
@@ -238,7 +261,16 @@ function BlogCard({blog}) {
         </div>
           </Modal>
         )}
-
+        <Snackbar
+          open={alertopen}
+          autoHideDuration={5000} 
+          onClose={() => {setalertOpen(false)}}
+          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        >
+          <Alert onClose={() => setalertOpen(false)} variant="filled" severity={severityType}>
+            {alertMessage}
+          </Alert>
+        </Snackbar>
       </>
     )
   }

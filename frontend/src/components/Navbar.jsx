@@ -9,11 +9,18 @@ import { VscSignIn } from "react-icons/vsc";
 import { MdMenu } from "react-icons/md";
 import pp_logo from "../assets/pp-logo.png"
 import { useAuth } from '../components/AuthContext';
+import { useEffect } from 'react';
 //import IsSmallScreen from '../modes/isSmallScreen'
 
 function Navbar() {
 
-  const {isSignedIn} = useAuth();
+  const {isSignedIn, setid} = useAuth();
+
+  useEffect(() => {
+    if(isSignedIn === false){
+      setid('');
+    }
+  }, [isSignedIn]);
 
   const [anchorEl, setAnchorEl] = useState(null);
   const [open, setOpen] = useState(false);

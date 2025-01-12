@@ -9,7 +9,7 @@ import { useUserStore } from "../store/user";
 function SignInSuccessPage() {
 
     const navigate = useNavigate();
-    const { username, setusername, email, setemail, password, setpassword, isSignedIn, setIsSignedIn, id } = useAuth();
+    const { username, setusername, email, setemail, password, setpassword, isSignedIn, setIsSignedIn, id, setid } = useAuth();
     useEffect(() => {
         if(isSignedIn === false) {
             navigate("/signin");
@@ -20,6 +20,7 @@ function SignInSuccessPage() {
         setemail('');
         setpassword('');
         setusername('');
+        setid('');
         setIsSignedIn(false);
     };
 

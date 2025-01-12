@@ -7,21 +7,23 @@ import { MdCloudUpload } from "react-icons/md";
 import { useBlogStore } from '../store/blog';
 import ErrorAlert from '../components/ErrorAlert';
 import BlogCard from '../components/BlogCard';
+import { useAuth } from '../components/AuthContext';
 
 function CreateBlogPage() {
 
+    const {id} = useAuth();
     const fallbackImage = "https://images.unsplash.com/photo-1488998427799-e3362cec87c3?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NTZ8fGRlZmF1bHQlMjBibG9nfGVufDB8fDB8fHww";
 
     const [newBlog, setnewBlog] = useState({
       title: "",
-      prompt: "",
       content: "",
       image: "",
+      owner_id: id || "",
     });
 
     const { createBlog } = useBlogStore();
 
-    const [open, setOpen] = useState(false);
+    const [alertopen, setalertOpen] = useState(false);
     const [severityType, setseverityType] = useState("");
     const [alertMessage, setalertMessage] = useState("");
 
@@ -29,13 +31,14 @@ function CreateBlogPage() {
       const {success, message} = await createBlog(newBlog);
       console.log("Success:",success);
       console.log("Message:",message);
+      console.log("Owner id:",newBlog.owner_id);
       if (success === false) {
-        setOpen(true);
+        setalertOpen(true);
         setseverityType("error");
-        setalertMessage("Please fill in all fields!");
+        setalertMessage("Please fill in all fields and be Signed in!");
       }
       else {
-        setOpen(true);
+        setalertOpen(true);
         setseverityType("success");
         setalertMessage("Published a blog with success!");
       }
@@ -146,12 +149,12 @@ function CreateBlogPage() {
           </div>
         </div>
         <Snackbar
-          open={open}
+          open={alertopen}
           autoHideDuration={5000} 
-          onClose={() => {setOpen(false)}}
+          onClose={() => {setalertOpen(false)}}
           anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
         >
-          <Alert onClose={() => setOpen(false)} variant="filled" severity={severityType}>
+          <Alert onClose={() => setalertOpen(false)} variant="filled" severity={severityType}>
             {alertMessage}
           </Alert>
         </Snackbar>

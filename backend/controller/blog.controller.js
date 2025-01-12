@@ -14,7 +14,7 @@ export const getBlog = async (req,res) => {
 export const createBlog = async (req,res) => {
     const blog = req.body;
 
-    if (!blog.title || !blog.content || !blog.image){
+    if (!blog.title || !blog.content || !blog.image || !blog.owner_id){
         return res.status(400).json({ success: false, message: "Provide all fields" })
     }
 
