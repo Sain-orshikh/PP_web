@@ -84,7 +84,7 @@ function BlogPage() {
             )}
             <TableRow>
               <div className='w-full bg-red-300 mt-10'>
-                This is footer bar
+                {/*This is footer bar*/}
               </div>
             </TableRow>
           </TableBody>

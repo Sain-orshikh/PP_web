@@ -14,11 +14,12 @@ import { useEffect } from 'react';
 
 function Navbar() {
 
-  const {isSignedIn, setid} = useAuth();
+  const {isSignedIn, setid, id} = useAuth();
 
   useEffect(() => {
     if(isSignedIn === false){
       setid('');
+      console.log(id);
     }
   }, [isSignedIn]);
 

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Alert, Button, Snackbar, Modal, Box, ButtonGroup } from '@mui/material';
 import { FaSave, FaEye, FaRegPaperPlane, FaRegEdit } from "react-icons/fa";
 import { IoLinkSharp } from "react-icons/io5";
@@ -8,12 +8,15 @@ import { useBlogStore } from '../store/blog';
 import ErrorAlert from '../components/ErrorAlert';
 import BlogCard from '../components/BlogCard';
 import { useAuth } from '../components/AuthContext';
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 
 function CreateBlogPage() {
 
     const {id} = useAuth();
     const fallbackImage = "https://images.unsplash.com/photo-1488998427799-e3362cec87c3?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NTZ8fGRlZmF1bHQlMjBibG9nfGVufDB8fDB8fHww";
 
+    const quillRef = useRef(null);
     const [newBlog, setnewBlog] = useState({
       title: "",
       content: "",
@@ -26,9 +29,18 @@ function CreateBlogPage() {
     const [alertopen, setalertOpen] = useState(false);
     const [severityType, setseverityType] = useState("");
     const [alertMessage, setalertMessage] = useState("");
-
+    
     const handlePublishBlog = async() => {
-      const {success, message} = await createBlog(newBlog);
+      const editor = quillRef.current.getEditor();
+      const contentHtml = editor.root.innerHTML; // Get content as HTML
+
+      const NewBlog = {
+        ...newBlog,
+        content: contentHtml,
+      };
+
+      console.log(NewBlog);
+      const {success, message} = await createBlog(NewBlog);
       console.log("Success:",success);
       console.log("Message:",message);
       console.log("Owner id:",newBlog.owner_id);
@@ -43,13 +55,27 @@ function CreateBlogPage() {
         setalertMessage("Published a blog with success!");
       }
 
-      setnewBlog({ title: "", prompt: "", content: "", image: "",});
+      setnewBlog({ title: "", prompt: "", content: "", image: "", owner_id: id,});
     };
 
     const [previewModalBodyOpen, setpreviewModalBodyOpen] = useState(false);
     const [previewThumbnailOpen, setpreviewThumbnailOpen] = useState(false);
     const [fullversion, setfullversion] = useState(true);
 
+    const [freshBlog, setfreshBlog] = useState({
+      title: "",
+      content: "",
+      image: "",
+      owner_id: id || "",
+    });
+
+    const handlePreviewOpen = () => {
+      const editor = quillRef.current.getEditor();
+      const contentHtml = editor.root.innerHTML; // Get content as HTML
+
+      setfreshBlog({...newBlog, content: contentHtml,});
+      setpreviewModalBodyOpen(true)
+    };
 
     return (
       <>
@@ -71,31 +97,16 @@ function CreateBlogPage() {
                 />
               </div>
               <div>
-                <div className='mt-3'>
-                  Content
-                </div>
-                <div className='focus-within:border-blue-600 focus-within:ring-2 focus-within:ring-blue-600 rounded'>
-                  <div className='flex items-center w-full bg-gray-100 rounded rounded-b-none border '>
-                    <button className='ml-2 w-[1rem] font-greek text-gray-700 hover:text-black'>
-                      B
-                    </button>
-                    <button className='ml-2 w-[1rem] font-italic italic text-gray-700 hover:text-black'>
-                      I
-                    </button>
-                    <button className='ml-2 w-[1rem]'> 
-                      <IoLinkSharp/>
-                    </button>
-                    <button className='ml-4 w-[1rem]'>
-                      <BiNotepad/>
-                    </button>
-                  </div>
-                  <textarea
-                    value={newBlog.content}
-                    onChange={(e) => setnewBlog({ ...newBlog, content: e.target.value})}
-                    placeholder=" Write your blog content here..."
-                    className="w-full h-60 text-left border-b border-l border-r rounded rounded-t-none focus:outline-none"
-                  />
-                </div>
+                <ReactQuill
+                  ref={quillRef}
+                  theme="snow"
+                  placeholder="Write your blog here..."
+                  style={{
+                    height: "300px",
+                    backgroundColor: "white",
+                    border: "1px solid #ccc",
+                  }}
+                />
               </div>
               <div className='mt-3'>
                 Featured Image
@@ -134,7 +145,7 @@ function CreateBlogPage() {
           <div className='flex flex-row items-center justify-between w-full h-[3rem] bg-white border-t'>
             <div className='flex flex-row ml-auto'>
               <div className='border rounded mr-5 bg-gray-100'>
-                <Button onClick={() => {setpreviewModalBodyOpen(true)}}>
+                <Button onClick={handlePreviewOpen}>
                   <span className='text-black'><FaEye/></span>
                   <span className="text-black capitalize ml-1">Preview</span>
                 </Button>
@@ -177,13 +188,13 @@ function CreateBlogPage() {
               />
               <div className="absolute inset-0 bg-gradient-to-b from-black/20 to-black/10"></div>
               <div className="absolute bottom-0 left-0 right-0 p-6 break-words whitespace-normal">
-                <h2 className="text-4xl font-bold text-white">{newBlog.title}</h2>
+                <h2 className="text-4xl font-bold text-white">{freshBlog.title}</h2>
               </div>
             </div>
 
             <div className="p-8">
               <div className="break-words whitespace-pre-wrap">
-                <p className="text-lg leading-relaxed mb-6">{newBlog.content}</p>
+                <div dangerouslySetInnerHTML={{ __html: freshBlog.content }} />
               </div>
             </div>
           </div>
@@ -210,7 +221,7 @@ function CreateBlogPage() {
             <button className="w-full h-[12rem] border-b border-gray-500">
               <div className="w-full h-[12rem] border-b border-gray-500">
                 <img
-                  src={newBlog.image}
+                  src={freshBlog.image}
                   alt="Blog image"
                   className="w-full h-full"
                   onError={(e) => {
@@ -222,7 +233,7 @@ function CreateBlogPage() {
             </button>
           <div className="flex flex-row bg-gray-100">
             <div><button className="ml-2"><FaRegEdit fontSize={25}/></button></div>  
-            <div className=""><h6 className="mx-1 mb-1 text-xl">{newBlog.title}</h6></div>
+            <div className=""><h6 className="mx-1 mb-1 text-xl">{freshBlog.title}</h6></div>
           </div>
         </Box>
           <div className='flex justify-end w-[22rem] mx-auto'>

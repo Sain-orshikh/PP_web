@@ -2,12 +2,16 @@ import { Button, Box, Alert, Snackbar, Modal, ButtonGroup } from "@mui/material"
 import { Link } from "react-router-dom"
 import { FaRegEdit } from "react-icons/fa";
 import { useBlogStore } from "../store/blog";
-import { useState, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import { IoLinkSharp } from "react-icons/io5";
 import { BiNotepad } from "react-icons/bi";
 import { useAuth } from "./AuthContext";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 
 function BlogCard({blog}) {
+
+    const quillRef = useRef(null);
 
     const {id, isSignedIn, username, password, email} = useAuth();
 
@@ -23,8 +27,15 @@ function BlogCard({blog}) {
     const [updatedBlog, setupdatedBlog] = useState(blog);
 
     const {updateBlog} = useBlogStore()
-    const handleUpdateBlog = async (bid, updatedBlog) => {
-      const { success, message } = await updateBlog(bid, updatedBlog)
+      const handleUpdateBlog = async (bid, updatedBlog) => {
+        const editor = quillRef.current.getEditor();
+        const contentHtml = editor.root.innerHTML; // Get content as HTML
+
+        const UpdatedBlog = {
+          ...updatedBlog,
+          content: contentHtml,
+        };
+      const { success, message } = await updateBlog(bid, UpdatedBlog)
       setmodalOpen(false)
     };
 
@@ -53,6 +64,22 @@ function BlogCard({blog}) {
         setseverityType('error');
         setalertMessage('You can only edit your blog!')
       }
+    };
+
+    const [freshBlog, setfreshBlog] = useState({
+      title: "",
+      content: "",
+      image: "",
+      owner_id: id || "",
+    });
+
+    const handlePreviewOpen = () => {
+      const editor = quillRef.current.getEditor();
+      const contentHtml = editor.root.innerHTML; // Get content as HTML
+
+      setfreshBlog({...updatedBlog, content: contentHtml,});
+
+      setpreviewModalBodyOpen(true);
     };
 
     return (
@@ -89,27 +116,16 @@ function BlogCard({blog}) {
                 className="w-full h-8 pb-1 mt-1 border rounded"
               />
             </div>
-            <div className='focus-within:border-blue-600 focus-within:ring-2 focus-within:ring-blue-600 rounded mx-1 mt-1'>
-              <div className='flex items-center w-full bg-gray-100 rounded rounded-b-none border '>
-                <button className='ml-2 w-[1rem] font-greek text-gray-700 hover:text-black'>
-                  B
-                </button>
-                <button className='ml-2 w-[1rem] font-italic italic text-gray-700 hover:text-black'>
-                  I
-                </button>
-                <button className='ml-2 w-[1rem]'> 
-                  <IoLinkSharp/>
-                </button>
-                <button className='ml-4 w-[1rem]'>
-                  <BiNotepad/>
-                </button>
-              </div>
-                <textarea
-                  value={updatedBlog.content}
-                  onChange={(e) => setupdatedBlog({ ...updatedBlog, content: e.target.value})}
-                  placeholder=" Write your blog content here..."
-                  className="w-full h-60 text-left border-b border-l border-r rounded rounded-t-none focus:outline-none"
-                />
+            <div className='rounded mx-1 mt-1'>
+              <ReactQuill
+                ref={quillRef}
+                theme="snow"
+                placeholder="Write your blog here..."
+                style={{
+                  height: "300px",
+                  backgroundColor: "white",
+                }}
+              />
             </div>
             <div className='mt-1 mb-3 mx-1'>
               <input
@@ -122,7 +138,7 @@ function BlogCard({blog}) {
             <div className='flex flex-row items-center justify-between w-full h-[3rem] bg-white border-t rounded-t rounded-xl'>
               <div className='flex flex-row ml-5 space-x-0 sm:space-x-4'>
                 <div className='bg-gray-300 border rounded-md'>
-                  <Button onClick={() => {setpreviewModalBodyOpen(true)}}>
+                  <Button onClick={handlePreviewOpen}>
                     <span className="text-black capitalize ml-1">Preview</span>
                   </Button>
                 </div>
@@ -176,7 +192,7 @@ function BlogCard({blog}) {
 
             <div className="p-8">
               <div className="break-words whitespace-pre-wrap">
-                <p className="text-lg leading-relaxed mb-6">{blog.content}</p>
+                <div dangerouslySetInnerHTML={{ __html: blog.content }} />
               </div>
             </div>
           </div>
@@ -191,7 +207,7 @@ function BlogCard({blog}) {
           <div className="relative w-full min-h-[80%] mx-auto mt-10 bg-white shadow-lg rounded-lg">
             <div className="relative h-80">
               <img 
-                src={updatedBlog.image}
+                src={freshBlog.image}
                 className="w-full h-full"
                 onError={(e) => {
                   e.target.onerror = null; 
@@ -200,13 +216,13 @@ function BlogCard({blog}) {
               />
               <div className="absolute inset-0 bg-gradient-to-b from-black/20 to-black/10"></div>
               <div className="absolute bottom-0 left-0 right-0 p-6 break-words whitespace-normal">
-                <h2 className="text-4xl font-bold text-white">{updatedBlog.title}</h2>
+                <h2 className="text-4xl font-bold text-white">{freshBlog.title}</h2>
               </div>
             </div>
 
             <div className="p-8">
               <div className="break-words whitespace-pre-wrap">
-                <p className="text-lg leading-relaxed mb-6">{updatedBlog.content}</p>
+                <div dangerouslySetInnerHTML={{ __html: freshBlog.content }} />
               </div>
             </div>
           </div>
@@ -233,7 +249,7 @@ function BlogCard({blog}) {
             <button className="w-full h-[12rem] border-b border-gray-500">
               <div className="w-full h-[12rem] border-b border-gray-500">
                 <img
-                  src={updatedBlog.image}
+                  src={freshBlog.image}
                   alt="Blog image"
                   className="w-full h-full"
                   onError={(e) => {
@@ -245,7 +261,7 @@ function BlogCard({blog}) {
             </button>
           <div className="flex flex-row bg-gray-100">
             <div><button className="ml-2"><FaRegEdit fontSize={25}/></button></div>  
-            <div className=""><h6 className="mx-1 mb-1 text-xl">{updatedBlog.title}</h6></div>
+            <div className=""><h6 className="mx-1 mb-1 text-xl">{freshBlog.title}</h6></div>
           </div>
         </Box>
           <div className='flex justify-end w-[22rem] mx-auto'>
