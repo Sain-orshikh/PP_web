@@ -12,9 +12,31 @@ import CreateBlogPage from './pages/CreateBlogPage'
 import CreateProjectPage from './pages/CreateProjectPage'
 import SignUpPage from './pages/SignUpPage'
 import SignInSuccessPage from './pages/SignInSuccessPage'
+import { Toaster } from "react-hot-toast";
 import { AuthProvider } from './components/AuthContext'
+import { useQuery } from "@tanstack/react-query"
 
 function App() {
+
+  const {data:authUser, isLoading} = useQuery({
+    queryKey: ["authUser"],
+    queryFn: async () => {
+      try{
+        const res = await fetch("/api/auth/me");
+        const data = await res.json();
+        if(data.error) return null;
+        if(!res.ok){
+          throw new Error(data.error || "Something went wrong");
+        }
+        console.log("Auth user is here:",data);
+        return data;
+      }
+      catch(error){
+        throw new Error(error);
+    }
+  },
+  retry: false,
+  });
 
   return (
     <>
@@ -30,10 +52,10 @@ function App() {
             <Route path='/about' element={ <AboutPage/>}/>
             <Route path='/create/project' element={ <CreateProjectPage/>}/>
             <Route path='/create/blog' element={ <CreateBlogPage/>}/>
-            <Route path='/signin' element={ <SignInPage/>}/>
-            <Route path='/signup' element={ <SignUpPage/>}/>
-            <Route path='/signin/success' element={ <SignInSuccessPage/>}/>
+            <Route path='/signin' element={authUser ? <SignInSuccessPage/> : <SignInPage/>}/>
+            <Route path='/signup' element={authUser ? <SignInSuccessPage/> : <SignUpPage/>}/>
           </Routes> 
+          <Toaster/>
         </Box>
       </AuthProvider>
     </>

@@ -7,10 +7,6 @@ import { useBlogStore } from '../store/blog';
 import { TbLoader } from "react-icons/tb";
 
 function BlogPage() {
-  const { fetchBlogs, blogs} = useBlogStore();
-  useEffect(() => {
-    fetchBlogs();
-  }, [fetchBlogs]);
 
   const [visibleBlogs, setVisibleBlogs] = useState(6);
 

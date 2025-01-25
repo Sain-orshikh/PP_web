@@ -1,30 +1,72 @@
 import { useEffect, useState } from "react";
 import pp_logo from "../assets/pp-logo.png"
-import { useAuth } from '../components/AuthContext';
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Modal } from "@mui/material";
 import { FaHome, FaBookReader, FaRegEdit, FaLongArrowAltRight } from "react-icons/fa";
-import { useUserStore } from "../store/user";
+import { useMutation } from "@tanstack/react-query";
+import toast from "react-hot-toast";
 
 function SignInSuccessPage() {
 
-    const navigate = useNavigate();
-    const { username, setusername, email, setemail, password, setpassword, isSignedIn, setIsSignedIn, id, setid } = useAuth();
-    useEffect(() => {
-        if(isSignedIn === false) {
-            navigate("/signin");
-        };
-    }, [isSignedIn]);
+    const {data:authUser} = useQuery({queryKey:["authUser"]});
+
+    const {logoutMutation} = useMutation({
+      mutationFn: async() => {
+        try{
+          const res = await fetch("/api/auth/logout",{
+            method: "POST",
+          });
+          const data = await res.json();
+          if(!res.ok) throw new Error(data.error || "Failed to logout");
+          console.log(data);
+          return data;
+        }
+        catch(error){
+          console.error(error);
+          throw error;
+        }
+      },
+      onSuccess: () => {
+        toast.success("Logged out successfully");
+        queryClient.invalidateQueries({queryKey:["authUser"]});
+      },
+      onError: (error) => {
+        toast.error(error.message);
+      },
+    }); 
 
     const handleSignOut = () => {
-        setemail('');
-        setpassword('');
-        setusername('');
-        setid('');
-        setIsSignedIn(false);
+        logoutMutation();
     };
 
-    const {updateUser} = useUserStore()
+    const {updateUserMutation} = useMutation({
+      mutationFn: async(updatedUser) => {
+        try{
+          const res = await fetch(`/api/auth/update`,{
+            method: "PUT",
+            headers:{
+              "Content-Type":"application/json"
+            },
+            body: JSON.stringify(updatedUser),
+          });
+          const data = await res.json();
+          if(!res.ok) throw new Error(data.error || "Failed to update user");
+          console.log(data);
+          return data;
+        }
+        catch(error){
+          console.error(error);
+          throw error;
+        }
+      },
+      onSuccess: () => {
+        toast.success("User updated successfully");
+        queryClient.invalidateQueries({queryKey:["authUser"]});
+      },
+      onError: (error) => {
+        toast.error(error.message);
+      },
+    })
 
     const [modalOpen, setmodalOpen] = useState(false);
     const [updatedUser, setupdatedUser] =  useState({
@@ -32,13 +74,8 @@ function SignInSuccessPage() {
       email: email,
       password: password
     }); 
-    const handleUpdateUser = async(uid, updatedUser) => {
-      const {success, message} = await updateUser(uid, updatedUser)
-      if(success) {
-        setusername(updatedUser.name);
-        setemail(updatedUser.email);
-        setpassword(updatedUser.password);
-      };
+    const handleUpdateUser = async(updatedUser) => {
+      updateUserMutation(updatedUser);
       setmodalOpen(false)
     };
 
@@ -47,7 +84,7 @@ function SignInSuccessPage() {
         <div className="w-full min-h-screen flex flex-col bg-gray-100">
           <div className="flex flex-row justify-between w-[95%] h-[5rem] bg-white mt-7 mx-auto rounded-md">
             <div className="ml-5 w-[60%]">
-              <span className="block font-bold text-xl sm:text-2xl mt-3">Welcome back, {username}!</span>
+              <span className="block font-bold text-xl sm:text-2xl mt-3">Welcome back, {authUser.username}!</span>
               <span className="block text-gray-500">Successfully signed in</span>
             </div>
             <div className="flex items-center h-full">
@@ -107,7 +144,7 @@ function SignInSuccessPage() {
             <div className="flex flex-row justify-between items-center mt-3">
               <div className="flex flex-col">
                 <span className="text-gray-500">Username</span>
-                <span className="">{username}</span>
+                <span className="">{authUser.username}</span>
               </div>
               <div>
                 <button onClick={() => setmodalOpen(true)} className="border border-black rounded p-1">
@@ -118,7 +155,7 @@ function SignInSuccessPage() {
             <div className="flex flex-row justify-between items-center mt-3">
               <div className="flex flex-col">
                 <span className="text-gray-500">Email</span>
-                <span className="">{email}</span>
+                <span className="">{authUser.email}</span>
               </div>
               <div>
                 <button onClick={() => setmodalOpen(true)} className="border border-black rounded p-1">
@@ -129,7 +166,7 @@ function SignInSuccessPage() {
             <div className="flex flex-row justify-between items-center mt-3">
               <div className="flex flex-col">
                 <span className="text-gray-500">Password</span>
-                <span className="">{password}</span>
+                <span className="">********</span>
               </div>
               <div>
                 <button onClick={() => setmodalOpen(true)} className="border border-black rounded p-1">
@@ -149,7 +186,7 @@ function SignInSuccessPage() {
               <input
                 value={updatedUser.name}
                 onChange={(e) => setupdatedUser({ ...updatedUser, name: e.target.value})}
-                placeholder={username}
+                placeholder={authUser.username}
                 className="w-full border border-black p-1"
               />
             </div>
@@ -157,7 +194,7 @@ function SignInSuccessPage() {
               <input
                 value={updatedUser.email}
                 onChange={(e) => setupdatedUser({ ...updatedUser, email: e.target.value})}
-                placeholder={email}
+                placeholder={authUser.email}
                 className="w-full border border-black p-1"
               />
             </div>
@@ -165,7 +202,7 @@ function SignInSuccessPage() {
               <input
                 value={updatedUser.password}
                 onChange={(e) => setupdatedUser({ ...updatedUser, password: e.target.value})}
-                placeholder={password}
+                placeholder={""}
                 className="w-full border border-black p-1"
               />
             </div>

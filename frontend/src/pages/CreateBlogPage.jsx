@@ -10,10 +10,11 @@ import BlogCard from '../components/BlogCard';
 import { useAuth } from '../components/AuthContext';
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import { useQuery } from '@tanstack/react-query';
 
 function CreateBlogPage() {
 
-    const {id} = useAuth();
+    const {data:authUser, isLoading} = useQuery({queryKey: ["authUser"]});
     const fallbackImage = "https://images.unsplash.com/photo-1488998427799-e3362cec87c3?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NTZ8fGRlZmF1bHQlMjBibG9nfGVufDB8fDB8fHww";
 
     const quillRef = useRef(null);
@@ -21,7 +22,7 @@ function CreateBlogPage() {
       title: "",
       content: "",
       image: "",
-      owner_id: id || "",
+      owner_id: authUser._id || "",
     });
 
     const { createBlog } = useBlogStore();

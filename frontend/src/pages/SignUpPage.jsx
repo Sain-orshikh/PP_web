@@ -1,17 +1,14 @@
-import React, { useState, useEffect } from "react";
-import { useUserStore } from "../store/user";
-import { Button, Snackbar, Alert } from "@mui/material";
+import React, { useState } from "react";
 import { FaGoogle, FaFacebookF, FaApple, FaLock } from "react-icons/fa";
 import { IoMdMail } from "react-icons/io";
 import { MdAccountCircle } from "react-icons/md";
-import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from '../components/AuthContext';
+import { Link } from "react-router-dom";
+import { useQueryClient, useMutation } from "@tanstack/react-query";
+import toast from "react-hot-toast";
 
 function SignUpPage() {
 
-
-  const { setusername, setIsSignedIn, isSignedIn } = useAuth();
-  const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const [newUser, setnewUser] = useState({
     name: "",
@@ -19,25 +16,37 @@ function SignUpPage() {
     password: "",
   });
 
-  const { createUser } = useUserStore();
+	const { mutate: singupMutation, isError, error, isPending} = useMutation({
+		mutationFn: async({username, email, password}) => {
+			try{
+				const res = await fetch('/api/auth/signup',{
+					method:"POST",
+					headers:{
+						"Content-Type":"application/json"
+					},
+					body: JSON.stringify({username, email, password}),
+				});
+				
+				const data = await res.json();
+				if(!res.ok) throw new Error(data.error || "Failed to create account");
+				console.log(data);
+				return data;
+			}
+			catch(error){
+				console.error(error);
+				throw error;
+			}
+		},
+		onSuccess: () => {
+			toast.success("Account created successfully (reload to continue)");
+			queryClient.invalidateQueries({queryKey:["authUser"]});
+		},
+	});
 
-  const handleSignUp = async() => {
-    const {success, message} = await createUser(newUser);
-    console.log("Success:", success);
-    console.log("Message:",message);
-    if(success) {
-      setusername(newUser.name);
-      setIsSignedIn(true);
-    };
-    setnewUser({name: "John", email: "", password: "",});
-  };
-
-      useEffect(() => {
-        if(isSignedIn) {
-          navigate("/signin/success");
-        };
-      },[isSignedIn]);
-
+	const handleSignUp = (e) => {
+		e.preventDefault();
+		singupMutation(newUser);
+	};
 
   return (
     <>
@@ -94,6 +103,7 @@ function SignUpPage() {
                 className="w-full h-[2.5rem] border-t border-b border-r border-gray-300 focus:outline-none"
               />
             </div>
+            {isError && <p className='text-red-500'>{error.message}</p>}
           </div>
           <div className="w-full my-7">
             <button onClick={handleSignUp} className="w-full h-[2.5rem] bg-black rounded hover:bg-gray-800">
