@@ -1,33 +1,23 @@
 import mongoose from "mongoose";
 
 const blogSchema = new mongoose.Schema({
-    username:{
+    title:{
         type: String,
         required: true,
-        unique: true,
     },
-    password:{
+    content:{
         type: String,
         required: true,
-        minLength: 6,
     },
-    email:{
+    image:{
         type: String,
         required: true,
-        unique: true,
     },
-    profileImg:{
-        type: String,
-        default: "",
-    },
-    coverImg:{
-        type: String,
-        default: "",
-    },
-    bio:{
-        type: String,
-        default: "",
-    },
+    ownerId:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true,
+    }
 },{timestamps: true});
 
 const Blog = mongoose.model("Blog", blogSchema);
