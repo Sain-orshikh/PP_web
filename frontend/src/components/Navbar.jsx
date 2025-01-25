@@ -8,7 +8,6 @@ import { BsFillInfoSquareFill } from "react-icons/bs";
 import { VscSignIn } from "react-icons/vsc";
 import { MdMenu } from "react-icons/md";
 import pp_logo from "../assets/pp-logo.png"
-import { useAuth } from '../components/AuthContext';
 import { useEffect } from 'react';
 //import IsSmallScreen from '../modes/isSmallScreen'
 

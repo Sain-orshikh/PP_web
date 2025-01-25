@@ -5,8 +5,6 @@ import pp_logo from "../assets/pp-logo.png"
 import { FcGoogle } from "react-icons/fc";
 import { TfiFacebook } from "react-icons/tfi";
 import { FaApple } from "react-icons/fa";
-import { useUserStore } from '../store/user';
-import { useAuth } from '../components/AuthContext';
 
 function SignInPage() {
     

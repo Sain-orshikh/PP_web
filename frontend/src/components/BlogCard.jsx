@@ -1,11 +1,9 @@
 import { Button, Box, Alert, Snackbar, Modal, ButtonGroup } from "@mui/material"
 import { Link } from "react-router-dom"
 import { FaRegEdit } from "react-icons/fa";
-import { useBlogStore } from "../store/blog";
 import React, { useState, useRef } from "react";
 import { IoLinkSharp } from "react-icons/io5";
 import { BiNotepad } from "react-icons/bi";
-import { useAuth } from "./AuthContext";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 

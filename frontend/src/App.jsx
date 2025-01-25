@@ -13,7 +13,6 @@ import CreateProjectPage from './pages/CreateProjectPage'
 import SignUpPage from './pages/SignUpPage'
 import SignInSuccessPage from './pages/SignInSuccessPage'
 import { Toaster } from "react-hot-toast";
-import { AuthProvider } from './components/AuthContext'
 import { useQuery } from "@tanstack/react-query"
 
 function App() {
@@ -40,9 +39,8 @@ function App() {
 
   return (
     <>
-      <AuthProvider>
         <Box className='flex'>
-          <Navbar/>
+          
         </Box>
         <Box className='flex'>
           <Routes>
@@ -57,7 +55,6 @@ function App() {
           </Routes> 
           <Toaster/>
         </Box>
-      </AuthProvider>
     </>
   )
 }
