@@ -4,14 +4,17 @@ const blogSchema = new mongoose.Schema({
     title:{
         type: String,
         required: true,
+        default: "",
     },
     content:{
         type: String,
         required: true,
+        default: "",
     },
     image:{
         type: String,
         required: true,
+        default: "",
     },
     ownerId:{
         type: mongoose.Schema.Types.ObjectId,

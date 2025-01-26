@@ -4,17 +4,35 @@ import { CiSearch } from "react-icons/ci";
 import BGpic from "../assets/starry night.jpg"
 import BlogCard from '../components/BlogCard';
 import { TbLoader } from "react-icons/tb";
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 function BlogPage() {
 
+  const {data:blogs} = useQuery({
+    queryKey: ['blogs'],
+    queryFn: async () => {
+      const res = await fetch("/api/blogs/fetch");
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to fetch blogs");
+      return data;
+    },
+    retry: false,
+  });
+  
+  const Blogs = blogs?.data;
+
+  console.log("Blogs data:", Blogs);
   const [visibleBlogs, setVisibleBlogs] = useState(6);
 
   const handleLoadMore = () => {
     setVisibleBlogs((prevNum) => prevNum + 6);
   };
 
-  const displayedBlogs = [...blogs].reverse().slice(0, visibleBlogs);
+  let displayedBlogs = [];
 
+  if(Blogs){
+  displayedBlogs = [...Blogs].slice(0, visibleBlogs);
+  }
   return (
     <>
       <Box className="flex flex-col justify-between w-full min-h-screen bg-gray-100 pt-3">
@@ -51,7 +69,7 @@ function BlogPage() {
                 </div>
               </div>
             </TableRow>
-            <TableRow>
+            {Blogs && (<TableRow>
               <div className='flex flex-row justify-evenly space-around w-[90%] mx-auto mt-10'>
                 <div className=''><Grid2 container spacing={2} columns={12} minHeight={290} >
                   {displayedBlogs.map((blog) => (
@@ -66,8 +84,8 @@ function BlogPage() {
                   ))}
                 </Grid2></div>
               </div>
-            </TableRow>
-            {visibleBlogs < blogs.length && (
+            </TableRow>)}
+            {Blogs && visibleBlogs < Blogs.length && (
             <TableRow>
               <div className='flex flex-row justify-center w-full mt-3'>
                 <div className='bg-black hover:bg-gray-900 rounded'><Button onClick={handleLoadMore}>

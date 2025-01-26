@@ -8,18 +8,48 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 
 function BlogCard({blog}) {
-
+  return (
+    <>
+      <div>{blog.title}</div>
+    </>
+  )
+}
+{/*
     const quillRef = useRef(null);
-
-    const {id, isSignedIn, username, password, email} = useAuth();
 
     const [modalOpen, setmodalOpen] = useState(false);
 
-    const {deleteBlog} = useBlogStore()
+    const {mutate: deleteBlog} = useMutation({
+      mutationFn: async (bid) => {
+        try{
+          const res = await fetch(`/api/blogs/delete/${bid}`, {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+          const data = await res.json();
+          if(!res.ok) throw new Error(data.error || "Failed to delete blog");
+          console.log("Deleted blog:", data);
+          return data;
+        }
+        catch(error){
+          console.error("Error deleting blog:", error);
+          throw error;
+        }
+      },
+      onSuccess: () => {
+        toast.success("Blog deleted successfully");
+        queryClient.invalidateQueries({queryKey:["blogs"]});
+      },
+      onError: (error) => {
+        toast.error(error.message);
+      },
+    });
+
     const handleDeleteBlog = async (bid) => {
-      const { success,message } = await deleteBlog(bid)
-      console.log("Success:",success);
-      console.log("Message:",message);
+      deleteBlog(bid);
+      setmodalOpen(false);
     };
 
     const [updatedBlog, setupdatedBlog] = useState(blog);
@@ -83,7 +113,7 @@ function BlogCard({blog}) {
     return (
       <>
           <Box className="w-[22rem] min-h-[14rem] rounded border border-gray-500 transition-transform transform hover:-translate-y-1.5">
-          {/*<img src="" className="max-w-full h-[5rem] bg-blue-500"></img>*/}
+         
             <button onClick={() => {setviewBlogModal(true)}} className="w-full h-[12rem] border-b border-gray-500">
               <div className="w-full h-[12rem] border-b border-gray-500">
                 <img
@@ -243,7 +273,7 @@ function BlogCard({blog}) {
             onClose={() => {setfullversion(true), setpreviewModalBodyOpen(false), setpreviewThumbnailOpen(false)}}
           >
           <div className='flex flex-col w-[22rem] min-h-[14rem] mx-auto'><Box className="w-[22rem] min-h-[14rem] rounded border border-gray-500 bg-gray-100 mx-auto mt-24">
-          {/*<img src="" className="max-w-full h-[5rem] bg-blue-500"></img>*/}
+          
             <button className="w-full h-[12rem] border-b border-gray-500">
               <div className="w-full h-[12rem] border-b border-gray-500">
                 <img
@@ -288,6 +318,5 @@ function BlogCard({blog}) {
       </>
     )
   }
-  
+*/}  
   export default BlogCard
-            

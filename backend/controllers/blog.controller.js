@@ -13,7 +13,7 @@ export const fetchBlogs = async (req, res) => {
 		if(blogs.length === 0){
 			res.status(200).json([]);
 		}
-		res.status(200).json({ success: true, data: blogs });
+		res.status(200).json({ data: blogs });
 	} catch (error) {
 		console.log("error in fetching products:", error.message);
 		res.status(500).json({ success: false, message: "Server Error" });
@@ -22,15 +22,15 @@ export const fetchBlogs = async (req, res) => {
 
 export const createBlog = async (req, res) => {
 	try {
-		let {image} = req.body;
 		const {title, content} = req.body;
+		let {image} = req.body;
 
 		const ownerId = req.user._id.toString();
 
 		const user = await User.findById(ownerId);
-		if(!user) return res.status(404).json({message: "User not found"});
+		if(!user) return res.status(404).json({success: false, message: "User not found"});
 
-		if(!title || !content || !image) return res.status(400).json({error: "Please provide all fields"});
+		if(!title || !content || !image) return res.status(400).json({success: false, error: "Please provide all fields"});
 		if(image){
 			const uploadedResponse = await cloudinary.uploader.upload(image);
 			image = uploadedResponse.secure_url;
@@ -95,20 +95,20 @@ export const deleteBlog = async (req, res) => {
 		
 		const ownerId = req.user._id.toString();
 		const user = await User.findById(ownerId);
-		if(!user) return res.status(404).json({message: "User not found"});
+		if(!user) return res.status(404).json({error: "User not found"});
 
 		user.blogs = user.blogs.filter((id) => id.toString() !== blogId);
 		await user.save();
 
 		let blog = await Blog.findById(blogId);
-		if(!blog) return res.status(404).json({message: "Blog not found"});
+		if(!blog) return res.status(404).json({error: "Blog not found"});
 
 		await Blog.findByIdAndDelete(blogId);
 
 		res.status(200).json({message: "Blog deleted successfully"});
 	} catch (error) {
-		console.log("error in deleting blog:", error.message);
-		res.status(500).json({message: "Server Error"});
+		console.log("error in deleting blog:", error);
+		res.status(500).json({error: "Server Error"});
 	}
 };
 

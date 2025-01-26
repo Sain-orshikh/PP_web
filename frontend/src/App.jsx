@@ -37,6 +37,19 @@ function App() {
   retry: false,
   });
 
+  const {data:blogs, error} = useQuery({
+    queryKey: ['blogs'],
+    queryFn: async () => {
+      const res = await fetch("/api/blogs/fetch");
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to fetch blogs");
+      return data;
+    },
+    retry: false,
+  });
+
+  console.log("Auth User is:",authUser);
+  console.log(blogs);
   return (
     <>
         <Box className='flex'>
@@ -48,8 +61,8 @@ function App() {
             <Route path='/create' element={ <CreatePage/>}/>
             <Route path='/blog' element={ <BlogPage/>}/>
             <Route path='/about' element={ <AboutPage/>}/>
-            <Route path='/create/project' element={ <CreateProjectPage/>}/>
-            <Route path='/create/blog' element={ <CreateBlogPage/>}/>
+            <Route path='/create/project' element={authUser ? <CreateProjectPage/> : <CreatePage/>}/>
+            <Route path='/create/blog' element={authUser ? <CreateBlogPage/> : <CreatePage/>}/>
             <Route path='/signin' element={authUser ? <SignInSuccessPage/> : <SignInPage/>}/>
             <Route path='/signup' element={authUser ? <SignInSuccessPage/> : <SignUpPage/>}/>
           </Routes> 

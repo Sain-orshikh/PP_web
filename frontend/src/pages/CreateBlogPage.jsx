@@ -4,15 +4,45 @@ import { FaSave, FaEye, FaRegPaperPlane, FaRegEdit } from "react-icons/fa";
 import { IoLinkSharp } from "react-icons/io5";
 import { BiNotepad } from "react-icons/bi";
 import { MdCloudUpload } from "react-icons/md";
-import ErrorAlert from '../components/ErrorAlert';
 import BlogCard from '../components/BlogCard';
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import toast from 'react-hot-toast';
 
 function CreateBlogPage() {
 
-    const {data:authUser, isLoading} = useQuery({queryKey: ["authUser"]});
+    const queryClient = useQueryClient();
+
+    const {data:authUser} = useQuery({queryKey: ["authUser"]});
+
+    const {mutate: createBlogMutation} = useMutation({
+      mutationFn: async (newBlog) => {
+        try {
+          const res = await fetch("/api/blogs/create", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(newBlog),
+          });
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.message || "Failed to create blog");
+          return data;
+        } catch (error) {
+          console.error(error);
+          throw error;
+        }
+      },
+      onSuccess: () => {
+        queryClient.invalidateQueries({queryKey: ["authUser"]});
+        toast.success("Blog created successfully");
+      },
+      onError: (error) => {
+        toast.error(error.message);
+      },
+    });
+
     const fallbackImage = "https://images.unsplash.com/photo-1488998427799-e3362cec87c3?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NTZ8fGRlZmF1bHQlMjBibG9nfGVufDB8fDB8fHww";
 
     const quillRef = useRef(null);
@@ -22,8 +52,6 @@ function CreateBlogPage() {
       image: "",
       owner_id: authUser._id || "",
     });
-
-    const { createBlog } = useBlogStore();
 
     const [alertopen, setalertOpen] = useState(false);
     const [severityType, setseverityType] = useState("");
@@ -39,10 +67,8 @@ function CreateBlogPage() {
       };
 
       console.log(NewBlog);
-      const {success, message} = await createBlog(NewBlog);
-      console.log("Success:",success);
-      console.log("Message:",message);
-      console.log("Owner id:",newBlog.owner_id);
+      const {success} = createBlogMutation(NewBlog);
+
       if (success === false) {
         setalertOpen(true);
         setseverityType("error");
@@ -54,7 +80,7 @@ function CreateBlogPage() {
         setalertMessage("Published a blog with success!");
       }
 
-      setnewBlog({ title: "", prompt: "", content: "", image: "", owner_id: id,});
+      setnewBlog({ title: "", prompt: "", content: "", image: "", owner_id,});
     };
 
     const [previewModalBodyOpen, setpreviewModalBodyOpen] = useState(false);
@@ -65,7 +91,7 @@ function CreateBlogPage() {
       title: "",
       content: "",
       image: "",
-      owner_id: id || "",
+      owner_id: authUser._id || "",
     });
 
     const handlePreviewOpen = () => {
@@ -95,7 +121,7 @@ function CreateBlogPage() {
                   className="w-full h-8 pb-1 border rounded"
                 />
               </div>
-              <div>
+              <div className='my-3 overflow-hidden'>
                 <ReactQuill
                   ref={quillRef}
                   theme="snow"
@@ -107,7 +133,7 @@ function CreateBlogPage() {
                   }}
                 />
               </div>
-              <div className='mt-3'>
+              <div>
                 Featured Image
               </div>
               <div className='mt-1 mb-5'>
