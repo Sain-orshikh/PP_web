@@ -7,29 +7,28 @@ import { MdOutlineMail } from "react-icons/md";
 import { FaUser } from "react-icons/fa";
 import { MdPassword } from "react-icons/md";
 import { MdDriveFileRenameOutline } from "react-icons/md";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import toast from "react-hot-toast";
+import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
+import {toast} from "react-hot-toast";
 
 const SignUpPage = () => {
 
 	const queryClient = useQueryClient();
 
 	const [formData, setFormData] = useState({
-		email: "",
 		username: "",
-		fullName: "",
+		email: "",
 		password: "",
 	});
 
 	const { mutate: singupMutation, isError, error, isPending} = useMutation({
-		mutationFn: async({email, username, fullName, password}) => {
+		mutationFn: async({email, username, password}) => {
 			try{
 				const res = await fetch('/api/auth/signup',{
 					method:"POST",
 					headers:{
 						"Content-Type":"application/json"
 					},
-					body: JSON.stringify({email, username, fullName, password}),
+					body: JSON.stringify({username, email, password}),
 				});
 				
 				const data = await res.json();
@@ -43,7 +42,7 @@ const SignUpPage = () => {
 			}
 		},
 		onSuccess: () => {
-			toast.success("Account created successfully (reload to continue)");
+			toast.success("Account created successfully");
 			queryClient.invalidateQueries({queryKey:["authUser"]});
 		},
 	});
@@ -88,17 +87,6 @@ const SignUpPage = () => {
 								value={formData.username}
 							/>
 						</label>
-						<label className='input input-bordered rounded flex items-center gap-2 flex-1'>
-							<MdDriveFileRenameOutline />
-							<input
-								type='text'
-								className='grow'
-								placeholder='Full Name'
-								name='fullName'
-								onChange={handleInputChange}
-								value={formData.fullName}
-							/>
-						</label>
 					</div>
 					<label className='input input-bordered rounded flex items-center gap-2'>
 						<MdPassword />
@@ -118,7 +106,7 @@ const SignUpPage = () => {
 				</form>
 				<div className='flex flex-col lg:w-2/3 gap-2 mt-4'>
 					<p className='text-white text-lg'>Already have an account?</p>
-					<Link to='/login'>
+					<Link to='/signin'>
 						<button className='btn rounded-full btn-primary text-white btn-outline w-full'>Sign in</button>
 					</Link>
 				</div>

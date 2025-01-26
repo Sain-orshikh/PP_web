@@ -3,14 +3,16 @@ import pp_logo from "../assets/pp-logo.png"
 import { Link } from "react-router-dom";
 import { Modal } from "@mui/material";
 import { FaHome, FaBookReader, FaRegEdit, FaLongArrowAltRight } from "react-icons/fa";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 
 function SignInSuccessPage() {
 
+    const queryClient = useQueryClient();
+
     const {data:authUser} = useQuery({queryKey:["authUser"]});
 
-    const {logoutMutation} = useMutation({
+    const {mutate:logoutMutation} = useMutation({
       mutationFn: async() => {
         try{
           const res = await fetch("/api/auth/logout",{
@@ -39,11 +41,11 @@ function SignInSuccessPage() {
         logoutMutation();
     };
 
-    const {updateUserMutation} = useMutation({
+    const {mutate: updateUserMutation} = useMutation({
       mutationFn: async(updatedUser) => {
         try{
-          const res = await fetch(`/api/auth/update`,{
-            method: "PUT",
+          const res = await fetch(`/api/users/update`,{
+            method: "POST",
             headers:{
               "Content-Type":"application/json"
             },
@@ -70,11 +72,16 @@ function SignInSuccessPage() {
 
     const [modalOpen, setmodalOpen] = useState(false);
     const [updatedUser, setupdatedUser] =  useState({
-      name: username,
-      email: email,
-      password: password
+      name: authUser.username,
+      email: authUser.email,
+      currentpassword: "",
+      newpassword: "",
+      bio: "",
+      profileImg: authUser.profileImg || '',  
+      coverImg: authUser.coverImg || '',
     }); 
     const handleUpdateUser = async(updatedUser) => {
+      console.log(updatedUser);
       updateUserMutation(updatedUser);
       setmodalOpen(false)
     };
@@ -181,33 +188,53 @@ function SignInSuccessPage() {
           onClose={() => setmodalOpen(false)}
           className="flex items-center"
         >
-          <div className="w-[50%] sm:w-[30%] h-[12rem] mx-auto bg-white rounded-md p-3">
-            <div className="mt-2">
-              <input
-                value={updatedUser.name}
-                onChange={(e) => setupdatedUser({ ...updatedUser, name: e.target.value})}
-                placeholder={authUser.username}
-                className="w-full border border-black p-1"
-              />
+          <div className="w-[70%] sm:w-[50%] h-[12rem] mx-auto bg-white rounded-md p-3">
+            <div className="flex flex-row justify-between items-center space-x-2">
+              <div className="mt-2 w-[50%]">
+                <input
+                  value={updatedUser.name}
+                  onChange={(e) => setupdatedUser({ ...updatedUser, name: e.target.value})}
+                  placeholder={authUser.username}
+                  className="w-full border border-black p-1"
+                />
+              </div>
+              <div className="mt-2 w-[50%]">
+                <input
+                  value={updatedUser.email}
+                  onChange={(e) => setupdatedUser({ ...updatedUser, email: e.target.value})}
+                  placeholder={authUser.email}
+                  className="w-full border border-black p-1"
+                />
+              </div>
+            </div>
+            <div className="flex flex-row justify-between items-center space-x-2">
+              <div className="mt-2 w-[50%]">
+                <input
+                  value={updatedUser.currentpassword}
+                  onChange={(e) => setupdatedUser({ ...updatedUser, currentpassword: e.target.value})}
+                  placeholder={"Current password"}
+                  className="w-full border border-black p-1"
+                />
+              </div>
+              <div className="mt-2 w-[50%]">
+                <input
+                  value={updatedUser.newpassword}
+                  onChange={(e) => setupdatedUser({ ...updatedUser, newpassword: e.target.value})}
+                  placeholder={"New password"}
+                  className="w-full border border-black p-1"
+                />
+              </div>
             </div>
             <div className="mt-2">
               <input
-                value={updatedUser.email}
-                onChange={(e) => setupdatedUser({ ...updatedUser, email: e.target.value})}
-                placeholder={authUser.email}
+                value={updatedUser.bio}
+                onChange={(e) => setupdatedUser({ ...updatedUser, bio: e.target.value})}
+                placeholder={updatedUser.bio || "Bio"}
                 className="w-full border border-black p-1"
               />
             </div>
-            <div className="mt-2">
-              <input
-                value={updatedUser.password}
-                onChange={(e) => setupdatedUser({ ...updatedUser, password: e.target.value})}
-                placeholder={""}
-                className="w-full border border-black p-1"
-              />
-            </div>
-            <div className="flex mt-3">
-              <button onClick={() => {handleUpdateUser(id, updatedUser)}} className="bg-black rounded ml-auto p-1">
+            <div className="flex mt-3 w-full">
+              <button onClick={() => {handleUpdateUser(updatedUser)}} className="bg-black hover:bg-gray-500 rounded ml-auto p-1 w-full">
                 <span className="text-white mx-1">Update</span>
               </button>
             </div>

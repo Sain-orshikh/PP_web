@@ -40,7 +40,7 @@ function App() {
   return (
     <>
         <Box className='flex'>
-          
+          <Navbar/>
         </Box>
         <Box className='flex'>
           <Routes>

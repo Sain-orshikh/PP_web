@@ -9,18 +9,30 @@ import { VscSignIn } from "react-icons/vsc";
 import { MdMenu } from "react-icons/md";
 import pp_logo from "../assets/pp-logo.png"
 import { useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
 //import IsSmallScreen from '../modes/isSmallScreen'
 
 function Navbar() {
 
-  const {isSignedIn, setid, id} = useAuth();
-
-  useEffect(() => {
-    if(isSignedIn === false){
-      setid('');
-      console.log(id);
+  const {data:authUser} = useQuery({
+    queryKey: ["authUser"],
+    queryFn: async () => {
+      try{
+        const res = await fetch("/api/auth/me");
+        const data = await res.json();
+        if(data.error) return null;
+        if(!res.ok){
+          throw new Error(data.error || "Something went wrong");
+        }
+        console.log("Auth user is here:",data);
+        return data;
+      }
+      catch(error){
+        throw new Error(error);
     }
-  }, [isSignedIn]);
+  },
+  retry: false,
+  });
 
   const [anchorEl, setAnchorEl] = useState(null);
   const [open, setOpen] = useState(false);
@@ -66,7 +78,7 @@ function Navbar() {
           </Button>
           <Button>
             <Link to={'/signin'} className='text-black hover:text-blue-500'>
-            {isSignedIn ? (
+            {authUser ? (
               <FaUserCircle fontSize={30} />
             ) : (
               <VscSignIn fontSize={30}/>
@@ -105,7 +117,7 @@ function Navbar() {
         </MenuItem>
         <MenuItem onClick={handleClose}>
           <Link to={"/signin"}>
-          {isSignedIn ? (
+          {authUser ? (
             <FaUserCircle fontSize={30} />
           ) : (
             <VscSignIn fontSize={30}/>

@@ -18,7 +18,7 @@ export const getUserProfile = async (req,res) => {
 };
 
 export const updateUser = async (req, res) => {
-	const { email, username, currentPassword, newPassword, bio } = req.body;
+	const { username, email, currentPassword, newPassword, bio } = req.body;
 	let { profileImg, coverImg } = req.body;
 
 	const userId = req.user._id;
