@@ -24,7 +24,7 @@ export const createBlog = async (req, res) => {
 	try {
 		const {title, content} = req.body;
 		let {image} = req.body;
-
+		let imageurl = "";
 		const ownerId = req.user._id.toString();
 
 		const user = await User.findById(ownerId);
@@ -32,6 +32,7 @@ export const createBlog = async (req, res) => {
 
 		if(!title || !content || !image) return res.status(400).json({success: false, error: "Please provide all fields"});
 		if(image){
+			imageurl = image;
 			const uploadedResponse = await cloudinary.uploader.upload(image);
 			image = uploadedResponse.secure_url;
 		};
@@ -39,6 +40,7 @@ export const createBlog = async (req, res) => {
 			title,
 			content,
 			image,
+			imageurl,
 			ownerId,
 		});
 
@@ -121,9 +123,9 @@ export const checkBlogOwner = async (req,res) => {
 
 		if(!blog.ownerId.toString() === ownerId.toString()) return res.status(200).json({message: "You are not the owner of this blog"});
 		
-		res.status(201).json({message: "You are the owner of this blog"});
+		res.status(201).json({success: true, message: "You are the owner of this blog"});
 	} catch (error) {
 		console.log("error in checking blog owner:", error.message);
-		res.status(500).json({message: "Server Error"});
+		res.status(500).json({success: false, message: "Server Error"});
 	}
 };

@@ -8,6 +8,6 @@ router.get("/fetch", protectRoute, fetchBlogs);
 router.post("/create", protectRoute, createBlog);
 router.post("/update/:id", updateBlog);
 router.delete("/delete/:id", protectRoute, deleteBlog);
-router.post("/check/:id", protectRoute, checkBlogOwner);
+router.get("/check/:id", protectRoute, checkBlogOwner);
 
 export default router;

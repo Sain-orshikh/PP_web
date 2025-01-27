@@ -7,6 +7,7 @@ import { MdCloudUpload } from "react-icons/md";
 import BlogCard from '../components/BlogCard';
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import defaultimg from "../assets/no image1.png";
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
 
@@ -43,7 +44,7 @@ function CreateBlogPage() {
       },
     });
 
-    const fallbackImage = "https://images.unsplash.com/photo-1488998427799-e3362cec87c3?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NTZ8fGRlZmF1bHQlMjBibG9nfGVufDB8fDB8fHww";
+    const fallbackImage = "https://shorturl.at/6w7NB";
 
     const quillRef = useRef(null);
     const [newBlog, setnewBlog] = useState({
@@ -110,7 +111,7 @@ function CreateBlogPage() {
               <div className="font-bold text-2xl mt-3">
                 Create New Blog
               </div>
-              <div className="mt-3">
+              <div className="mt-3 ml-1 text-xl">
                 Blog Title
               </div>
               <div className="mt-1">
@@ -121,7 +122,10 @@ function CreateBlogPage() {
                   className="w-full h-8 pb-1 border rounded"
                 />
               </div>
-              <div className='my-3 overflow-hidden'>
+              <div className="mt-1 ml-1 text-xl">
+                Blog Content
+              </div>
+              <div className='my-2 overflow-hidden'>
                 <ReactQuill
                   ref={quillRef}
                   theme="snow"
@@ -133,7 +137,7 @@ function CreateBlogPage() {
                   }}
                 />
               </div>
-              <div>
+              <div className='text-xl ml-1'>
                 Featured Image
               </div>
               <div className='mt-1 mb-5'>
@@ -144,27 +148,6 @@ function CreateBlogPage() {
                   className="w-full h-8 pb-1 border rounded"
                 />
               </div>
-              {/*<div className='flex items-center mt-1 mb-5 w-full h-[7.5rem] border border-dashed border-gray-400 rounded'>
-                <div className='mx-auto'>
-                  <div className='flex justify-center items-center'>
-                    <MdCloudUpload fontSize={50}/>
-                  </div>
-                  <div>
-                    <label htmlFor="file-upload" className='cursor-pointer font-medium'>
-                      <span className='font-bold'>Upload a File</span><span className='text-gray-500'> or drag and drop</span> 
-                    </label>
-                    <input
-                      type='file'
-                      id='file-upload'
-                      onChange={handleFileChange}
-                      className='hidden'
-                    />
-                  </div>
-                  <div className='flex space-evenly'>
-                    <text className='text-gray-500 mx-auto'>PNG, JPG, GIF up to 10MB</text>
-                  </div>
-                </div>
-              </div>*/}
             </div>
           </div>
           <div className='flex flex-row items-center justify-between w-full h-[3rem] bg-white border-t'>

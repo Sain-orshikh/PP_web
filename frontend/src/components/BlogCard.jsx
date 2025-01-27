@@ -7,22 +7,66 @@ import { BiNotepad } from "react-icons/bi";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 
+import { useMutation, useQuery } from "@tanstack/react-query";
+
 function BlogCard({blog}) {
-  return (
-    <>
-      <div>{blog.title}</div>
-    </>
-  )
-}
-{/*
+
     const quillRef = useRef(null);
 
     const [modalOpen, setmodalOpen] = useState(false);
 
+    const {data: authUser} = useQuery({queryKey: ["authUser"]});
+
+    const {data: userVerification} = useQuery({
+      queryKey: ["userVerification"],
+      queryFn: async () => {
+        try {
+          const res = await fetch(`/api/blogs/check/${blog._id}`);
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.error || "You can only edit your blog");
+          console.log("User verified:", data);
+          return data.success;
+        } catch (error) {
+          console.error("Error verifying user:", error);
+          throw error;
+        }
+      },
+    });
+
+
+    const {mutate: updateBlog} = useMutation({
+      mutationFn: async (updatedBlog) => {
+        try {
+          const res = await fetch(`/api/blogs/update/${blog._id}`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(updatedBlog),
+          }
+          );
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.error || "Failed to update blog");
+          console.log("Updated blog:", data);
+          return data;
+        } catch (error) {
+          console.error("Error updating blog:", error);
+          throw error;
+        }
+      },
+      onSuccess: () => {
+        toast.success("Blog updated successfully");
+        queryClient.invalidateQueries({queryKey:["blogs"]});
+      },
+      onError: (error) => {
+        toast.error(error.message);
+      },
+    });
+
     const {mutate: deleteBlog} = useMutation({
-      mutationFn: async (bid) => {
+      mutationFn: async () => {
         try{
-          const res = await fetch(`/api/blogs/delete/${bid}`, {
+          const res = await fetch(`/api/blogs/delete/${blog._id}`, {
             method: "DELETE",
             headers: {
               "Content-Type": "application/json",
@@ -47,14 +91,13 @@ function BlogCard({blog}) {
       },
     });
 
-    const handleDeleteBlog = async (bid) => {
-      deleteBlog(bid);
+    const handleDeleteBlog = async () => {
+      deleteBlog();
       setmodalOpen(false);
     };
 
     const [updatedBlog, setupdatedBlog] = useState(blog);
-
-    const {updateBlog} = useBlogStore()
+    
       const handleUpdateBlog = async (bid, updatedBlog) => {
         const editor = quillRef.current.getEditor();
         const contentHtml = editor.root.innerHTML; // Get content as HTML
@@ -62,13 +105,14 @@ function BlogCard({blog}) {
         const UpdatedBlog = {
           ...updatedBlog,
           content: contentHtml,
+          image: updatedBlog.imageurl,
         };
-      const { success, message } = await updateBlog(bid, UpdatedBlog)
+      updateBlog(UpdatedBlog)
       setmodalOpen(false)
     };
 
     const [viewBlogModal, setviewBlogModal] = useState(false);
-    const fallbackImage = "https://images.unsplash.com/photo-1488998427799-e3362cec87c3?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NTZ8fGRlZmF1bHQlMjBibG9nfGVufDB8fDB8fHww"; // Fallback image URL
+    const fallbackImage = "https://shorturl.at/6w7NB";
     
     const [previewModalBodyOpen, setpreviewModalBodyOpen] = useState(false);
     const [previewThumbnailOpen, setpreviewThumbnailOpen] = useState(false);
@@ -79,33 +123,23 @@ function BlogCard({blog}) {
     const [alertMessage, setalertMessage] = useState('');
 
     const handleEditOpen = () => {
-      if(isSignedIn === false){
-        setalertOpen(true);
-        setseverityType('warning');
-        setalertMessage('Please Sign in before editing!');
-      }
-      else if(isSignedIn && blog.owner_id === id){
+      if(userVerification === true){
         setmodalOpen(true);
-      }
-      else{
-        setalertOpen(true);
-        setseverityType('error');
-        setalertMessage('You can only edit your blog!')
-      }
+      };
     };
 
     const [freshBlog, setfreshBlog] = useState({
       title: "",
       content: "",
       image: "",
-      owner_id: id || "",
+      owner_id: "",
     });
 
     const handlePreviewOpen = () => {
       const editor = quillRef.current.getEditor();
       const contentHtml = editor.root.innerHTML; // Get content as HTML
 
-      setfreshBlog({...updatedBlog, content: contentHtml,});
+      setfreshBlog({...updatedBlog, content: contentHtml, owner_id: authUser.id});
 
       setpreviewModalBodyOpen(true);
     };
@@ -136,13 +170,19 @@ function BlogCard({blog}) {
           open={modalOpen}
         >
           <div className="bg-gray-100 w-[75%] mx-auto mt-10 rounded-xl">
-            <div className="mt-3 mx-1">
+            <div className="mt-4 ml-2 text-xl">
+              Blog title
+            </div>
+            <div className="mt-1 mx-1">
               <input
                 value={updatedBlog.title}
                 onChange={(e) => setupdatedBlog({ ...updatedBlog, title: e.target.value})}
                 placeholder=" Enter new blog title"
                 className="w-full h-8 pb-1 mt-1 border rounded"
               />
+            </div>
+            <div className="mt-1 mb-2 ml-2 text-xl">
+              Blog content
             </div>
             <div className='rounded mx-1 mt-1'>
               <ReactQuill
@@ -155,10 +195,13 @@ function BlogCard({blog}) {
                 }}
               />
             </div>
-            <div className='mt-1 mb-3 mx-1'>
+            <div className="ml-2 mt-2 text-xl">
+              Featured image
+            </div>
+            <div className='mt-3 mb-3 mx-1'>
               <input
-                value={updatedBlog.image}
-                onChange={(e) => setupdatedBlog({ ...updatedBlog, image: e.target.value})}
+                value={updatedBlog.imageurl}
+                onChange={(e) => setupdatedBlog({ ...updatedBlog, imageurl: e.target.value})}
                 placeholder=" Enter url of the image"
                 className="w-full h-8 pb-1 border rounded"
               />
@@ -318,5 +361,4 @@ function BlogCard({blog}) {
       </>
     )
   }
-*/}  
   export default BlogCard
