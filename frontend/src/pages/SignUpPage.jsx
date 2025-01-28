@@ -66,10 +66,10 @@ const SignUpPage = () => {
 	return (
 	  <>
 		<div className="w-full min-h-screen flex items-center justify-center bg-cover bg-center" style={{backgroundImage: `url(${backgroundImage})`}}>
-			<div className="w-[25%] bg-white h-[80%] rounded-lg">
+			<div className="w-[75%] sm:w-[25%] bg-white  rounded-lg">
 				<div className="flex flex-col justify-center w-full h-[20%] bg-black rounded-t-lg">
-					<span className="font-playwright text-white text-5xl mx-auto">Passion</span>
-					<span className="w-[55%] ml-auto font-playwright text-white text-4xl">Project</span>
+					<span className="font-playwright text-white text-5xl mx-auto mt-2">Passion</span>
+					<span className="w-[55%] ml-auto font-playwright text-white text-4xl mb-2">Project</span>
 				</div>
 				<div className="h-[80%]">
 					<div className="w-full font-semibold text-3xl ml-5 mt-5">
@@ -105,8 +105,10 @@ const SignUpPage = () => {
 							/>
 						</div>						
 					</div>
+					<div className="w-[90%] mx-auto border border-gray-300 mt-3">
+					</div>
 					<div className="flex items-center justify-center w-full">
-						<button className="bg-black text-white font-semibold text-xl w-[90%] mx-auto mt-5 h-[3.5rem] rounded hover:bg-gray-700" onClick={handleSubmit}>
+						<button className="bg-black text-white font-semibold text-xl w-[90%] mx-auto mt-3 mb-5 h-[3.5rem] rounded hover:bg-gray-700" onClick={handleSubmit}>
 							Sign Up
 						</button>
 					</div>
