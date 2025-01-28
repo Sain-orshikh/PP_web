@@ -7,9 +7,11 @@ import { BiNotepad } from "react-icons/bi";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-function BlogCard({blog}) {
+function BlogCard({blog, onUpdate}) {
+
+    const queryClient = useQueryClient();
 
     const quillRef = useRef(null);
 
@@ -55,8 +57,8 @@ function BlogCard({blog}) {
         }
       },
       onSuccess: () => {
+        onUpdate();
         toast.success("Blog updated successfully");
-        queryClient.invalidateQueries({queryKey:["blogs"]});
       },
       onError: (error) => {
         toast.error(error.message);
@@ -82,9 +84,9 @@ function BlogCard({blog}) {
           throw error;
         }
       },
-      onSuccess: () => {
+      onSuccess: async () => {
         toast.success("Blog deleted successfully");
-        queryClient.invalidateQueries({queryKey:["blogs"]});
+        onUpdate();
       },
       onError: (error) => {
         toast.error(error.message);
@@ -117,10 +119,6 @@ function BlogCard({blog}) {
     const [previewModalBodyOpen, setpreviewModalBodyOpen] = useState(false);
     const [previewThumbnailOpen, setpreviewThumbnailOpen] = useState(false);
     const [fullversion, setfullversion] = useState(true);
-
-    const [alertopen, setalertOpen] = useState(false);
-    const [severityType, setseverityType] = useState('');
-    const [alertMessage, setalertMessage] = useState('');
 
     const handleEditOpen = () => {
       if(userVerification === true){
@@ -348,16 +346,6 @@ function BlogCard({blog}) {
         </div>
           </Modal>
         )}
-        <Snackbar
-          open={alertopen}
-          autoHideDuration={5000} 
-          onClose={() => {setalertOpen(false)}}
-          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-        >
-          <Alert onClose={() => setalertOpen(false)} variant="filled" severity={severityType}>
-            {alertMessage}
-          </Alert>
-        </Snackbar>
       </>
     )
   }

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom';
 import { ButtonGroup, Button, Box, Input, Table, TableRow, Typography, TableHead, TableBody, TableFooter, Grid, Grid2 } from '@mui/material'
 import { CiSearch } from "react-icons/ci";
 import BGpic from "../assets/starry night.jpg"
@@ -7,6 +8,8 @@ import { TbLoader } from "react-icons/tb";
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 function BlogPage() {
+
+  const queryClient = useQueryClient();
 
   const {data:blogs} = useQuery({
     queryKey: ['blogs'],
@@ -30,9 +33,13 @@ function BlogPage() {
 
   let displayedBlogs = [];
 
+
   if(Blogs){
-  displayedBlogs = [...Blogs].slice(0, visibleBlogs);
+    displayedBlogs = [...Blogs].slice(0, visibleBlogs);
   }
+  const handleinval = () => {
+    queryClient.invalidateQueries({queryKey: ['blogs']});
+  };
   return (
     <>
       <Box className="flex flex-col justify-between w-full min-h-screen bg-gray-100 pt-3">
@@ -79,7 +86,7 @@ function BlogPage() {
                     key={blog._id}
                     className="mx-auto"
                   >
-                    <BlogCard blog={blog} />
+                    <BlogCard blog={blog} onUpdate={handleinval} />
                   </Grid2>
                   ))}
                 </Grid2></div>
@@ -94,6 +101,11 @@ function BlogPage() {
                 </Button></div>
               </div>
             </TableRow>
+            )}
+            {Blogs === undefined && (
+              <div className='flex flex-row justify-center w-full mt-10 text-2xl'>
+                No blogs found, <button className='text-blue-600 ml-1'><Link to={'/create/blog'}> Create One!</Link></button>
+              </div>
             )}
             <TableRow>
               <div className='w-full bg-red-300 mt-10'>

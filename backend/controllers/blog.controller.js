@@ -10,12 +10,9 @@ export const fetchBlogs = async (req, res) => {
 			select: "username",
 		});
 
-		if(blogs.length === 0){
-			res.status(200).json([]);
-		}
 		res.status(200).json({ data: blogs });
 	} catch (error) {
-		console.log("error in fetching products:", error.message);
+		console.log("error in fetching blogs:", error.message);
 		res.status(500).json({ success: false, message: "Server Error" });
 	}
 };
