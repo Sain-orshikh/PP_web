@@ -2,6 +2,10 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 
 import pplogo from "../assets/pp-logo.png";
+import wood from "../assets/wood.jpg";
+import glass from "../assets/glass.jpg";
+import ocean from "../assets/ocean.jpg";
+import city from "../assets/city.jpg";
 
 import { MdOutlineMail } from "react-icons/md";
 import { FaUser } from "react-icons/fa";
@@ -14,7 +18,7 @@ const SignUpPage = () => {
 
 	const queryClient = useQueryClient();
 
-	const [formData, setFormData] = useState({
+	const [newUser, setnewUser] = useState({
 		username: "",
 		email: "",
 		password: "",
@@ -45,73 +49,71 @@ const SignUpPage = () => {
 			toast.success("Account created successfully");
 			queryClient.invalidateQueries({queryKey:["authUser"]});
 		},
+		onError: (error) => {
+			toast.error(error.message);
+		}
 	});
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		singupMutation(formData);
+		singupMutation(newUser);
 	};
 
-	const handleInputChange = (e) => {
-		setFormData({ ...formData, [e.target.name]: e.target.value });
-	};
+	const bgImages = [wood, glass, ocean, city];
+
+	const backgroundImage = bgImages[Math.floor(Math.random() * bgImages.length)];
 
 	return (
-		<div className='max-w-screen-xl mx-auto flex h-screen px-10'>
-			<div className='flex-1 hidden lg:flex items-center  justify-center'>
-			</div>
-			<div className='flex-1 flex flex-col justify-center items-center'>
-				<form className='lg:w-2/3  mx-auto md:mx-20 flex gap-4 flex-col' onSubmit={handleSubmit}>
-					
-					<h1 className='text-4xl font-extrabold text-white'>Join today.</h1>
-					<label className='input input-bordered rounded flex items-center gap-2'>
-						<MdOutlineMail />
-						<input
-							type='email'
-							className='grow'
-							placeholder='Email'
-							name='email'
-							onChange={handleInputChange}
-							value={formData.email}
-						/>
-					</label>
-					<div className='flex gap-4 flex-wrap'>
-						<label className='input input-bordered rounded flex items-center gap-2 flex-1'>
-							<FaUser />
-							<input
-								type='text'
-								className='grow '
-								placeholder='Username'
-								name='username'
-								onChange={handleInputChange}
-								value={formData.username}
-							/>
-						</label>
+	  <>
+		<div className="w-full min-h-screen flex items-center justify-center bg-cover bg-center" style={{backgroundImage: `url(${backgroundImage})`}}>
+			<div className="w-[25%] bg-white h-[80%] rounded-lg">
+				<div className="flex flex-col justify-center w-full h-[20%] bg-black rounded-t-lg">
+					<span className="font-playwright text-white text-5xl mx-auto">Passion</span>
+					<span className="w-[55%] ml-auto font-playwright text-white text-4xl">Project</span>
+				</div>
+				<div className="h-[80%]">
+					<div className="w-full font-semibold text-3xl ml-5 mt-5">
+						Sign Up	
 					</div>
-					<label className='input input-bordered rounded flex items-center gap-2'>
-						<MdPassword />
-						<input
-							type='password'
-							className='grow'
-							placeholder='Password'
-							name='password'
-							onChange={handleInputChange}
-							value={formData.password}
-						/>
-					</label>
-					<button className='btn rounded-full btn-primary text-white'>{
-						isPending ? "Loading..." : "Sign up"	
-					}</button>
-					{isError && <p className='text-red-500'>{error.message}</p>}
-				</form>
-				<div className='flex flex-col lg:w-2/3 gap-2 mt-4'>
-					<p className='text-white text-lg'>Already have an account?</p>
-					<Link to='/signin'>
-						<button className='btn rounded-full btn-primary text-white btn-outline w-full'>Sign in</button>
-					</Link>
+					<div className="w-full">
+						<div className="w-[90%] h-[3.5rem] mx-auto mt-5 border border-black">
+							<input
+								value={newUser.username}
+								onChange={(e) => setnewUser({...newUser, username: e.target.value})}
+								placeholder="Username"
+								className="w-full h-full p-1 text-xl"
+							/>
+						</div>
+					</div>
+					<div className="w-full">
+						<div className="w-[90%] h-[3.5rem] mx-auto mt-5 border border-black">
+							<input
+								value={newUser.email}
+								onChange={(e) => setnewUser({...newUser, email: e.target.value})}
+								placeholder="Email"
+								className="w-full h-full p-1 text-xl"
+							/>
+						</div>
+					</div>
+					<div className="w-full">
+						<div className="w-[90%] h-[3.5rem] mx-auto mt-5 border border-black">
+							<input
+								value={newUser.password}
+								onChange={(e) => setnewUser({...newUser, password: e.target.value})}
+								placeholder="Password"
+								className="w-full h-full p-1 text-xl"
+							/>
+						</div>						
+					</div>
+					<div className="flex items-center justify-center w-full">
+						<button className="bg-black text-white font-semibold text-xl w-[90%] mx-auto mt-5 h-[3.5rem] rounded hover:bg-gray-700" onClick={handleSubmit}>
+							Sign Up
+						</button>
+					</div>
 				</div>
 			</div>
-		</div>
+		</div>	
+	  </>
 	);
 };
 export default SignUpPage;

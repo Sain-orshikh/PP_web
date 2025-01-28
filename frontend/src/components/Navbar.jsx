@@ -33,37 +33,37 @@ function Navbar() {
         <Box className="flex justify-between items-center">
           {/*<img>Passion project logo has to go here</img>*/}
           <img src={pp_logo} className=""/>
-          <text className='text-xl text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500 font-bold ml-5'>
+          <text className='text-3xl text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500 font-playwright ml-5'>
             Passion Project MAIS
           </text>
         </Box>
-        <Box className="flex mr-10 space-x-4 hidden sm:block">
+        <Box className="flex mr-10 space-x-3 hidden sm:block">
           <Button className=''>
-            <Link to={'/'} className="text-sky-500 hover:text-black">
+            <Link to={'/'} className="text-sky-500 text-lg hover:text-black">
               Home
             </Link>
           </Button>
           <Button>
-            <Link to={'/blog'} className="text-indigo-500 hover:text-black">
+            <Link to={'/blog'} className="text-indigo-500 text-lg hover:text-black">
               Blog
             </Link>
           </Button>
           <Button>
-            <Link to={'/create'} className="text-emerald-500 hover:text-black">{/* text-amber-500 */}
+            <Link to={'/create'} className="text-emerald-500 text-lg hover:text-black">{/* text-amber-500 */}
               Create
             </Link>
           </Button>
           <Button>
-            <Link to={'/about'} className='text-amber-500 hover:text-black'>
+            <Link to={'/about'} className='text-amber-500 text-lg hover:text-black'>
               About
             </Link>
           </Button>
           <Button>
             <Link to={'/signin'} className='text-black hover:text-blue-500'>
             {authUser ? (
-              <FaUserCircle fontSize={30} />
+              <FaUserCircle fontSize={35} />
             ) : (
-              <VscSignIn fontSize={30}/>
+              <VscSignIn fontSize={35}/>
             )}
             </Link>
           </Button>
@@ -100,7 +100,7 @@ function Navbar() {
         <MenuItem onClick={handleClose}>
           <Link to={"/signin"}>
           {authUser ? (
-            <FaUserCircle fontSize={30} />
+            <FaUserCircle fontSize={30}/>
           ) : (
             <VscSignIn fontSize={30}/>
           )}

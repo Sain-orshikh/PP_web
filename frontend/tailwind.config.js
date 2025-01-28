@@ -9,6 +9,7 @@ export default {
         accent: 'var(--accent)',
       },
       fontFamily: {
+        playwright: ['Playwright India', 'serif'],
         greek: ['Cinzel', 'serif'],
         italic: ['Cormorant Italic', 'serif']
       },
