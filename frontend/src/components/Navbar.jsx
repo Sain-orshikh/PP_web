@@ -34,36 +34,36 @@ function Navbar() {
           {/*<img>Passion project logo has to go here</img>*/}
           <img src={pp_logo} className=""/>
           <text className='text-3xl text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500 font-playwright ml-5'>
-            Passion Project MAIS
+            Passion Project
           </text>
         </Box>
         <Box className="flex mr-10 space-x-3 hidden sm:block">
           <Button className=''>
-            <Link to={'/'} className="text-sky-500 text-lg hover:text-black">
+            <Link to={'/'} className="text-sky-500 text-md hover:text-black">
               Home
             </Link>
           </Button>
           <Button>
-            <Link to={'/blog'} className="text-indigo-500 text-lg hover:text-black">
+            <Link to={'/blog'} className="text-indigo-500 text-md hover:text-black">
               Blog
             </Link>
           </Button>
           <Button>
-            <Link to={'/create'} className="text-emerald-500 text-lg hover:text-black">{/* text-amber-500 */}
+            <Link to={'/create'} className="text-emerald-500 text-md hover:text-black">{/* text-amber-500 */}
               Create
             </Link>
           </Button>
           <Button>
-            <Link to={'/about'} className='text-amber-500 text-lg hover:text-black'>
+            <Link to={'/about'} className='text-amber-500 text-md hover:text-black'>
               About
             </Link>
           </Button>
           <Button>
             <Link to={'/signin'} className='text-black hover:text-blue-500'>
             {authUser ? (
-              <FaUserCircle fontSize={35} />
+              <FaUserCircle fontSize={30} />
             ) : (
-              <VscSignIn fontSize={35}/>
+              <VscSignIn fontSize={30}/>
             )}
             </Link>
           </Button>
