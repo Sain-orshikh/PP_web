@@ -62,7 +62,7 @@ function SignInPage() {
     return (
       <>
       <div className="w-full min-h-screen flex items-center justify-center bg-cover bg-center" style={{backgroundImage: `url(${skybg})`}}>
-        <div className="flex flex-col items-center w-[75%] sm:w-[35%] rounded-lg shadow-lg bg-gradient-to-b from-[#B3DAF1] via-[#A0C4E2] to-[#EAF1F6]">
+        <div className="flex flex-col items-center w-[75%] sm:w-[35%] rounded-[30px] shadow-lg bg-gradient-to-b from-[#B3DAF1] via-[#A0C4E2] to-[#EAF1F6]">
           <div className='flex items-center justify-center p-2 mt-7 mb-5 mx-auto bg-white hover:bg-gray-100 p-1 rounded-xl'>
             <button onClick={() => {handleLogin(credentials)}}>
               <PiSignIn fontSize={40}/>
@@ -104,7 +104,7 @@ function SignInPage() {
           </div>
           <div className='w-[70%] mt-5 border-dashed border border-gray-500'>
           </div>
-          <div className='my-5 text-xl'>
+          <div className='mb-5 mt-3 text-xl'>
             Don't have an account? <button className='font-semibold hover:text-gray-700'><Link to={'/signup'}>Sign up</Link></button>
           </div>
         </div>

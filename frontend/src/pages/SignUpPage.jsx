@@ -1,16 +1,18 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import pplogo from "../assets/pp-logo.png";
-import wood from "../assets/wood.jpg";
-import glass from "../assets/glass.jpg";
-import ocean from "../assets/ocean.jpg";
+import moon from "../assets/moon.jpg";
 import city from "../assets/city.jpg";
+import cliff from "../assets/cliff.jpg";
+import rug from "../assets/rug.jpg";
 
 import { MdOutlineMail } from "react-icons/md";
 import { FaUser } from "react-icons/fa";
 import { MdPassword } from "react-icons/md";
-import { MdDriveFileRenameOutline } from "react-icons/md";
+import { RiLockPasswordFill } from "react-icons/ri";
+import { FaUserGraduate } from "react-icons/fa";
+import { FaMailBulk } from "react-icons/fa";
 import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 import {toast} from "react-hot-toast";
 
@@ -59,58 +61,73 @@ const SignUpPage = () => {
 		singupMutation(newUser);
 	};
 
-	const bgImages = [wood, glass, ocean, city];
+	const handlecool = () => {
+		toast.success("cool");
+	};
 
-	const backgroundImage = bgImages[Math.floor(Math.random() * bgImages.length)];
+	const handleinfocls = () => {
+		setnewUser({
+			username: "",
+			email: "",
+			password: "",
+		});
+		toast.success("info cleared");
+	};
+
+	const bgImages = [moon, cliff, rug, city];
+
+	const [backgroundImage, setBackgroundImage] = useState(bgImages[3]);
+
+	useEffect(() => {
+		setBackgroundImage(bgImages[Math.floor(Math.random() * bgImages.length)]);
+	}, []);
 
 	return (
 	  <>
 		<div className="w-full min-h-screen flex items-center justify-center bg-cover bg-center" style={{backgroundImage: `url(${backgroundImage})`}}>
-			<div className="w-[75%] sm:w-[25%] bg-white  rounded-lg">
-				<div className="flex flex-col justify-center w-full h-[20%] bg-black rounded-t-lg">
-					<span className="font-playwright text-white text-5xl mx-auto mt-2">Passion</span>
-					<span className="w-[55%] ml-auto font-playwright text-white text-4xl mb-2">Project</span>
+			<div className="w-[80%] sm:w-[40%] mx-auto sm:mr-auto sm:ml-24 my-3">
+				<div className="text-gray-200 text-xl">
+					GET STARTED
 				</div>
-				<div className="h-[80%]">
-					<div className="w-full font-semibold text-3xl ml-5 mt-5">
-						Sign Up	
+				<div className="text-white text-5xl font-semibold mt-2">
+					Create new account<span className="text-blue-500 text-5xl">.</span>
+				</div>
+				<div className="text-gray-200 mt-7 text-md">
+					<button className="bg-blue-500 h-[2.5rem] p-2 rounded-l-xl font-semibold hover:bg-blue-700" onClick={handlecool}>Already A Member?</button><Link to="/signin" className="text-blue-500 h-[2.5rem] font-semibold p-2 bg-gray-700 rounded-r-xl hover:bg-gray-500 border-2 border-gray-700">Log in</Link>
+				</div>
+				<div className="flex flex-row items-center w-full sm:w-[70%] bg-gray-700 p-3 rounded-xl h-[2.5rem] mt-7 border border-black focus-within:border-none focus-within:outline focus-within:outline-blue-500">
+					<input
+						value={newUser.username}
+						onChange={(e) => setnewUser({...newUser, username: e.target.value})}
+						placeholder="Username"
+						className="text-white placeholder:text-white w-full bg-inherit focus:outline-none"
+					/>
+					<FaUser fontSize={30} className="text-gray-300"/>
+				</div>
+				<div className="flex flex-row items-center p-3 mt-5 w-full sm:w-[70%] bg-gray-700 rounded-xl h-[2.5rem] border border-black focus-within:border-none focus-within:outline focus-within:outline-blue-500">
+					<input
+						value={newUser.email}
+						onChange={(e) => setnewUser({...newUser, email: e.target.value})}
+						placeholder="Email"
+						className="text-white placeholder:text-white w-full bg-inherit focus:outline-none"
+					/>
+					<FaMailBulk fontSize={30} className="text-gray-300"/>
+				</div>
+				<div className="flex flex-row items-center p-3 mt-5 w-full sm:w-[70%] bg-gray-700 rounded-xl h-[2.5rem] border border-black focus-within:border-none focus-within:outline focus-within:outline-blue-500">
+					<input
+						value={newUser.password}
+						onChange={(e) => setnewUser({...newUser, password: e.target.value})}
+						placeholder="Password"
+						className="text-white placeholder:text-white w-full bg-inherit focus:outline-none"
+					/>
+					<RiLockPasswordFill fontSize={35} className="text-gray-300"/>
+				</div>
+				<div className="flex flex-row justify-between w-full sm:w-[70%] mt-10">
+					<div className="w-[48%] bg-gray-700 text-white text-center font-semibold p-3 rounded-[30px] hover:bg-gray-500">
+						<button onClick={handleinfocls}>Clear info</button>
 					</div>
-					<div className="w-full">
-						<div className="w-[90%] h-[3.5rem] mx-auto mt-5 border border-black">
-							<input
-								value={newUser.username}
-								onChange={(e) => setnewUser({...newUser, username: e.target.value})}
-								placeholder="Username"
-								className="w-full h-full p-1 text-xl"
-							/>
-						</div>
-					</div>
-					<div className="w-full">
-						<div className="w-[90%] h-[3.5rem] mx-auto mt-5 border border-black">
-							<input
-								value={newUser.email}
-								onChange={(e) => setnewUser({...newUser, email: e.target.value})}
-								placeholder="Email"
-								className="w-full h-full p-1 text-xl"
-							/>
-						</div>
-					</div>
-					<div className="w-full">
-						<div className="w-[90%] h-[3.5rem] mx-auto mt-5 border border-black">
-							<input
-								value={newUser.password}
-								onChange={(e) => setnewUser({...newUser, password: e.target.value})}
-								placeholder="Password"
-								className="w-full h-full p-1 text-xl"
-							/>
-						</div>						
-					</div>
-					<div className="w-[90%] mx-auto border border-gray-300 mt-3">
-					</div>
-					<div className="flex items-center justify-center w-full">
-						<button className="bg-black text-white font-semibold text-xl w-[90%] mx-auto mt-3 mb-5 h-[3.5rem] rounded hover:bg-gray-700" onClick={handleSubmit}>
-							Sign Up
-						</button>
+					<div className="w-[48%] text-white bg-blue-500 text-center font-semibold p-3 rounded-[30px] hover:bg-blue-700">
+						<button onClick={handleSubmit}>Create Account</button>
 					</div>
 				</div>
 			</div>
