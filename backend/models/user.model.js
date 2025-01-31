@@ -28,7 +28,28 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: "",
     },
+    followers: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref:"User",
+            default: []
+        }
+    ],
+    following: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref:"User",
+            default: []
+        }
+    ],
     blogs:[
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Blog",
+            default:[]
+        }
+    ],
+    likedBlogs:[
         {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Blog",
