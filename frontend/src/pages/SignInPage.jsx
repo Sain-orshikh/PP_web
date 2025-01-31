@@ -62,8 +62,8 @@ function SignInPage() {
     return (
       <>
       <div className="w-full min-h-screen flex items-center justify-center bg-cover bg-center" style={{backgroundImage: `url(${skybg})`}}>
-        <div className="flex flex-col items-center w-[75%] sm:w-[35%] rounded-[30px] shadow-lg bg-gradient-to-b from-[#B3DAF1] via-[#A0C4E2] to-[#EAF1F6]">
-          <div className='flex items-center justify-center p-2 mt-7 mb-5 mx-auto bg-white hover:bg-gray-100 p-1 rounded-xl'>
+        <div className="flex flex-col items-center my-5 w-[75%] sm:w-[35%] rounded-[30px] shadow-lg bg-gradient-to-b from-[#B3DAF1] via-[#A0C4E2] to-[#EAF1F6]">
+          <div className='flex items-center justify-center p-2 mt-7 mb-5 mx-auto bg-white hover:bg-gray-100 rounded-xl'>
             <button onClick={() => {handleLogin(credentials)}}>
               <PiSignIn fontSize={40}/>
             </button>

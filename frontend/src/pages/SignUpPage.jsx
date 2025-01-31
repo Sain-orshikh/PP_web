@@ -84,7 +84,7 @@ const SignUpPage = () => {
 
 	return (
 	  <>
-		<div className="w-full min-h-screen flex items-center justify-center bg-cover bg-center" style={{backgroundImage: `url(${backgroundImage})`}}>
+		<div className="w-full min-h-screen flex flex-col sm:flex-row items-center justify-center bg-cover bg-center" style={{backgroundImage: `url(${backgroundImage})`}}>
 			<div className="w-[80%] sm:w-[40%] mx-auto sm:mr-auto sm:ml-24 my-3">
 				<div className="text-gray-200 text-xl">
 					GET STARTED

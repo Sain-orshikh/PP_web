@@ -8,6 +8,7 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import toast from "react-hot-toast";
 
 function BlogCard({blog, onUpdate}) {
 
@@ -123,6 +124,9 @@ function BlogCard({blog, onUpdate}) {
     const handleEditOpen = () => {
       if(userVerification === true){
         setmodalOpen(true);
+      }
+      else {
+        toast.error("You can only edit your blog!");
       };
     };
 
@@ -167,8 +171,8 @@ function BlogCard({blog, onUpdate}) {
         <Modal
           open={modalOpen}
         >
-          <div className="bg-gray-100 w-[75%] mx-auto mt-10 rounded-xl">
-            <div className="mt-4 ml-2 text-xl">
+          <div className="bg-gray-100 pt-1 px-1 w-[75%] mx-auto mt-10 rounded-xl overflow-y-auto">
+            <div className="mt-2 ml-2 text-xl">
               Blog title
             </div>
             <div className="mt-1 mx-1">
@@ -182,7 +186,7 @@ function BlogCard({blog, onUpdate}) {
             <div className="mt-1 mb-2 ml-2 text-xl">
               Blog content
             </div>
-            <div className='rounded mx-1 mt-1'>
+            <div className='mx-1 mt-1'>
               <ReactQuill
                 ref={quillRef}
                 theme="snow"
@@ -193,10 +197,10 @@ function BlogCard({blog, onUpdate}) {
                 }}
               />
             </div>
-            <div className="ml-2 mt-2 text-xl">
+            <div className="ml-2 mt-5 sm:mt-2 text-xl">
               Featured image
             </div>
-            <div className='mt-3 mb-3 mx-1'>
+            <div className='mt-7 sm:mt-3 mb-3 mx-1'>
               <input
                 value={updatedBlog.imageurl}
                 onChange={(e) => setupdatedBlog({ ...updatedBlog, imageurl: e.target.value})}
@@ -205,7 +209,7 @@ function BlogCard({blog, onUpdate}) {
               />
             </div>
             <div className='flex flex-row items-center justify-between w-full h-[3rem] bg-white border-t rounded-t rounded-xl'>
-              <div className='flex flex-row ml-5 space-x-0 sm:space-x-4'>
+              <div className='flex flex-row ml-5 space-x-1 sm:space-x-4'>
                 <div className='bg-gray-300 border rounded-md'>
                   <Button onClick={handlePreviewOpen}>
                     <span className="text-black capitalize ml-1">Preview</span>
@@ -217,8 +221,8 @@ function BlogCard({blog, onUpdate}) {
                   </Button>
                 </div>
               </div>
-              <div className='flex flex-row mr-5 space-x-0 sm:space-x-4'>
-                <div className='border-2 rounded-md' style={{ backgroundColor: 'red' }}>
+              <div className='flex flex-row mr-5 space-x-1 sm:space-x-4'>
+                <div className='border-2 border-red-500 rounded-md' style={{ backgroundColor: 'red' }}>
                   <Button onClick={() => {handleDeleteBlog(blog._id)}}>
                     <span className="text-black capitalize ml-1">Delete</span>
                   </Button>
