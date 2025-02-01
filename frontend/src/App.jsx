@@ -35,7 +35,8 @@ function App() {
         throw new Error(error);
     }
   },
-  retry: false,
+  retry: 1,
+  refetchOnWindowFocus: true,
   });
 
   const {data:blogs, error} = useQuery({

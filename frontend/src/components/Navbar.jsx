@@ -37,7 +37,10 @@ function Navbar() {
             Passion Project
           </text>
         </Box>
-        <Box className="flex mr-10 space-x-3 hidden sm:block">
+        <Box className="mr-10 space-x-3 hidden sm:block">
+          <Button>
+            <Link to={'/profile/test'} className="text-sky-500 text-md hover:text-black">TEST</Link>
+          </Button>
           <Button className=''>
             <Link to={'/'} className="text-sky-500 text-md hover:text-black">
               Home

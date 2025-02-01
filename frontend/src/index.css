@@ -5,3 +5,9 @@
 :root{
     --accent: #982ae1;
 }
+
+@layer base {
+  :root {
+        --radius: 0.5rem;
+    }
+}

@@ -22,6 +22,13 @@ export default {
       },
     },
   },
+  safelist: [
+    'text-black',
+    'text-red-500',
+    'text-blue-500',
+    'text-purple-800',
+    'text-white',
+  ],
   plugins: [
     plugin(function({ addBase }) {
       addBase({

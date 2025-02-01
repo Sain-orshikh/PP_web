@@ -1,12 +1,15 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 
+import paperairplane from "../assets/paperairplane.png";
 import pplogo from "../assets/pp-logo.png";
 import moon from "../assets/moon.jpg";
 import city from "../assets/city.jpg";
 import cliff from "../assets/cliff.jpg";
 import rug from "../assets/rug.jpg";
 
+import { CiPaperplane } from "react-icons/ci";
+import { Magnetic } from "../components/magnetic";
 import { MdOutlineMail } from "react-icons/md";
 import { FaUser } from "react-icons/fa";
 import { MdPassword } from "react-icons/md";
@@ -82,10 +85,45 @@ const SignUpPage = () => {
 		setBackgroundImage(bgImages[Math.floor(Math.random() * bgImages.length)]);
 	}, []);
 
+	const [isSmallScreen, setIsSmallScreen] = useState(false);
+
+	useEffect(() => {
+		const checkScreenSize = () => {
+		  if (window.innerWidth <= 768) {
+			setIsSmallScreen(true);
+		  } else {
+			setIsSmallScreen(false);
+		  }
+		};
+		checkScreenSize();
+		window.addEventListener('resize', checkScreenSize);
+		return () => {
+		  window.removeEventListener('resize', checkScreenSize);
+		};
+	  }, []);
+
+	const [IsRemoved, setIsRemoved] = useState(true);
+
+	const [planecolor, setplanecolor] = useState('black');
+
+	const [spawnplane, setspawnplane] = useState(false);
+
+	const handleColorChange = (color) => {
+		setplanecolor(color);
+	};
+
+	const handleRemovePlane = () => {
+		setIsRemoved(!IsRemoved);
+		setTimeout(() => {
+			setspawnplane(!spawnplane);
+		}, 1500);
+	};
+
 	return (
 	  <>
-		<div className="w-full min-h-screen flex flex-col sm:flex-row items-center justify-center bg-cover bg-center" style={{backgroundImage: `url(${backgroundImage})`}}>
-			<div className="w-[80%] sm:w-[40%] mx-auto sm:mr-auto sm:ml-24 my-3">
+		<div className="w-full min-h-screen flex flex-col sm:flex-row justify-center bg-cover bg-center" style={{backgroundImage: `url(${backgroundImage})`}}>
+			{spawnplane ? <Magnetic color={planecolor} isRemoved={IsRemoved}/> : null}
+			<div className={`flex flex-col justify-center w-[80%] sm:w-[40%] mx-auto sm:mr-auto ${ spawnplane === true ? `sm:ml-8` : `sm:ml-24`} my-3`}>
 				<div className="text-gray-200 text-xl">
 					GET STARTED
 				</div>
@@ -131,7 +169,36 @@ const SignUpPage = () => {
 					</div>
 				</div>
 			</div>
-		</div>	
+			<div className="flex flex-col justify-center w-[20%] min-h-screen bg-yellow-500">
+				<div className="flex flex-col border w-full h-36 border-black">
+					<div className="flex flex-row w-full h-24 border-b border-red-300">
+						<div className="w-[80%] h-24 border-r border-black bg-white">
+							<CiPaperplane className={`w-full h-full text-${planecolor}`}/>
+						</div>
+						<div className="w-[20%] h-24 flex flex-col items-center justify-evenly bg-white">
+							<button className="w-4 h-4 bg-black" onClick={() => {handleColorChange('black')}}/>
+							<button className="w-4 h-4 bg-red-500" onClick={() => {handleColorChange('red-500')}}/>
+							<button className="w-4 h-4 bg-blue-500" onClick={() => {handleColorChange('blue-500')}}/>
+							<button className="w-4 h-4 bg-purple-800" onClick={() => {handleColorChange('purple-800')}}/>
+						</div>
+					</div>
+					<div className="w-full h-12 border-t border-black bg-gray-100">
+						<button className="w-full h-full text-xl hover:bg-gray-300" onClick={handleRemovePlane}>
+							{spawnplane ? 'Remove Paperplane' : 'Deploy Paperplane'}
+						</button>
+					</div>
+				</div>
+				<div className="flex flex-col w-full h-48 items-center mt-5 bg-red-300">
+					<img src={pplogo} className="ml-auto mr-5 w-24 h-24" alt="pplogo"/>
+					<div className="text-white text-2xl font-semibold">
+						Passion Project
+					</div>
+					<p>
+						All rights reserved &copy; 2025
+					</p>
+				</div>
+			</div>
+		</div>
 	  </>
 	);
 };

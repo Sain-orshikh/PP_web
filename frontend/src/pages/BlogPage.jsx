@@ -19,7 +19,8 @@ function BlogPage() {
       if (!res.ok) throw new Error(data.error || "Failed to fetch blogs");
       return data;
     },
-    retry: false,
+    retry: 1,
+    refetchOnWindowFocus: true,
   });
   
   const Blogs = blogs?.data;
