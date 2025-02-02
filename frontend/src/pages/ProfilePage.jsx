@@ -7,9 +7,21 @@ import { Grid2, TableRow } from '@mui/material'
 import userdefault from '../assets/userdefault.jpg'
 import cover from "../assets/cover.png"
 import { FaUserGraduate } from "react-icons/fa6";
+import { MdEdit } from "react-icons/md";
+import { IoCalendarOutline } from "react-icons/io5";
+
+import boy1 from "../assets/boy1.png";
+import boy2 from "../assets/boy2.png";
+import boy3 from "../assets/boy3.png";
+import girl1 from "../assets/girl1.png";
+import girl2 from "../assets/girl2.png";
+import girl3 from "../assets/girl3.png";
+
+import EditProfileModal from '../components/EditProfileModal'
 import {formatMemberSinceDate} from "../utils/date";
 import BlogCard from "../components/BlogCard";
 import UseFollow from "../components/useFollow";
+import RightPanel from '@/components/RightPanel'
 
 const ProfilePage = () => {
 
@@ -17,10 +29,13 @@ const ProfilePage = () => {
 
 	const [coverImg, setCoverImg] = useState(null);
 	const [profileImg, setProfileImg] = useState(null);
-	const [feedType, setFeedType] = useState("posts");
+	const [feedType, setFeedType] = useState("blogs");
 
 	const coverImgRef = useRef(null);
 	const profileImgRef = useRef(null);
+
+	const avatars = [boy1, boy2, boy3, girl1, girl2, girl3];
+	const chosenavatar = avatars[Math.floor(Math.random() * avatars.length)];
 
 	const {username} = useParams();
 
@@ -96,7 +111,9 @@ const ProfilePage = () => {
 
 	const {followUser, isPending} = UseFollow();
 
-	if(authUser) {const amIFollowing = authUser?.following.includes(user?._id)};
+	const amIFollowing = authUser?.following.includes(user?._id);
+
+	const isMyProfile = authUser?._id === user?._id;
 
 	useEffect(() => {
 		refetch();
@@ -108,31 +125,132 @@ const ProfilePage = () => {
 
   const  Blogs = blogs?.data//?.filter((blog) => blog.ownerId === user?._id)
 
-  const userBlogs = Blogs.filter((blog) => blog.ownerId._id.toString() === user?._id);
-  console.log("Blogs:", Blogs);
-  console.log(typeof user?._id, user?._id);
-console.log(typeof Blogs[0]?.ownerId, Blogs[0]?.ownerId);
-  console.log("User Blogs:", userBlogs);
+  const userBlogs = Blogs?.filter((blog) => blog.ownerId._id.toString() === user?._id);
 
   return (
-    <>
-    <div className='flex flex-col'>
-      <div>{username}</div>
-      <div>
-        <img
-          src={coverImg || user?.coverImg || cover}
-          className='h-52 w-full object-cover'
-          alt='cover image'
-        />
-      </div>
-      <div>
-        <img
-          src={profileImg || user?.profileImg || userdefault}
-          className='h-24 w-full object-cover rounded-full'
-          alt='profile image'
-        />
-      </div>
-      {Blogs && (
+	<>
+	<div className='flex-[4_4_0] flex flex-row border-r border-gray-700 min-h-screen'>
+		{!user && <p className='text-center text-lg mt-4'>User not found</p>}
+		<div className='flex flex-col w-full sm:w-[80%] bg-black border-x border-gray-700'>
+			{user && (
+				<>
+					{/* COVER IMG */}
+					<div className='relative group/cover'>
+						<img
+							src={coverImg || user?.coverImg || cover}
+							className='h-52 w-full object-cover'
+							alt='cover image'
+						/>
+						{isMyProfile && (
+							<div
+								className='absolute top-2 right-2 rounded-full p-2 bg-gray-800 bg-opacity-75 cursor-pointer opacity-0 group-hover/cover:opacity-100 transition duration-200'
+								onClick={() => coverImgRef.current.click()}
+							>
+								<MdEdit className='w-5 h-5 text-white' />
+							</div>
+						)}
+
+						<input
+							type='file'
+							hidden
+							accept="image/*"
+							ref={coverImgRef}
+							onChange={(e) => handleImgChange(e, "coverImg")}
+						/>
+						<input
+							type='file'
+							hidden
+							accept="image/*"
+							ref={profileImgRef}
+							onChange={(e) => handleImgChange(e, "profileImg")}
+						/>
+						{/* USER AVATAR */}
+						<div className='avatar absolute -bottom-16 left-4'>
+							<div className='w-32 rounded-full relative group/avatar'>
+								<img src={profileImg || user?.profileImg || chosenavatar} />
+								<div className='absolute top-5 right-3 p-1 bg-primary rounded-full group-hover/avatar:opacity-100 opacity-0 cursor-pointer'>
+									{isMyProfile && (
+										<MdEdit
+											className='w-4 h-4 text-white'
+											onClick={() => profileImgRef.current.click()}
+										/>
+									)}
+								</div>
+							</div>
+						</div>
+					</div>
+					<div className='flex justify-end px-4 mt-5'>
+						{isMyProfile && <EditProfileModal authUser={authUser}/>}
+						{!isMyProfile && (
+							<button
+								className='border-2 p-2 border-white rounded-xl bg-black text-white hover:bg-gray-700'
+								onClick={() => followUser(user?._id)}
+							>
+								{isPending && "Loading..."}
+								{!isPending && amIFollowing && "Unfollow"}
+								{!isPending && !amIFollowing && "Follow"}
+							</button>
+						)}
+						{(coverImg || profileImg) && (
+							<button
+								className='border-2 border-white px-4 ml-2 bg-black text-white hover:bg-gray-700 rounded-xl'
+								onClick={() => updateProfileMutation()}
+							>
+								{isUpdatingProfile ? "Updating..." : "Update"}
+							</button>
+						)}
+					</div>
+
+					<div className='flex flex-col gap-4 mt-10 px-4'>
+						<div className='flex flex-col'>
+							<span className='font-bold text-2xl text-white'>{user?.username}</span>
+							<span className='text-md mt-5 text-white'>{user?.bio}</span>
+						</div>
+
+						<div className='flex gap-2 flex-wrap'>
+							<div className='flex gap-2 items-center'>
+								<IoCalendarOutline className='w-4 h-4 text-slate-500' />
+								<span className='text-md text-slate-500'>{memberSinceDate}</span>
+							</div>
+						</div>
+						<div className='flex gap-2'>
+							<div className='flex gap-1 items-center'>
+								<span className='font-bold text-sm text-white'>{user?.following.length}</span>
+								<span className='text-slate-500 text-sm'>Following</span>
+							</div>
+							<div className='flex gap-1 items-center'>
+								<span className='font-bold text-sm text-white'>{user?.followers.length}</span>
+								<span className='text-slate-500 text-sm'>Followers</span>
+							</div>
+						</div>
+					</div>
+					<div className='flex w-full border-b border-gray-700 mt-4'>
+								<div
+									className='flex justify-center flex-1 p-3 text-white hover:text-slate-500 transition duration-300 relative cursor-pointer'
+									onClick={() => setFeedType("blogs")}
+								>
+									Blogs
+									{feedType === "blogs" && (
+										<div className='absolute bottom-0 w-10 h-1 rounded-full bg-blue-500' />
+									)}
+								</div>
+								<div
+									className='flex justify-center flex-1 p-3 text-slate-500 hover:text-white transition duration-300 relative cursor-pointer'
+									onClick={() => {setFeedType("projects"), toast.error("Projects are not available yet")}}
+								>
+									Projects
+									{feedType === "projects" && (
+										<div className='absolute bottom-0 w-10  h-1 rounded-full bg-inherit' />
+									)}
+								</div>
+							</div>
+				</>
+			)}
+			{!Blogs && (
+			  <div>No Blogs Found</div>
+			)	
+			}
+			{Blogs && (
               <div className='flex flex-row justify-evenly space-around w-[90%] mx-auto mt-10'>
                 <div className=''><Grid2 container spacing={2} columns={12} minHeight={290} >
                   {userBlogs.map((blog) => (
@@ -142,13 +260,17 @@ console.log(typeof Blogs[0]?.ownerId, Blogs[0]?.ownerId);
                     key={blog._id}
                     className="mx-auto"
                   >
-                    <BlogCard blog={blog} onUpdate={handleinval} />
+                    <BlogCard blog={blog} onUpdate={handleinval} inprofile={true} />
                   </Grid2>
                   ))}
                 </Grid2></div>
               </div>)}
-              </div>
-    </>
+		</div>
+		<div className='w-[20%] hidden sm:block bg-black'>
+			<RightPanel />
+		</div>
+	</div>
+	</>
   )
 }
 

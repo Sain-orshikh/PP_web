@@ -17,6 +17,34 @@ export const getUserProfile = async (req,res) => {
     }
 };
 
+export const getSuggestedUsers = async (req,res) => {
+    try {
+        const userId = req.user._id;
+
+        const usersFollowedByMe = await User.findById(userId).select("following");
+
+        const users = await User.aggregate([
+            {
+                $match:{
+                    _id: {$ne:userId}
+                }
+            },
+            {$sample:{size:10}}
+        ]);
+
+        const filteredUsers = users.filter(user=>!usersFollowedByMe.following.includes(user._id));
+        const suggestedUsers = filteredUsers.slice(0,4);
+
+        suggestedUsers.forEach(user=>user.password=null);
+
+        res.status(200).json(suggestedUsers);
+    }
+    catch(error){
+        console.log("Error in getSuggestedUsers:",error.message);
+        res.status(500).json({error: error.message}); 
+    }
+};
+
 export const updateUser = async (req, res) => {
 	const { username, email, currentPassword, newPassword, bio } = req.body;
 	let { profileImg, coverImg } = req.body;
@@ -26,6 +54,8 @@ export const updateUser = async (req, res) => {
 	try {
 		let user = await User.findById(userId);
 		if (!user) return res.status(404).json({ message: "User not found" });
+
+		if (username === user.username || email === user.email) return res.status(400).json({ error: "Credentials are already taken" });
 
 		if ((!newPassword && currentPassword) || (!currentPassword && newPassword)) {
 			return res.status(400).json({ error: "Please provide both current password and new password" });

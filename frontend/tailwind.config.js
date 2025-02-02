@@ -7,6 +7,8 @@ export default {
     extend: {
       colors: {
         accent: 'var(--accent)',
+        primary: 'var(--primary)',
+        secondary: 'var(--secondary)',
       },
       fontFamily: {
         playwright: ['Playwright India', 'serif'],
@@ -33,7 +35,9 @@ export default {
     plugin(function({ addBase }) {
       addBase({
         ':root': {
-          '--accent': '#982ae1'
+          '--accent': '#982ae1',
+          '--primary': "rgb(29, 155, 240)",
+          '--secondary': "rgb(24, 24, 24)",
         },
       });
     }),

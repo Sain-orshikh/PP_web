@@ -7,6 +7,12 @@ import moon from "../assets/moon.jpg";
 import city from "../assets/city.jpg";
 import cliff from "../assets/cliff.jpg";
 import rug from "../assets/rug.jpg";
+import boy1 from "../assets/boy1.png";
+import boy2 from "../assets/boy2.png";
+import boy3 from "../assets/boy3.png";
+import girl1 from "../assets/girl1.png";
+import girl2 from "../assets/girl2.png";
+import girl3 from "../assets/girl3.png";
 
 import { CiPaperplane } from "react-icons/ci";
 import { Magnetic } from "../components/magnetic";
@@ -22,22 +28,26 @@ import {toast} from "react-hot-toast";
 const SignUpPage = () => {
 
 	const queryClient = useQueryClient();
+	
+	const avatars = [boy1, boy2, boy3, girl1, girl2, girl3];
+	const chosenavatar = avatars[Math.floor(Math.random() * avatars.length)];
 
 	const [newUser, setnewUser] = useState({
 		username: "",
 		email: "",
 		password: "",
+		profileImg: chosenavatar,
 	});
 
 	const { mutate: singupMutation, isError, error, isPending} = useMutation({
-		mutationFn: async({email, username, password}) => {
+		mutationFn: async({email, username, password, profileImg}) => {
 			try{
 				const res = await fetch('/api/auth/signup',{
 					method:"POST",
 					headers:{
 						"Content-Type":"application/json"
 					},
-					body: JSON.stringify({username, email, password}),
+					body: JSON.stringify({username, email, password, profileImg}),
 				});
 				
 				const data = await res.json();

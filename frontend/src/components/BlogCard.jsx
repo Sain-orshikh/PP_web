@@ -10,7 +10,7 @@ import "react-quill/dist/quill.snow.css";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 
-function BlogCard({blog, onUpdate}) {
+function BlogCard({blog, onUpdate, inprofile}) {
 
     const queryClient = useQueryClient();
 
@@ -164,8 +164,8 @@ function BlogCard({blog, onUpdate}) {
               </div>
             </button>
           <div className="flex flex-row">
-            <div><button onClick={handleEditOpen} className="ml-2"><FaRegEdit fontSize={25}/></button></div>  
-            <div className=""><h6 className="mx-1 mb-1 text-xl">{blog.title}</h6></div>
+            <div><button onClick={handleEditOpen} className={`ml-2 ${inprofile ? `text-white` : ``}`}><FaRegEdit fontSize={25}/></button></div>  
+            <div><h6 className={`mx-1 mb-1 text-xl ${inprofile ? `text-white` : ``}`}>{blog.title}</h6></div>
           </div>
         </Box>
         <Modal
