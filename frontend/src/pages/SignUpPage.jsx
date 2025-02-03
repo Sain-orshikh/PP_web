@@ -15,7 +15,7 @@ import girl2 from "../assets/girl2.png";
 import girl3 from "../assets/girl3.png";
 
 import { CiPaperplane } from "react-icons/ci";
-import { Magnetic } from "../components/magnetic";
+import { Magnetic } from "../components/ui/magnetic";
 import { MdOutlineMail } from "react-icons/md";
 import { FaUser } from "react-icons/fa";
 import { MdPassword } from "react-icons/md";

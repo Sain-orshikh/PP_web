@@ -1,67 +1,61 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { CiPaperplane } from "react-icons/ci"; // Paper airplane icon
+import portal1 from "@/assets/portal1.png";
+import portal2 from "@/assets/portal2.png";
+import boy1 from "@/assets/boy1.png";
+import boy2 from "@/assets/boy2.png";
 
+import { InfiniteSlider } from "@/components/ui/infinite-slider";
 function HomePage() {
-  const [isRemoved, setIsRemoved] = useState(false);
 
-  // Trigger the remove animation when button is clicked
-  const handleRemovePlane = () => {
-    setIsRemoved(true);
+  const portal = [portal1, portal2];
+  const [currentPortal, setCurrentPortal] = useState(0);
+  const animateportal = () => {
+  if (currentPortal === 1) {setCurrentPortal(0);}
+  else {setCurrentPortal(1);}
   };
-
+  useEffect(() => {
+    const interval = setInterval(() => {
+      animateportal();
+    }, 500);
+    return () => clearInterval(interval);
+  }, [currentPortal]);
   return (
-    <div>
-      <button onClick={handleRemovePlane} className="p-2 bg-red-500 text-white rounded">
-        Remove Paper Airplane
-      </button>
+      <div className='flex h-full space-x-4'>
+        <div className="relative flex flex-col items-center h-[1200px] overflow-hidden">
+          {/* Top Portal */}
+          <img src={portal[currentPortal]} alt="portal" className="w-[100px] z-10 mb-auto" />
 
-      <motion.div
-        className="w-16 h-16 relative"
-        initial={{ x: 0, y: 0 }} // Initial position of the airplane
-        animate={{
-          x: isRemoved ? 600 : 0, // Move down when removed
-          opacity: isRemoved ? 0 : 1, // Fade out when removed
-          scale: isRemoved ? 0.5 : 1, // Shrink when removed
-        }}
-        transition={{
-          type: "spring",
-          stiffness: 100,
-          damping: 20,
-        }}
-        style={{
-          filter: isRemoved ? "grayscale(100%)" : "none", // Optionally, make it look burnt
-        }}
-      >
-        <CiPaperplane
-          className={`w-16 h-16 ${isRemoved ? "animate-burn" : ""}`}
-        />
-      </motion.div>
+          {/* Image Moving Through Portals */}
+          <div className="relative h-full w-[120px] flex items-center justify-center" style={{top: `-25px`}}>
+            <InfiniteSlider direction="vertical" duration={10} reverse className=" h-full">
+              <img
+                src={boy1}
+                alt="Falling Image"
+                className="aspect-square w-[120px] rounded-[4px]"
+              />
+              <img
+                src={boy1}
+                alt="Falling Image"
+                className="aspect-square w-[120px] rounded-[4px]"
+              />
+              <img
+                src={boy1}
+                alt="Falling Image"
+                className="aspect-square w-[120px] rounded-[4px]"
+              />
+              <img
+                src={boy1}
+                alt="Falling Image"
+                className="aspect-square w-[120px] rounded-[4px]"
+              />
+            </InfiniteSlider>
+          </div>
 
-      {/* Burning animation with CSS */}
-      <style jsx>{`
-        @keyframes burn {
-          0% {
-            transform: scale(1);
-            opacity: 1;
-            filter: brightness(1);
-          }
-          50% {
-            transform: scale(0.7);
-            opacity: 0.5;
-            filter: brightness(0.5);
-          }
-          100% {
-            transform: scale(0);
-            opacity: 0;
-            filter: brightness(0);
-          }
-        }
-
-        .animate-burn {
-          animation: burn 4s ease-out forwards;
-        }
-      `}</style>
+          {/* Bottom Portal */}
+          <img src={portal[currentPortal]} alt="portal" className="w-[100px] mt-auto z-10" />
+        </div>
     </div>
   );
 }

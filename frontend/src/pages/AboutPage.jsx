@@ -1,4 +1,4 @@
-import { Magnetic } from '../components/magnetic';
+import { Magnetic } from '../components/ui/magnetic';
 
 import ocean from "../assets/ocean.jpg";
 import paperairlplane from "../assets/paperairplane.png";
