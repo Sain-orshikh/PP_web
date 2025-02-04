@@ -6,6 +6,10 @@ import { InfiniteSlider } from "./ui/infinite-slider";
 
 import { TbFaceIdError } from "react-icons/tb";
 import boy1 from "../assets/boy1.png";
+import boy2 from "../assets/boy2.png";
+import girl1 from "../assets/girl1.png";
+import girl2 from "../assets/girl2.png";
+
 import portal1 from "../assets/portal1.png";
 import portal2 from "../assets/portal2.png";
 
@@ -36,15 +40,16 @@ const RightPanel = () => {
 	useEffect(() => {
 	const interval = setInterval(() => {
 		animateportal();
-	}, 500);
+	}, 400);
 		return () => clearInterval(interval);
 	}, [currentPortal]);
 
 	return (
         <>
-		{suggestedUsers?.length > 0 && (<div className='w-[95%] my-4 mx-auto'>
-			<div className='bg-[#16181C] p-4 rounded-md w-full'>
-				{<p className='font-bold text-gray-100 text-lg'>Explore Members</p>}
+		<div className="flex flex-col w-full">
+		<div className='w-[95%] my-4 mx-auto'>
+			<div className='bg-[#16181C] flex flex-col justify-start h-[10rem] p-4 rounded-md w-full'>
+				{<p className='font-bold text-gray-100 mb-3 text-lg'>Explore Members</p>}
 				<div className='flex flex-col gap-4'>
 					{!isLoading &&
 						suggestedUsers?.map((user) => (
@@ -68,34 +73,33 @@ const RightPanel = () => {
 							</Link>
 						))}
 				</div>
+				{suggestedUsers?.length === 0 && (<div className="text-white">
+					No members found <TbFaceIdError className="inline-block" fontSize={25}/>
+				</div>)}
 			</div>
-		</div>)}
-        <div className={`flex flex-col w-[95%] mx-auto ${suggestedUsers?.length === 0 ? `h-full` : `h-screen`}`}>
-            		<div className={`relative flex flex-col items-center justify-start ${suggestedUsers?.length === 0 ? `h-full` : `h-screen`} my-1 overflow-hidden`}>
+		</div>
+        <div className={`flex flex-col w-[95%] mx-auto h-full`}>
+            		<div className={`relative flex flex-col items-center justify-start h-full my-0 overflow-hidden`}>
 					  {/* Top Portal */}
-					  <img src={portal[currentPortal]} alt="portal" className="w-[70%] z-10" />
-					  <img src={portal[currentPortal]} alt="portal" className="w-[70%] z-10" 
+					  <img src={portal[currentPortal]} alt="portal" className="w-[70%] z-10" style={{filter: 'invert(1)'}}/>
+					  <img src={portal[currentPortal]} alt="portal" className="w-[70%] z-10 bg-transparent" 
 					  	style={{
 							position: "absolute",
 							bottom: -20,
 							transform: 'scaleY(-1)',
+							filter: 'invert(1)',
 						}}
 					  />
 					  {/* Image Moving Through Portals */}
-					  <div className={`relative ${suggestedUsers?.length === 0 ? `h-full` : `h-screen`} w-[120px] flex items-center justify-center`} style={{top: `-25px`,}}>
-						<InfiniteSlider direction="vertical" duration={10} reverse className={` ${suggestedUsers?.length === 0 ? `h-full` : `h-screen`}`}>
+					  <div className={`relative h-full w-[120px] flex items-center justify-center`} style={{top: `-25px`,}}>
+						<InfiniteSlider direction="vertical" duration={5} reverse className={`h-full`}>
 						  <img
 							src={boy1}
 							alt="Falling Image"
 							className="aspect-square w-[120px] rounded-[4px]"
 						  />
 						  <img
-							src={boy1}
-							alt="Falling Image"
-							className="aspect-square w-[120px] rounded-[4px]"
-						  />
-						  <img
-							src={boy1}
+							src={boy2}
 							alt="Falling Image"
 							className="aspect-square w-[120px] rounded-[4px]"
 						  />
@@ -103,7 +107,7 @@ const RightPanel = () => {
 					  </div>
 					</div>
         </div>
-		{suggestedUsers?.length > 0 && (<div className={`flex items-center justify-center ${suggestedUsers?.length === 1 ? `mt-10` : `mt-4`} text-white`}><TbFaceIdError fontSize={40}/></div>)}
+		</div>
         </>
     );
 };

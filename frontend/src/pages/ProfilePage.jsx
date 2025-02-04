@@ -2,13 +2,15 @@ import {React, useEffect, useRef, useState} from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
-import { Grid2, TableRow } from '@mui/material'
+import { Grid2, Button } from '@mui/material'
 
 import userdefault from '../assets/userdefault.jpg'
 import cover from "../assets/cover.png"
 import { FaUserGraduate } from "react-icons/fa6";
 import { MdEdit } from "react-icons/md";
 import { IoCalendarOutline } from "react-icons/io5";
+import { TbFaceIdError } from 'react-icons/tb'
+import { TbLoader } from 'react-icons/tb'
 
 import boy1 from "../assets/boy1.png";
 import boy2 from "../assets/boy2.png";
@@ -126,6 +128,19 @@ const ProfilePage = () => {
   const  Blogs = blogs?.data//?.filter((blog) => blog.ownerId === user?._id)
 
   const userBlogs = Blogs?.filter((blog) => blog.ownerId._id.toString() === user?._id);
+  
+  const [visibleBlogs, setVisibleBlogs] = useState(4);
+
+  const handleLoadMore = () => {
+    setVisibleBlogs((prevNum) => prevNum + 4);
+	toast.success("Loading more blogs... (Potential error in portal)");
+  };
+
+  let displayedBlogs = [];
+
+  if(userBlogs){
+    displayedBlogs = [...userBlogs].slice(0, visibleBlogs);
+  }
 
   return (
 	<>
@@ -246,14 +261,10 @@ const ProfilePage = () => {
 							</div>
 				</>
 			)}
-			{!Blogs && (
-			  <div>No Blogs Found</div>
-			)	
-			}
-			{Blogs && (
+			{userBlogs && (
               <div className='flex flex-row justify-evenly space-around w-[90%] mx-auto mt-10'>
                 <div className=''><Grid2 container spacing={2} columns={12} minHeight={290} >
-                  {userBlogs.map((blog) => (
+                  {displayedBlogs.map((blog) => (
                   <Grid2 
                     xs={12} // 1 column on extra-small screens
                     sm={4}  // 2 columns on small screens and up
@@ -264,7 +275,16 @@ const ProfilePage = () => {
                   </Grid2>
                   ))}
                 </Grid2></div>
-              </div>)}
+              </div>
+			)}
+			{userBlogs && visibleBlogs < userBlogs.length && (
+				<div className='flex flex-row justify-center w-full mt-3'>
+                <div className='bg-black hover:bg-gray-700 rounded-lg border border-white'><Button onClick={handleLoadMore}>
+                  <span className='capitalize text-white'>Load more</span>
+                  <span className='text-white ml-1'><TbLoader fontSize={20}/></span>
+                </Button></div>
+              </div>
+			)}	
 		</div>
 		<div className='w-[20%] hidden sm:block bg-black'>
 			<RightPanel />

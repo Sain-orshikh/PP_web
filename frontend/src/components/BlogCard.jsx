@@ -222,7 +222,7 @@ function BlogCard({blog, onUpdate, inprofile}) {
                 </div>
               </div>
               <div className='flex flex-row mr-5 space-x-1 sm:space-x-4'>
-                <div className='border-2 border-red-500 rounded-md' style={{ backgroundColor: 'red' }}>
+                <div className='border border-red-500 rounded-md' style={{ backgroundColor: 'red' }}>
                   <Button onClick={() => {handleDeleteBlog(blog._id)}}>
                     <span className="text-black capitalize ml-1">Delete</span>
                   </Button>

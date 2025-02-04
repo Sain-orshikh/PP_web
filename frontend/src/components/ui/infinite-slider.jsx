@@ -77,8 +77,9 @@ export function InfiniteSlider({
 
   return (
     <div className={cn("overflow-hidden", className)}>
-      <motion.div
-        className="flex w-max"
+      {/* if you want to adjust the number of cycles of elements, you can add more children down here
+       */}<motion.div
+        className="flex w-max block" 
         style={{
           ...(direction === "horizontal"
             ? { x: translation }
@@ -91,6 +92,7 @@ export function InfiniteSlider({
       >
         {children}
         {children}
+        {children} 
       </motion.div>
     </div>
   );
