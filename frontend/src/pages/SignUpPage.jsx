@@ -39,6 +39,12 @@ const SignUpPage = () => {
 		profileImg: chosenavatar,
 	});
 
+	const [spawntag, setspawntag] = useState(true);
+
+	const handlebigdot = () => {
+		setspawntag(!spawntag);
+	};
+
 	const { mutate: singupMutation, isError, error, isPending} = useMutation({
 		mutationFn: async({email, username, password, profileImg}) => {
 			try{
@@ -179,7 +185,8 @@ const SignUpPage = () => {
 					</div>
 				</div>
 			</div>
-			<div className="flex flex-col justify-center w-[20%] min-h-screen bg-yellow-500">
+			<div><button onClick={handlebigdot}>Big Dot</button></div>
+			<div className={`${spawntag ? `hidden` : `flex`} flex-col justify-center w-[20%] min-h-screen bg-inherit`}>
 				<div className="flex flex-col border w-full h-36 border-black">
 					<div className="flex flex-row w-full h-24 border-b border-red-300">
 						<div className="w-[80%] h-24 border-r border-black bg-white">
@@ -198,12 +205,12 @@ const SignUpPage = () => {
 						</button>
 					</div>
 				</div>
-				<div className="flex flex-col w-full h-48 items-center mt-5 bg-red-300">
-					<img src={pplogo} className="ml-auto mr-5 w-24 h-24" alt="pplogo"/>
+				<div className="flex flex-col w-full h-48 items-center mt-auto bg-inherit">
+					<img src={pplogo} className="w-24 h-24" alt="pplogo"/>
 					<div className="text-white text-2xl font-semibold">
 						Passion Project
 					</div>
-					<p>
+					<p className="text-white text-sm">
 						All rights reserved &copy; 2025
 					</p>
 				</div>
