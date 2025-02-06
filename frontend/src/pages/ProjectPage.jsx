@@ -4,7 +4,7 @@ import ocean from "../assets/ocean.jpg";
 import paperairlplane from "../assets/paperairplane.png";
 import { CiPaperplane } from "react-icons/ci";
 
-function AboutPage() {
+function ProjectPage() {
 
   return (
     <div className="w-full min-h-screen flex flex-col sm:flex-row">
@@ -17,4 +17,4 @@ function AboutPage() {
   );
 }
 
-export default AboutPage;
+export default ProjectPage;

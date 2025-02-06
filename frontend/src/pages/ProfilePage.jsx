@@ -21,6 +21,8 @@ import girl3 from "../assets/girl3.png";
 
 import EditProfileModal from '../components/EditProfileModal'
 import {formatMemberSinceDate} from "../utils/date";
+import { AnimatedNumber } from '@/components/ui/animatenumber'
+import { useInView } from 'framer-motion'
 import BlogCard from "../components/BlogCard";
 import UseFollow from "../components/useFollow";
 import RightPanel from '@/components/RightPanel'
@@ -60,8 +62,6 @@ const ProfilePage = () => {
 	});
 
 	const {data: blogs} = useQuery({queryKey: ["blogs"]});
-
-	if(authUser){const isMyProfile = authUser._id === user?._id};
 
 	const handleImgChange = (e, state) => {
 		const file = e.target.files[0];
@@ -230,11 +230,11 @@ const ProfilePage = () => {
 						</div>
 						<div className='flex gap-2'>
 							<div className='flex gap-1 items-center'>
-								<span className='font-bold text-sm text-white'>{user?.following.length}</span>
+								<AnimatedNumber value={user?.following.length} as='span' className="font-bold text-sm text-white" />
 								<span className='text-slate-500 text-sm'>Following</span>
 							</div>
 							<div className='flex gap-1 items-center'>
-								<span className='font-bold text-sm text-white'>{user?.followers.length}</span>
+								<AnimatedNumber value={user?.followers.length} as='span' className="font-bold text-sm text-white" />
 								<span className='text-slate-500 text-sm'>Followers</span>
 							</div>
 						</div>

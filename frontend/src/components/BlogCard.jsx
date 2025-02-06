@@ -263,7 +263,7 @@ function BlogCard({blog, onUpdate, inprofile}) {
                   e.target.src = fallbackImage; // Fallback image URL
                 }}
               />
-              <button className="z-10 text-black"><Link to={`/profile/${ownerInfo.username}`}>By: {ownerInfo.username}</Link></button>
+              <button className="z-10 text-black"><Link to={`/profile/${ownerInfo?.username}`}>By: {ownerInfo?.username}</Link></button>
               <div className="absolute inset-0 bg-gradient-to-b from-black/0 to-black/10"></div>
               <button
                 className="absolute top-4 right-4 text-white hover:text-gray-300"

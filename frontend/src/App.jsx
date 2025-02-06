@@ -7,7 +7,7 @@ import { Route, Routes } from 'react-router-dom'
 import BlogCard from './components/BlogCard'
 import SignInPage from './pages/SignInPage'
 import BlogPage from './pages/BlogPage'
-import AboutPage from './pages/AboutPage'
+import ProjectPage from './pages/ProjectPage'
 import CreateBlogPage from './pages/CreateBlogPage'
 import CreateProjectPage from './pages/CreateProjectPage'
 import SignUpPage from './pages/SignUpPage'
@@ -62,7 +62,7 @@ function App() {
             <Route path='/' element={ <HomePage/>}/>
             <Route path='/create' element={ <CreatePage/>}/>
             <Route path='/blog' element={ <BlogPage/>}/>
-            <Route path='/about' element={ <AboutPage/>}/>
+            <Route path='/project' element={ <ProjectPage/>}/>
             <Route path='/profile/:username' element={ <ProfilePage/>}/>
             <Route path='/create/project' element={authUser ? <CreateProjectPage/> : <CreatePage/>}/>
             <Route path='/create/blog' element={authUser ? <CreateBlogPage/> : <CreatePage/>}/>

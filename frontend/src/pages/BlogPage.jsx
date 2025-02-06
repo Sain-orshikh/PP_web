@@ -72,7 +72,7 @@ function BlogPage() {
               <div className='flex w-[80%] mx-auto mt-5 '>
                 <div className='mx-auto'>
                   <Typography variant='h6' className='text-gray-500'>
-                   Discover our latest thoughts, ideas and insights about the world
+                   Discover our latest thoughts, ideas and insights about MAIS
                   </Typography>
                 </div>
               </div>

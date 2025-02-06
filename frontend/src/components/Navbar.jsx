@@ -10,6 +10,7 @@ import { MdMenu } from "react-icons/md";
 import pp_logo from "../assets/pp-logo.png"
 import { useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { TextShimmer } from './ui/shimmertext';
 //import IsSmallScreen from '../modes/isSmallScreen'
 
 function Navbar() {
@@ -33,13 +34,18 @@ function Navbar() {
         <Box className="flex justify-between items-center">
           {/*<img>Passion project logo has to go here</img>*/}
           <img src={pp_logo} className=""/>
-          <text className='text-3xl text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500 font-playwright ml-5'>
+          <TextShimmer
+            as="span" // Using <span> since <text> isn't valid in normal HTML
+            duration={1.5}
+            className="text-3xl     [--base-color:theme(colors.cyan.400)] 
+      [--base-gradient-color:theme(colors.blue.500)] font-playwright ml-5"
+          >
             Passion Project
-          </text>
+          </TextShimmer>
         </Box>
         <Box className="mr-10 space-x-3 hidden sm:block">
           <Button>
-            <Link to={'/profile/Test'} className="text-sky-500 text-md hover:text-black">TEST</Link>
+            <Link to={'/profile/Munku'} className="text-sky-500 text-md hover:text-black">TEST</Link>
           </Button>
           <Button className=''>
             <Link to={'/'} className="text-sky-500 text-md hover:text-black">
@@ -57,8 +63,8 @@ function Navbar() {
             </Link>
           </Button>
           <Button>
-            <Link to={'/about'} className='text-amber-500 text-md hover:text-black'>
-              About
+            <Link to={'/project'} className='text-amber-500 text-md hover:text-black'>
+              Project
             </Link>
           </Button>
           <Button>
