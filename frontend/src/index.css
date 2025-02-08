@@ -11,3 +11,24 @@
         --radius: 0.5rem;
     }
 }
+
+@font-face {
+    font-family: 'harmonique';
+    src: url('/fonts/harmonique/Harmonique-Black.otf') format('otf');
+    font-weight: 400;
+    font-style: normal;
+  }
+  
+  @font-face {
+    font-family: 'harmonique';
+    src: url('/fonts/harmonique/Harmonique-SemiBold.otf') format('otf');
+    font-weight: 500;
+    font-style: normal;
+  }
+  
+  @font-face {
+    font-family: 'harmonique';
+    src: url('/fonts/harmonique/Harmonique-Bold.otf') format('otf');
+    font-weight: 700;
+    font-style: normal;
+  }

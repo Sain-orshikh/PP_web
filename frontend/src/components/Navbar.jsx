@@ -11,6 +11,8 @@ import pp_logo from "../assets/pp-logo.png"
 import { useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { TextShimmer } from './ui/shimmertext';
+import { LuNewspaper } from "react-icons/lu";
+
 //import IsSmallScreen from '../modes/isSmallScreen'
 
 function Navbar() {
@@ -33,23 +35,23 @@ function Navbar() {
       <div className="flex justify-between items-center w-full bg-white p-1 shadow-md z-10 ">
         <Box className="flex justify-between items-center">
           {/*<img>Passion project logo has to go here</img>*/}
-          <img src={pp_logo} className=""/>
-          <TextShimmer
-            as="span" // Using <span> since <text> isn't valid in normal HTML
+          <button><Link to={"/"}><img src={pp_logo} className=""/></Link></button>
+          <button><Link to={"/"}><TextShimmer
+            as="span"
             duration={1.5}
             className="text-3xl     [--base-color:theme(colors.cyan.400)] 
-      [--base-gradient-color:theme(colors.blue.500)] font-playwright ml-5"
+          [--base-gradient-color:theme(colors.blue.500)] font-harmonique ml-5"
           >
             Passion Project
-          </TextShimmer>
+          </TextShimmer></Link></button>
         </Box>
         <Box className="mr-10 space-x-3 hidden sm:block">
           <Button>
             <Link to={'/profile/Munku'} className="text-sky-500 text-md hover:text-black">TEST</Link>
           </Button>
           <Button className=''>
-            <Link to={'/'} className="text-sky-500 text-md hover:text-black">
-              Home
+            <Link to={'/about'} className="text-sky-500 text-md hover:text-black">
+              About
             </Link>
           </Button>
           <Button>
@@ -104,7 +106,7 @@ function Navbar() {
           <Link to={"/create"} className='text-emerald-500'><FaPenSquare fontSize={30}/></Link>
         </MenuItem>
         <MenuItem onClick={handleClose}>
-          <Link to={"/about"} className='text-amber-500'><BsFillInfoSquareFill fontSize={30}/></Link>
+          <Link to={"/project"} className='text-amber-500'><LuNewspaper fontSize={30}/></Link>
         </MenuItem>
         <MenuItem onClick={handleClose}>
           <Link to={"/signin"}>

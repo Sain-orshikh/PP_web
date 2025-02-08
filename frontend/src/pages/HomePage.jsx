@@ -10,7 +10,7 @@ function HomePage() {
       <div className='flex flex-col space-y-0'>
         <TextEffect
           per='char'
-          delay={0.7}
+          delay={0.2}
           preset="blur"
           variants={{
             container: {
@@ -40,11 +40,12 @@ function HomePage() {
               },
             },
           }}
+          className={`text-5xl font-harmonique font-bold`}
         >
-          Explore the world of MAIS students
+          Peek into the world of MAIS students
         </TextEffect>
-        <TextEffect per='char' preset="blur" delay={1.5}>
-          with our passion projects
+        <TextEffect per='char' preset="blur" delay={0.2} className={`text-5xl font-harmonique font-bold`}>
+          Hello
         </TextEffect>
       </div>
     </>

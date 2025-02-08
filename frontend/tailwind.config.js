@@ -13,7 +13,13 @@ export default {
       fontFamily: {
         playwright: ['Playwright India', 'serif'],
         greek: ['Cinzel', 'serif'],
-        italic: ['Cormorant Italic', 'serif']
+        italic: ['Cormorant Italic', 'serif'],
+        harmonique: ['harmonique', 'serif'],
+      },
+      fontWeight: {
+        normal: 400,
+        semibold: 500,
+        bold: 700,
       },
       screens: {
         xs: '480px',
