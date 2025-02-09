@@ -111,18 +111,24 @@ export const deleteBlog = async (req, res) => {
 	}
 };
 
-export const checkBlogOwner = async (req,res) => {
-	const ownerId = req.body;
-	const blogId = req.params.id;
-	try {
-		const blog = await Blog.findById(blogId);
-		if(!blog) return res.status(404).json({message: "Blog not found"});
+export const checkBlogOwner = async (req, res) => {
+    const ownerId = req.user._id;
+    const blogId = req.params.id;
 
-		if(!blog.ownerId.toString() === ownerId.toString()) return res.status(200).json({message: "You are not the owner of this blog"});
-		
-		res.status(201).json({success: true, message: "You are the owner of this blog"});
-	} catch (error) {
-		console.log("error in checking blog owner:", error.message);
-		res.status(500).json({success: false, message: "Server Error"});
-	}
+    try {
+        const blog = await Blog.findById(blogId);
+        if (!blog) {
+            return res.status(404).json({ success: false, message: "Blog not found" });
+        }
+
+        if (blog.ownerId.toString() !== ownerId.toString()) { 
+            return res.status(200).json({ success: false, message: "You are not the owner of this blog" });
+        }
+
+        return res.status(200).json({ success: true, message: "You are the owner of this blog" });
+
+    } catch (error) {
+        console.log("Error in checking blog owner:", error.message);
+        return res.status(500).json({ success: false, message: "Server Error" });
+    }
 };

@@ -158,10 +158,10 @@ function BlogCard({blog, onUpdate, inprofile}) {
 
       setpreviewModalBodyOpen(true);
     };
-
+    console.log(userVerification);
     return (
       <>
-          <Box className="w-[22rem] min-h-[14rem] rounded border border-gray-500 transition-transform transform hover:-translate-y-1.5">
+          <Box className="w-[22rem] min-h-[14rem] rounded-sm border border-gray-500 transition-transform transform hover:-translate-y-1.5">
             <button onClick={() => {setviewBlogModal(true)}} className="w-full h-[12rem] border-b border-gray-500">
               <div className="w-full h-[12rem] border-b border-gray-500">
                 <img
