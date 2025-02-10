@@ -4,6 +4,8 @@ import { ButtonGroup, Button, Box, Menu, MenuItem } from '@mui/material'
 import { Link } from 'react-router-dom'
 import { FaUserCircle, FaHome, FaPenSquare,  } from "react-icons/fa";
 import { FaBookOpen } from "react-icons/fa6";
+import { FaInfo } from "react-icons/fa";
+
 import { BsFillInfoSquareFill } from "react-icons/bs";
 import { VscSignIn } from "react-icons/vsc";
 import { MdMenu } from "react-icons/md";
@@ -107,6 +109,9 @@ function Navbar() {
         </MenuItem>
         <MenuItem onClick={handleClose}>
           <Link to={"/project"} className='text-amber-500'><LuNewspaper fontSize={30}/></Link>
+        </MenuItem>
+        <MenuItem onClick={handleClose}>
+          <Link to={"/about"} className='text-yellow-400'><BsFillInfoSquareFill fontSize={30}/></Link>
         </MenuItem>
         <MenuItem onClick={handleClose}>
           <Link to={"/signin"}>

@@ -70,7 +70,7 @@ function BlogPage() {
             </TableRow>
             <TableRow className='h-[3rem]'>
               <div className='flex w-[80%] mx-auto mt-5 '>
-                <div className='mx-auto'>
+                <div className='mx-auto text-center'>
                   <Typography variant='h6' className='text-gray-500'>
                    Discover our latest thoughts, ideas and insights about MAIS
                   </Typography>
