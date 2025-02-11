@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import { data, Link } from "react-router-dom";
 import { TextEffect } from "@/components/ui/texteffect";
 
+import tornppr from "../assets/tornppr.png";
+import tornppr1 from "../assets/tornppr1.png";
+import tornppr2 from "../assets/tornppr2.png";
 import duo from "../assets/duo.jpg";
 import { FaXTwitter } from "react-icons/fa6";
 import { FaInstagram } from "react-icons/fa"
@@ -187,10 +190,11 @@ function HomePage() {
             <PiBirdFill fontSize={30}/>
           </InfiniteSlider>
         </div>
-        <div className="w-full mx-auto min-h-[30rem] bg-black">
-          <div className="w-[95%] mx-auto mt-7">
+
+        <div className="w-full mx-auto min-h-[30rem] bg-gray-100">
+          <div className="w-[95%] mx-auto mt-5">
           <div className="flex flex-row justify-between">
-            <div className="text-5xl sm:text-6xl font-harmonique font-bold text-white">
+            <div className="text-5xl sm:text-6xl font-harmonique font-bold text-black">
               <TextEffect
                 per='char'
                 delay={0.2}
@@ -234,7 +238,7 @@ function HomePage() {
               </AnimatedGroup>
             </div>
           </div>
-          <div className="text-white text-xl font-semibold mt-7 text-center sm:text-start">
+          <div className="text-black text-xl font-semibold mt-5 text-center sm:text-start">
             <TextEffect
                 per='char'
                 delay={0.2}
@@ -282,12 +286,19 @@ function HomePage() {
           </Grid2>
           </div>
         </div>
+        <div className="w-full h-[15rek] bg-black">
+          <img
+            src={tornppr}
+            alt="torn paper"
+            className="w-full h-full object-cover"
+          />
         </div>
-
-        <div className="w-full mx-auto min-h-[30rem] bg-gray-100">
+        </div>
+        
+        <div className="w-full mx-auto min-h-[30rem] bg-black">
           <div className="w-[95%] mx-auto mt-7">
           <div className="flex flex-row justify-between">
-            <div className="text-5xl sm:text-6xl font-harmonique font-bold text-black">
+            <div className="text-5xl sm:text-6xl font-harmonique font-bold text-white">
               Blogs
             </div>
             <div>
@@ -298,7 +309,7 @@ function HomePage() {
               </button>
             </div>
           </div>
-          <div className="text-black text-xl font-semibold mt-7 text-center sm:text-start">
+          <div className="text-white text-xl font-semibold mt-5 text-center sm:text-start">
             Gain insight into the minds of MAIS students
           </div>
           <div className="w-full my-5">
@@ -308,7 +319,7 @@ function HomePage() {
                 xs={12} // 1 column on extra-small screens
                 sm={4}  // 2 columns on small screens and up
                 key={blog._id}
-                className="mx-auto"
+                className="mx-auto text-white"
               >
                 <BlogCard blog={blog} onUpdate={handleinval} />
               </Grid2>
@@ -316,10 +327,17 @@ function HomePage() {
           </Grid2>
           </div>
         </div>
+        <div className="w-full h-[15rem] bg-black">
+          <img
+            src={tornppr1}
+            alt="torn paper"
+            className="w-full h-full object-cover"
+          />
+        </div>
         </div>
 
-        <div className="flex flex-col w-full mx-auto min-h-[30rem] bg-black border-b border-white">
-            <div className="w-full mt-20 text-center text-white text-5xl sm:text-6xl font-harmonique font-bold">
+        <div className="flex flex-col w-full mx-auto min-h-[30rem] bg-gray-100">
+            <div className="w-full mt-0 sm:mt-10 text-center text-black text-5xl sm:text-6xl font-harmonique font-bold">
               What is this club?
             </div>
             <div className="flex flex-col sm:flex-row justify-around items-center w-[95%] mx-auto mt-7 mb-20 text-white text-xl font-semibold">
@@ -330,7 +348,7 @@ function HomePage() {
                   className="w-full h-full"
                 />
               </div>
-              <div className="w-[90%] sm:w-[50%] mt-3 sm:mt-0 text-gray-300">
+              <div className="w-[90%] sm:w-[50%] mt-3 sm:mt-0 text-gray-700">
                 <div>Oi oi, Jack and Will here.</div>
                 <div className="mt-8">Webflail was born out of frustration. Frustration about how freelancing looked so damn easy according to social media but how hard it was in reality.</div>
                 <div className="mt-8">Will, my brother is the mastermind behind the editing and just generally being a bright bloke while I ask the hard questions to bright Webflowers.</div>
@@ -341,30 +359,39 @@ function HomePage() {
                 </button></div>
               </div>
             </div>
+            {/*<div className="w-full h-[17rem] bg-black">
+              <img
+                src={tornppr2}
+                alt="torn paper"
+                className="w-full h-full object-cover"
+              />
+            </div>*/}
         </div>
-        <div className="flex flex-col sm:flex-row justify-between w-[95%] mx-auto mt-7 mb-7">
-          <div className="mx-8 sm:mx-0">
-            <div className="flex flex-row space-x-4">
-              <FaXTwitter fontSize={30}/>
-              <FaInstagram fontSize={30}/>
-              <FaFacebookSquare fontSize={30}/>
+        <div className="w-full bg-black border-t border-white">
+          <div className="flex flex-col sm:flex-row justify-between w-[95%] mx-auto mt-7 mb-7">
+            <div className="mx-8 sm:mx-0">
+              <div className="flex flex-row space-x-4 text-white">
+                <FaXTwitter fontSize={30}/>
+                <FaInstagram fontSize={30}/>
+                <FaFacebookSquare fontSize={30}/>
+              </div>
+              <div className="mt-5 text-lg text-white">
+                © 2025 MAIS. All rights reserved.
+              </div>
             </div>
-            <div className="mt-5 text-lg">
-              © 2025 MAIS. All rights reserved.
-            </div>
-          </div>
-          
-          <div className="flex flex-col mt-5 mx-auto sm:mx-0">
-            <div className="flex flex-row text-lg space-x-2 items-center">
-              <div>Found a bug?</div>
-              <div><FaBug fontSize={20} /></div>
-              <div className="ml-2">Help us improve</div>
-              <div><FaTools fontSize={20} /></div>
-            </div>
-            <div className="space-y-1 mt-1">
-              <div>26b_sain-orshikh.n@mongolaspiration.edu.mn</div>
-              <div>26b_sayan.b@mongolaspiration.edu.mn</div>
-              <div>27b_tsegts.a@mongolaspiration.edu.mn</div>
+            
+            <div className="flex flex-col mt-3 sm:mt-0 mx-auto sm:mx-0">
+              <div className="flex flex-row text-lg space-x-2 items-center text-white">
+                <div>Found a bug?</div>
+                <div><FaBug fontSize={20} /></div>
+                <div className="ml-2">Help us improve</div>
+                <div><FaTools fontSize={20} /></div>
+              </div>
+              <div className="space-y-1 mt-3 sm:mt-1 text-white">
+                <div>26b_sain-orshikh.n@mongolaspiration.edu.mn</div>
+                <div>26b_sayan.b@mongolaspiration.edu.mn</div>
+                <div>27b_tsegts.a@mongolaspiration.edu.mn</div>
+              </div>
             </div>
           </div>
         </div>

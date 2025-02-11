@@ -5,8 +5,8 @@ const ProjectCard = ({project, bg}) => {
   return (
     <>
         <Tilt rotationFactor={6} isRevese>
-            <div className={`w-full min-h-[22rem] shadow-lg rounded-lg overflow-hidden border-2 ${bg === "white" ? `border-black` : `border-gray-200`}`}>
-                <div className={`border-b-2 ${bg === "white" ? `border-black` : `border-gray-200`}`}>
+            <div className={`w-full min-h-[22rem] shadow-lg rounded-lg overflow-hidden ${bg === "white" ? `border border-gray-200` : ``}`}>
+                <div className={`border-b-2 ${bg === "white" ? `border-gray-200` : `border-black`}`}>
                     <img
                         src='https://images.unsplash.com/photo-1738975927070-d5af82de67c1?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwyfHx8ZW58MHx8fHx8'
                         alt='project'
@@ -17,7 +17,7 @@ const ProjectCard = ({project, bg}) => {
                     <div className='text-gray-700 ml-1'>Author name</div>
                     <div className='rounded-md bg-pink-200 p-2 mr-1'>Project type</div>
                 </div>
-                <div className={`${bg === "white" ? `text-black` : `text-white`} font-harmonique text-xl ml-1`}>Project title</div>
+                <div className={`${bg === "white" ? `text-white` : `text-black`} font-harmonique text-xl ml-1`}>Project title</div>
                 <div className='text-gray-700 ml-1 mb-3'>Project date</div>
             </div>
         </Tilt>
