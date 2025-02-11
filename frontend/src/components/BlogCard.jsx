@@ -158,7 +158,6 @@ function BlogCard({blog, onUpdate, inprofile}) {
 
       setpreviewModalBodyOpen(true);
     };
-    console.log(userVerification);
     return (
       <>
           <Box className="w-[22rem] min-h-[14rem] rounded-sm border border-gray-500 transition-transform transform hover:-translate-y-1.5">

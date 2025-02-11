@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { data, Link } from "react-router-dom";
 import { TextEffect } from "@/components/ui/texteffect";
 
 import duo from "../assets/duo.jpg";
@@ -28,22 +28,30 @@ function HomePage() {
 
   const {mutate: addEmail} = useMutation({
     mutationFn: async (email) => {
-      const response = await fetch('/api/notifyuser/add', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({email}),
-      });
-      const data = await response.json();
-      return data;
+      try {
+        const res = await fetch('/api/notifyuser/add', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({email}),
+        });
+        const data = await res.json();
+        if(!res.ok) throw new Error(data.error || "Failed to create account");
+				console.log(data);
+        return data;
+
+      } catch (error) {
+        console.error(error);
+        throw error;
+      }
     },
     onSuccess: () => {
       toast.success('Email added successfully');
       setNotifyemail('');
     },
-    onError: () => {
-      toast.error('Failed to add email');
+    onError: (error) => {
+      toast.error(error.message);
     },
   });
 
@@ -145,7 +153,7 @@ function HomePage() {
               }}
             className={`text-gray-700 text-xl font-semibold`}
           >
-            Be notified of our 20+ student researchers in their journey to follow along in their routhe to a scientific discovery.
+            Be notified of our 20+ student researchers in their journey, to follow along in their route to a scientific discovery.
           </TextEffect>
         </div>
         <div className="w-[90%] sm:w-[30%] mx-auto mt-5 space-x-2 flex justify-center">
@@ -310,7 +318,7 @@ function HomePage() {
         </div>
         </div>
 
-        <div className="flex flex-col w-full mx-auto min-h-[30rem] bg-blue-700 border-b-2 border-blue-900">
+        <div className="flex flex-col w-full mx-auto min-h-[30rem] bg-black border-b border-white">
             <div className="w-full mt-20 text-center text-white text-5xl sm:text-6xl font-harmonique font-bold">
               What is this club?
             </div>

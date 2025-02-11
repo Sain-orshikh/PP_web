@@ -86,7 +86,7 @@ function Navbar() {
             aria-controls="basic-menu"
             aria-haspopup="true"
             onClick={handleClick}>
-            <MdMenu fontSize={40} className='mr-5'/>
+            <MdMenu fontSize={40} className='mr-5 text-black'/>
           </Button>
         </Box>
       <Menu
