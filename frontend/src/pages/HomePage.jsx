@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { data, Link } from "react-router-dom";
 import { TextEffect } from "@/components/ui/texteffect";
+import { Carousel, CarouselContent, CarouselItem, CarouselNavigation } from "@/components/ui/carousel";
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 
 import tornppr from "../assets/tornppr.png";
 import tornppr1 from "../assets/tornppr1.png";
@@ -28,6 +30,30 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 
 function HomePage() {
+
+  const customVariants = {
+    initial: {
+      opacity: 0,
+      scale: 0.95,
+      y: 40,
+    },
+    animate: {
+      opacity: 1,
+      scale: 1,
+      y: 0,
+    },
+    exit: {
+      opacity: 0,
+      scale: 0.95,
+      y: 40,
+    },
+  };
+
+  const customTransition = {
+    type: 'spring',
+    bounce: 0,
+    duration: 0.25,
+  };
 
   const {mutate: addEmail} = useMutation({
     mutationFn: async (email) => {
@@ -86,7 +112,7 @@ function HomePage() {
   return (
     <>
       <div className='flex flex-col w-full min-h-screen bg-gray-100'>
-        <div className="w-[90%] sm:w-[40%] mx-auto mt-12">
+        <div className="w-[90%] sm:w-[50%] mx-auto mt-12">
         <TextEffect
           per='char'
           delay={0.2}
@@ -121,10 +147,10 @@ function HomePage() {
           }}
           className={`text-5xl sm:text-6xl font-harmonique font-bold text-center`}
         >
-          Peek into the world of MAIS students
+          MAIS's Largest Research Organization
         </TextEffect>
         </div>
-        <div className="w-[90%] sm:w-[40%] mx-auto mt-3 text-center">
+        <div className="w-[90%] sm:w-[35%] mx-auto mt-3 text-center">
           <TextEffect
             per='char'
             delay={0.2}
@@ -156,11 +182,46 @@ function HomePage() {
               }}
             className={`text-gray-700 text-xl font-semibold`}
           >
-            Be notified of our 20+ student researchers in their journey, to follow along in their route to a scientific discovery.
+            We are dedicated to promoting interest in scientific research among the students of MAIS.
           </TextEffect>
         </div>
-        <div className="w-[90%] sm:w-[30%] mx-auto mt-5 space-x-2 flex justify-center">
-          <AnimatedGroup className={`w-[70%]`}>
+        <div className="w-[90%] sm:w-[30%] mx-auto mt-5 flex justify-center">
+          <Dialog variants={customVariants} transition={customTransition}>
+            <DialogTrigger className='bg-zinc-950 px-4 py-2 text-white text-xl hover:bg-zinc-800 dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-100 rounded-xl'>
+              Become a member
+            </DialogTrigger>
+            <DialogContent className='w-full max-w-md bg-white p-6 dark:bg-zinc-900'>
+              <DialogHeader>
+                <DialogTitle className='text-zinc-900 text-center dark:text-white text-3xl'>
+                  Join the aspiring researchers
+                </DialogTitle>
+                <DialogDescription className='text-zinc-600 mt-1 text-center dark:text-zinc-400 text-xl'>
+                  Enter your email address to join our club.
+                </DialogDescription>
+              </DialogHeader>
+              <div className='mt-1 flex flex-col space-y-4'>
+                <label htmlFor='name' className='sr-only'>
+                  Email
+                </label>
+                <input
+                  value={notifyemail}
+                  onChange={(e) => setNotifyemail(e.target.value)}
+                  id='name'
+                  type='email'
+                  className='h-9 w-full rounded-lg border border-zinc-200 bg-white px-3 text-lg text-zinc-900 outline-hidden focus:ring-2 focus:ring-black/5 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white dark:focus:ring-white/5'
+                  placeholder='Enter your email'
+                />
+                <button
+                  className='inline-flex items-center justify-center self-end rounded-lg bg-black px-4 py-1 text-lg font-medium text-zinc-50 dark:bg-white dark:text-zinc-900'
+                  type='submit'
+                  onClick={() => {handleSubmit(notifyemail)}}
+                >
+                  Join now
+                </button>
+              </div>
+            </DialogContent>
+          </Dialog>
+          {/*<AnimatedGroup className={`w-[70%]`}>
           <input
             value={notifyemail}
             onChange={(e) => setNotifyemail(e.target.value)}
@@ -174,7 +235,7 @@ function HomePage() {
               Submit
             </span>
           </button>
-          </AnimatedGroup>
+          </AnimatedGroup>*/}
         </div>
         <div className="w-[90%] sm:w-[45%] mx-auto mt-10 mb-10">
           <InfiniteSlider className={`w-full`} gap={100} autoPlay={true} autoPlaySpeed={3000}
@@ -269,21 +330,27 @@ function HomePage() {
                     },
                   }}
             >
-              The brilliant researh projects of MAIS students
+              The researh projects of MAIS students
             </TextEffect>
           </div>
           <div className="w-full my-5">
-          <Grid2 container spacing={4} className="w-full flex justify-evenly">
-            <Grid2 xs={12} sm={6} md={4}>
-              <ProjectCard />
-            </Grid2>
-            <Grid2 xs={12} sm={6} md={4}>
-              <ProjectCard />
-            </Grid2>
-            <Grid2 xs={12} sm={6} md={4}>
-              <ProjectCard />
-            </Grid2>
-          </Grid2>
+          <Carousel>
+        <CarouselContent className="-ml-4 pb-5 flex">
+          {/* Wrapping the ProjectCards in CarouselItems while maintaining Grid2 layout */}
+          {[...Array(6)].map((_, index) => (
+            <CarouselItem key={index} className="basis-full sm:basis-1/2 md:basis-1/3 pl-4">
+              <Grid2 container spacing={4} className="w-full flex justify-evenly">
+                <ProjectCard />
+              </Grid2>
+            </CarouselItem>
+          ))}
+        </CarouselContent>
+        <CarouselNavigation
+          className="absolute -bottom-20 left-auto top-auto w-full justify-end gap-2"
+          classNameButton="bg-zinc-800 *:stroke-zinc-50 dark:bg-zinc-200 dark:*:stroke-zinc-800"
+          alwaysShow
+        />
+      </Carousel>
           </div>
         </div>
         <div className="w-full h-[15rek] bg-black">
@@ -312,19 +379,23 @@ function HomePage() {
           <div className="text-white text-xl font-semibold mt-5 text-center sm:text-start">
             Gain insight into the minds of MAIS students
           </div>
-          <div className="w-full my-5">
-          <Grid2 container spacing={4} className="w-full flex justify-evenly">
-            {displayedBlogs?.map((blog) => (
-              <Grid2 
-                xs={12} // 1 column on extra-small screens
-                sm={4}  // 2 columns on small screens and up
-                key={blog._id}
-                className="mx-auto text-white"
-              >
-                <BlogCard blog={blog} onUpdate={handleinval} />
-              </Grid2>
-            ))}
-          </Grid2>
+          <div className="w-full mb-5 mt-7 px-4">
+          <Carousel>
+            <CarouselContent className="mr-4 mx-auto pt-2 pb-4 flex">
+              {Blogs?.map((blog) => (
+                <CarouselItem key={blog._id} className="basis-full sm:basis-1/2 md:basis-1/3 pl-4">
+                  <Grid2 className="mx-auto text-white">
+                    <BlogCard blog={blog} onUpdate={handleinval}/>
+                  </Grid2>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <CarouselNavigation 
+              className="absolute -bottom-20 left-auto top-auto w-full justify-start gap-2" 
+              classNameButton="bg-gray-800 *:stroke-white dark:bg-gray-200 dark:*:stroke-black"
+              alwaysShow
+            />
+          </Carousel>
           </div>
         </div>
         <div className="w-full h-[15rem] bg-black">
