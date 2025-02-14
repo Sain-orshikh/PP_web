@@ -8,6 +8,8 @@ import tornppr from "../assets/tornppr.png";
 import tornppr1 from "../assets/tornppr1.png";
 import tornppr2 from "../assets/tornppr2.png";
 import duo from "../assets/duo.jpg";
+import pplogo from "../assets/pp-logo.png";
+
 import { FaXTwitter } from "react-icons/fa6";
 import { FaInstagram } from "react-icons/fa"
 import { FaFacebookSquare } from "react-icons/fa";
@@ -20,6 +22,8 @@ import { FaTree } from "react-icons/fa6";
 import { MdOutlineWaterDrop } from "react-icons/md";
 import { PiBirdFill } from "react-icons/pi";
 import { MdOutlineScience } from "react-icons/md";
+import { TbLoader } from "react-icons/tb";
+import {Button} from "@mui/material";
 
 import { AnimatedGroup } from "@/components/ui/animateimage";
 import { InfiniteSlider } from "@/components/ui/infinite-slider";
@@ -97,9 +101,15 @@ function HomePage() {
 
   let displayedBlogs = [];
 
+  const [visibleBlogs, setVisibleBlogs] = useState(3);
+
   if(blogs){
-    displayedBlogs = [...Blogs].slice(0, 3);
+    displayedBlogs = [...Blogs].slice(0, visibleBlogs);
   }
+
+  const handleLoadMore = () => {
+    setVisibleBlogs((prevNum) => prevNum + 3);
+  };
 
   const handleinval = () => {
     queryClient.invalidateQueries({queryKey: ['blogs']});
@@ -379,24 +389,29 @@ function HomePage() {
           <div className="text-white text-xl font-semibold mt-5 text-center sm:text-start">
             Gain insight into the minds of MAIS students
           </div>
-          <div className="w-full mb-5 mt-7 px-4">
-          <Carousel>
-            <CarouselContent className="mr-4 mx-auto pt-2 pb-4 flex">
-              {Blogs?.map((blog) => (
-                <CarouselItem key={blog._id} className="basis-full sm:basis-1/2 md:basis-1/3 pl-4">
-                  <Grid2 className="mx-auto text-white">
-                    <BlogCard blog={blog} onUpdate={handleinval}/>
+          <div className='flex flex-row justify-evenly w-[95%] mx-auto mt-10 text-white'>
+                <div className=''><Grid2 container spacing={10} columns={12} minHeight={250}>
+                  {displayedBlogs.map((blog) => (
+                  <Grid2 
+                    xs={12} // 1 column on extra-small screens
+                    sm={4}  // 2 columns on small screens and up
+                    key={blog._id}
+                    className="mx-auto"
+                  >
+                    <BlogCard blog={blog} onUpdate={handleinval} />
                   </Grid2>
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            <CarouselNavigation 
-              className="absolute -bottom-20 left-auto top-auto w-full justify-start gap-2" 
-              classNameButton="bg-gray-800 *:stroke-white dark:bg-gray-200 dark:*:stroke-black"
-              alwaysShow
-            />
-          </Carousel>
-          </div>
+                  ))}
+                </Grid2></div>
+              </div>
+              {Blogs && visibleBlogs < Blogs?.length && (
+              <div className='flex flex-row justify-center w-full mt-3'>
+                <div className='rounded-md hover:bg-gray-900'>
+                <button onClick={handleLoadMore} className="flex flex-row items-center bg-white hover:bg-gray-200 rounded px-2 py-1.5 text-white">
+                  <span className='capitalize text-black'>Load more</span>
+                  <span className='text-black ml-1'><TbLoader fontSize={20}/></span>
+                </button></div>
+              </div>
+              )}
         </div>
         <div className="w-full h-[15rem] bg-black">
           <img
@@ -439,8 +454,8 @@ function HomePage() {
             </div>*/}
         </div>
         <div className="w-full bg-black border-t border-white">
-          <div className="flex flex-col sm:flex-row justify-between w-[95%] mx-auto mt-7 mb-7">
-            <div className="mx-8 sm:mx-0">
+          <div className="flex flex-col sm:flex-row justify-between w-[80%] sm:w-[95%] mx-auto mt-7 mb-7">
+            <div className="w-full">
               <div className="flex flex-row space-x-4 text-white">
                 <FaXTwitter fontSize={30}/>
                 <FaInstagram fontSize={30}/>
@@ -450,18 +465,34 @@ function HomePage() {
                 © 2025 MAIS. All rights reserved.
               </div>
             </div>
-            
-            <div className="flex flex-col mt-3 sm:mt-0 mx-auto sm:mx-0">
-              <div className="flex flex-row text-lg space-x-2 items-center text-white">
-                <div>Found a bug?</div>
-                <div><FaBug fontSize={20} /></div>
-                <div className="ml-2">Help us improve</div>
-                <div><FaTools fontSize={20} /></div>
+
+            <div className="flex flex-row w-full h-16 mt-3 sm:mt-0 items-center bg-inherit mx-auto">
+              <div className="mx-0 sm:mx-auto flex flex-row">
+                <img src={pplogo} className="w-16 h-16" alt="pplogo"/>
+                <div className="ml-1">
+                  <div className="text-white text-2xl font-semibold">
+                    Passion Project
+                  </div>
+                  <p className="text-white mt-1 text-md">
+                    &copy; 2025 Passion Project club
+                  </p>
+                </div>
               </div>
-              <div className="space-y-1 mt-3 sm:mt-1 text-white">
-                <div>26b_sain-orshikh.n@mongolaspiration.edu.mn</div>
-                <div>26b_sayan.b@mongolaspiration.edu.mn</div>
-                <div>27b_tsegts.a@mongolaspiration.edu.mn</div>
+            </div>
+
+            <div className="flex flex-col w-full mt-3 sm:mt-0">
+              <div className="ml-auto">
+                <div className="flex flex-row text-xl space-x-2 items-center text-white">
+                  <div>Found a bug?</div>
+                  <div><FaBug fontSize={20} /></div>
+                  <div className="ml-2">Help us improve</div>
+                  <div><FaTools fontSize={20} /></div>
+                </div>
+                <div className="space-y-1 mt-3 sm:mt-1 text-white">
+                  <div>26b_sain-orshikh.n@mongolaspiration.edu.mn</div>
+                  <div>26b_sayan.b@mongolaspiration.edu.mn</div>
+                  <div>27b_tsegts.a@mongolaspiration.edu.mn</div>
+                </div>
               </div>
             </div>
           </div>

@@ -105,7 +105,7 @@ function SignInPage() {
           <div className='w-[70%] mt-5 border-dashed border border-gray-500'>
           </div>
           <div className='mb-5 mt-3 text-xl'>
-            Don't have an account? <button className='font-semibold hover:text-gray-700'><Link to={'/signup'}>Sign up</Link></button>
+            Don't have an account? <button className='font-semibold text-blue-700 hover:text-blue-900'><Link to={'/signup'}>Sign up</Link></button>
           </div>
         </div>
       </div>	

@@ -95,7 +95,7 @@ function BlogPage() {
             </TableRow>)}
             {Blogs && visibleBlogs < Blogs.length && (
             <TableRow>
-              <div className='flex flex-row justify-center w-full mt-3'>
+              <div className='flex flex-row justify-center w-full mt-6'>
                 <div className='bg-black hover:bg-gray-900 rounded'><Button onClick={handleLoadMore}>
                   <span className='capitalize text-white'>Load more</span>
                   <span className='text-white ml-1'><TbLoader fontSize={20}/></span>

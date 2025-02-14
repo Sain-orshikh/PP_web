@@ -34,7 +34,7 @@ function Navbar() {
   };
   return (
     <>
-      <div className="flex justify-between items-center w-full bg-white p-1 shadow-md z-10 ">
+      <div className="flex flex-row justify-between items-center w-full bg-white p-1 shadow-md z-50 fixed top-0">
         <Box className="flex justify-between items-center">
           {/*<img>Passion project logo has to go here</img>*/}
           <button><Link to={"/"}><img src={pp_logo} className=""/></Link></button>

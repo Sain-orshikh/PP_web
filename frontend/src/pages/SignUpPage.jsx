@@ -147,7 +147,7 @@ const SignUpPage = () => {
 					Create new account<span className="text-blue-500 text-5xl">.</span>
 				</div>
 				<div className="text-gray-200 mt-7 text-md">
-					<button className="bg-blue-500 h-[2.5rem] p-2 rounded-l-xl font-semibold hover:bg-blue-700" onClick={handlecool}>Already A Member?</button><Link to="/signin" className="text-blue-500 h-[2.5rem] font-semibold p-2 bg-gray-700 rounded-r-xl hover:bg-gray-500 border-2 border-gray-700">Log in</Link>
+					<button className="bg-blue-500 h-[2.5rem] px-3 py-2 rounded-l-xl font-semibold hover:bg-blue-700" onClick={handlecool}>Already A Member?</button><Link to="/signin" className="text-blue-500 h-[2.5rem] font-semibold p-2 bg-gray-700 rounded-r-xl hover:bg-gray-500 border-2 border-gray-700">Log in</Link>
 				</div>
 				<div className="flex flex-row items-center w-full sm:w-[70%] bg-gray-700 p-3 rounded-xl h-[2.5rem] mt-7 border border-black focus-within:border-none focus-within:outline focus-within:outline-blue-500">
 					<input
@@ -205,14 +205,16 @@ const SignUpPage = () => {
 						</button>
 					</div>
 				</div>
-				<div className="flex flex-col w-full h-48 items-center mt-auto bg-inherit">
-					<img src={pplogo} className="w-24 h-24" alt="pplogo"/>
-					<div className="text-white text-2xl font-semibold">
-						Passion Project
+				<div className="flex flex-row w-full h-16 mt-auto mb-5 items-center bg-inherit">
+					<img src={pplogo} className="w-16 h-16" alt="pplogo"/>
+					<div className="ml-1">
+						<div className="text-white text-2xl font-semibold">
+							Passion Project
+						</div>
+						<p className="text-white mt-1 text-sm">
+							&copy; 2025 Passion Project club
+						</p>
 					</div>
-					<p className="text-white text-sm">
-						All rights reserved &copy; 2025
-					</p>
 				</div>
 			</div>
 		</div>

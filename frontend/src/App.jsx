@@ -55,10 +55,10 @@ function App() {
   console.log(blogs);
   return (
     <>
-        <Box className='flex'>
+        <Box className='flex relative'>
           <Navbar/>
         </Box>
-        <Box className='flex'>
+        <Box className='flex pt-16'>
           <Routes>
             <Route path='/' element={ <HomePage/>}/>
             <Route path='/create' element={ <CreatePage/>}/>

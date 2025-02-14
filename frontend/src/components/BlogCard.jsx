@@ -252,8 +252,8 @@ function BlogCard({blog, onUpdate, inprofile}) {
           onClose={() => {setviewBlogModal(false)}}
           className="overflow-y-auto" 
         >
-          <div className="relative w-[70%] min-h-[80%] mx-auto my-10 bg-white shadow-lg rounded-lg">
-            <div className="relative h-80 bg-cover bg-center">
+          <div className="relative w-[70%] min-h-[50%] sm:min-h-[80%] mx-auto my-10 bg-white shadow-lg rounded-lg">
+            <div className="relative h-40 sm:h-80 bg-cover bg-center">
               <img 
                 src={blog.image}
                 className="w-full h-full"
@@ -271,12 +271,12 @@ function BlogCard({blog, onUpdate, inprofile}) {
                 <i className="fas fa-times text-2xl"></i>
               </button>
               <div className="absolute bottom-0 left-0 right-0 p-6 break-words whitespace-normal">
-                <h2 className="text-4xl font-bold text-white">{blog.title}</h2>
+                <h2 className="text-3xl sm:text-4xl font-bold text-white">{blog.title}</h2>
               </div>
             </div>
 
-            <div className="p-8">
-              <div className="break-words whitespace-pre-wrap">
+            <div className="p-4 sm:p-8">
+              <div className="break-words whitespace-pre-wrap text-sm sm:text-md">
                 <div dangerouslySetInnerHTML={{ __html: blog.content }} />
               </div>
             </div>
