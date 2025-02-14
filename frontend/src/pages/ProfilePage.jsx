@@ -429,7 +429,7 @@ const ProfilePage = () => {
               </div>
 			)}
 			{userBlogs && visibleBlogs < userBlogs.length && (
-				<div className='flex flex-row justify-center w-full mt-3'>
+				<div className='flex flex-row justify-center w-full mt-3 mb-3 sm:mb-1'>
                 <div className='bg-black hover:bg-gray-700 rounded-lg border border-white'><Button onClick={handleLoadMore}>
                   <span className='capitalize text-white'>Load more</span>
                   <span className='text-white ml-1'><TbLoader fontSize={20}/></span>

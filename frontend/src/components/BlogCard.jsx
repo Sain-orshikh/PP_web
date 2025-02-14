@@ -153,7 +153,7 @@ function BlogCard({blog, onUpdate, inprofile}) {
     const handlePreviewOpen = () => {
       const editor = quillRef.current.getEditor();
       const contentHtml = editor.root.innerHTML; // Get content as HTML
-
+      
       setfreshBlog({...updatedBlog, content: contentHtml, owner_id: authUser.id});
 
       setpreviewModalBodyOpen(true);
@@ -288,9 +288,9 @@ function BlogCard({blog, onUpdate, inprofile}) {
           onClose={() => {setfullversion(true), setpreviewModalBodyOpen(false), setpreviewThumbnailOpen(false)}}
           className="overflow-y-auto" 
         >
-          <div className='w-[70%] mx-auto'>
-          <div className="relative w-full min-h-[80%] mx-auto mt-10 bg-white shadow-lg rounded-lg">
-            <div className="relative h-80">
+          <div className='w-[70%] mx-auto h-full'>
+          <div className="relative w-full min-h-[50%] sm:min-h-[80%] mx-auto mt-10 bg-white shadow-lg rounded-lg">
+            <div className="relative h-40 sm:h-80">
               <img 
                 src={freshBlog.image}
                 className="w-full h-full"
@@ -301,11 +301,11 @@ function BlogCard({blog, onUpdate, inprofile}) {
               />
               <div className="absolute inset-0 bg-gradient-to-b from-black/20 to-black/10"></div>
               <div className="absolute bottom-0 left-0 right-0 p-6 break-words whitespace-normal">
-                <h2 className="text-4xl font-bold text-white">{freshBlog.title}</h2>
+                <h2 className="text-3xl sm:text-4xl font-bold text-white">{freshBlog.title}</h2>
               </div>
             </div>
 
-            <div className="p-8">
+            <div className="p-4 sm:p-8 bg-red-500">
               <div className="break-words whitespace-pre-wrap">
                 <div dangerouslySetInnerHTML={{ __html: freshBlog.content }} />
               </div>
@@ -346,7 +346,7 @@ function BlogCard({blog, onUpdate, inprofile}) {
             </button>
           <div className="flex flex-row bg-gray-100">
             <div><button className="ml-2"><FaRegEdit fontSize={25}/></button></div>  
-            <div className=""><h6 className="mx-1 mb-1 text-xl">{freshBlog.title}</h6></div>
+            <div className=""><h6 className="mx-1 mb-1 text-xl text-black">{freshBlog.title}</h6></div>
           </div>
         </Box>
           <div className='flex justify-end w-[22rem] mx-auto'>
