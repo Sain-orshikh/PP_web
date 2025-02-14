@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 import paperairplane from "../assets/paperairplane.png";
@@ -26,6 +26,16 @@ import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 import {toast} from "react-hot-toast";
 
 const SignUpPage = () => {
+
+	const {data:authUser} = useQuery({queryKey:["authUser"]});
+
+    const navigate = useNavigate();
+    
+    useEffect(() => {
+		if(authUser){
+		  navigate("/overview");
+		}
+	},[authUser]);
 
 	const queryClient = useQueryClient();
 	

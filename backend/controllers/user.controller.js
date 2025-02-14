@@ -52,10 +52,15 @@ export const updateUser = async (req, res) => {
 	const userId = req.user._id;
 
 	try {
+		
 		let user = await User.findById(userId);
-		if (!user) return res.status(404).json({ message: "User not found" });
+		const usernameregex = await User.findOne({username});
+		const emailregex = await User.findOne({email});
+		
+		if(usernameregex && usernameregex.username !== user.username) return res.status(400).json({error: "Username is already taken"});
+		if(emailregex && emailregex.email !== user.email) return res.status(400).json({error: "Email is already taken"});
 
-		if (username === user.username || email === user.email) return res.status(400).json({ error: "Credentials are already taken" });
+		if (!user) return res.status(404).json({ message: "User not found" });
 
 		if ((!newPassword && currentPassword) || (!currentPassword && newPassword)) {
 			return res.status(400).json({ error: "Please provide both current password and new password" });

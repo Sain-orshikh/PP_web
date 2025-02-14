@@ -12,9 +12,20 @@ import skybg from "../assets/skybg.jpg"
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
+import { use } from 'react';
 
 function SignInPage() {
+
+    const {data:authUser} = useQuery({queryKey:["authUser"]});
+
+    const navigate = useNavigate();
     
+    useEffect(() => {
+      if(authUser){
+        navigate("/overview");
+      }
+    },[authUser]);
+
     const [credentials, setCredentials] = useState({
       username: "",
       password: ""

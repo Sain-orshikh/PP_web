@@ -488,7 +488,7 @@ function HomePage() {
                   <div className="ml-2">Help us improve</div>
                   <div><FaTools fontSize={20} /></div>
                 </div>
-                <div className="space-y-1 mt-3 sm:mt-1 text-white">
+                <div className="space-y-1 mt-3 text-md sm:mt-1 text-white">
                   <div>26b_sain-orshikh.n@mongolaspiration.edu.mn</div>
                   <div>26b_sayan.b@mongolaspiration.edu.mn</div>
                   <div>27b_tsegts.a@mongolaspiration.edu.mn</div>

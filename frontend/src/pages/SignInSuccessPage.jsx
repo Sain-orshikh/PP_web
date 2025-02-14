@@ -1,16 +1,55 @@
 import { useEffect, useState } from "react";
 import pp_logo from "../assets/pp-logo.png"
-import { Link } from "react-router-dom";
-import { Modal } from "@mui/material";
+import { Link, useNavigate } from "react-router-dom";
 import { FaHome, FaBookReader, FaRegEdit, FaLongArrowAltRight } from "react-icons/fa";
+import { FaGear } from "react-icons/fa6";
+
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
+import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogClose } from "@/components/ui/dialog";
 
-function SignInSuccessPage() {
+const SignInSuccessPage = () => {
 
-    const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
-    const {data:authUser} = useQuery({queryKey:["authUser"]});
+  const queryClient = useQueryClient();
+  const {data: authUser} = useQuery({queryKey: ["authUser"]});
+
+  if(!authUser){
+    navigate("/signin");
+  };
+
+  const [updatedUser, setupdatedUser] =  useState({
+    username: authUser?.username,
+    email: authUser?.email,
+    currentpassword: "",
+    newpassword: "",
+    bio: authUser?.bio,
+  });
+
+  const customVariants = {
+      initial: {
+        opacity: 0,
+        scale: 0.95,
+        y: 40,
+      },
+      animate: {
+        opacity: 1,
+        scale: 1,
+        y: 0,
+      },
+      exit: {
+        opacity: 0,
+        scale: 0.95,
+        y: 40,
+      },
+    };
+
+  const customTransition = {
+    type: 'spring',
+    bounce: 0,
+    duration: 0.25,
+  };
 
     const {mutate:logoutMutation} = useMutation({
       mutationFn: async() => {
@@ -64,26 +103,12 @@ function SignInSuccessPage() {
       onSuccess: () => {
         toast.success("User updated successfully");
         queryClient.invalidateQueries({queryKey:["authUser"]});
-      },
-      onError: (error) => {
-        toast.error(error.message);
-      },
+        DialogClose();
+      }
     })
 
-    const [modalOpen, setmodalOpen] = useState(false);
-    const [updatedUser, setupdatedUser] =  useState({
-      name: authUser.username,
-      email: authUser.email,
-      currentpassword: "",
-      newpassword: "",
-      bio: "",
-      profileImg: authUser.profileImg || '',  
-      coverImg: authUser.coverImg || '',
-    }); 
     const handleUpdateUser = async(updatedUser) => {
-      console.log(updatedUser);
       updateUserMutation(updatedUser);
-      setmodalOpen(false)
     };
 
     return (
@@ -95,7 +120,7 @@ function SignInSuccessPage() {
               <span className="block text-gray-500">Successfully signed in</span>
             </div>
             <div className="flex items-center h-full">
-              <button onClick={handleSignOut} className="bg-black text-white rounded p-1.5 mr-5">
+              <button onClick={handleSignOut} className="bg-black text-white rounded p-1.5 mr-5 hover:bg-gray-800">
                 <span className="mx-2">Sign Out</span>
               </button>
             </div>
@@ -145,30 +170,193 @@ function SignInSuccessPage() {
             </div>
           </div>
           <div className="flex flex-col w-[95%] min-h-[15rem] bg-white rounded-md mx-auto mt-7 p-4">
-            <div className="mt-1">
+            <div className="mt-1 flex justify-between">
               <span className="font-bold text-xl">Profile Information</span>
+              <button className="rounded bg-black text-white px-4 py-1.5 hover:bg-gray-800">
+                <Link to={`/profile/${authUser?.username}`}>
+                  To Profile
+                </Link>
+              </button>
             </div>
             <div className="flex flex-row justify-between items-center mt-3">
-              <div className="flex flex-col">
+              <div className="flex flex-col w-[60%] sm:w-[75%]">
                 <span className="text-gray-500">Username</span>
-                <span className="">{authUser.username}</span>
+                <span className="w-full break-words whitespace-pre-wrap">{authUser.username}</span>
               </div>
               <div>
-                <button onClick={() => setmodalOpen(true)} className="border border-black rounded p-1">
-                  <span className="mx-2">Edit</span>
-                </button>
-              </div>
+                <Dialog variants={customVariants} transition={customTransition}>
+                  <DialogTrigger className='bg-black p-2 text-white text-md hover:bg-gray-800 rounded'>
+                    <FaGear fontSize={20}/>
+                  </DialogTrigger>
+                  <DialogContent className='w-full max-w-md bg-white p-6 dark:bg-zinc-900'>
+                    <DialogHeader>
+                      <DialogTitle className='text-zinc-900 text-center dark:text-white text-3xl'>
+                        Enter your new credentials
+                      </DialogTitle>
+                    </DialogHeader>
+                    <div className='flex flex-col space-y-4'>
+                      <label htmlFor='name' className='sr-only'>
+                        Email
+                      </label>
+                      <input
+                        value={updatedUser.email}
+                        onChange={(e) => setupdatedUser({ ...updatedUser, email: e.target.value })}
+                        id='name'
+                        type='email'
+                        className='h-9 w-full rounded-lg border border-zinc-200 bg-white px-3 text-lg text-zinc-900 outline-hidden focus:ring-2 focus:ring-black/5 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white dark:focus:ring-white/5'
+                        placeholder='Enter your email'
+                      />
+                    </div>
+                    <div className='flex flex-col space-y-4'>
+                      <label htmlFor='name' className='sr-only'>
+                        Username
+                      </label>
+                      <input
+                        value={updatedUser.username}
+                        onChange={(e) => setupdatedUser({ ...updatedUser, username: e.target.value })}
+                        id='name'
+                        type='username'
+                        className='h-9 w-full rounded-lg border border-zinc-200 bg-white px-3 text-lg text-zinc-900 outline-hidden focus:ring-2 focus:ring-black/5 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white dark:focus:ring-white/5'
+                        placeholder='Enter your username'
+                      />
+                    </div>
+                    <div className='flex flex-col space-y-4'>
+                      <label htmlFor='name' className='sr-only'>
+                        Current Password
+                      </label>
+                      <input
+                        value={updatedUser.currentpassword}
+                        onChange={(e) => setupdatedUser({ ...updatedUser, currentpassword: e.target.value })}
+                        id='name'
+                        type='currentpassword'
+                        className='h-9 w-full rounded-lg border border-zinc-200 bg-white px-3 text-lg text-zinc-900 outline-hidden focus:ring-2 focus:ring-black/5 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white dark:focus:ring-white/5'
+                        placeholder='Enter your current password'
+                      />
+                    </div>
+                    <div className='flex flex-col space-y-4'>
+                      <label htmlFor='name' className='sr-only'>
+                        New password
+                      </label>
+                      <input
+                        value={updatedUser.newpassword}
+                        onChange={(e) => setupdatedUser({ ...updatedUser, newpassword: e.target.value })}
+                        id='name'
+                        type='newpassword'
+                        className='h-9 w-full rounded-lg border border-zinc-200 bg-white px-3 text-lg text-zinc-900 outline-hidden focus:ring-2 focus:ring-black/5 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white dark:focus:ring-white/5'
+                        placeholder='Enter your new password'
+                      />
+                    </div>
+                    <div className='flex flex-col space-y-4'>
+                      <label htmlFor='name' className='sr-only'>
+                        Bio
+                      </label>
+                      <input
+                        value={updatedUser.bio}
+                        onChange={(e) => setupdatedUser({ ...updatedUser, bio: e.target.value })}
+                        id='name'
+                        type='bio'
+                        className='h-9 w-full rounded-lg border border-zinc-200 bg-white px-3 text-lg text-zinc-900 outline-hidden focus:ring-2 focus:ring-black/5 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white dark:focus:ring-white/5'
+                        placeholder='Enter your bio'
+                      />
+                    </div>
+                    <div className="mt-4 w-fit ml-auto">
+                      <button onClick={() => handleUpdateUser(updatedUser)} className='bg-zinc-950 text-white rounded-lg px-4 py-2 hover:bg-zinc-900 dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-100'>
+                        Update
+                      </button>
+                    </div>
+                  </DialogContent>
+                </Dialog>
+                </div>
             </div>
             <div className="flex flex-row justify-between items-center mt-3">
-              <div className="flex flex-col">
+              <div className="flex flex-col w-[60%] sm:w-[75%]">
                 <span className="text-gray-500">Email</span>
-                <span className="">{authUser.email}</span>
+                <span className="w-full break-words whitespace-pre-wrap">{authUser.email}</span>
               </div>
               <div>
-                <button onClick={() => setmodalOpen(true)} className="border border-black rounded p-1">
-                  <span className="mx-2">Change</span>
-                </button>
-              </div>
+                <Dialog variants={customVariants} transition={customTransition}>
+                  <DialogTrigger className='bg-black p-2 text-white text-md hover:bg-gray-800 rounded'>
+                    <FaGear fontSize={20}/>
+                  </DialogTrigger>
+                  <DialogContent className='w-full max-w-md bg-white p-6 dark:bg-zinc-900'>
+                    <DialogHeader>
+                      <DialogTitle className='text-zinc-900 text-center dark:text-white text-3xl'>
+                        Enter your new credentials
+                      </DialogTitle>
+                    </DialogHeader>
+                    <div className='flex flex-col space-y-4'>
+                      <label htmlFor='name' className='sr-only'>
+                        Email
+                      </label>
+                      <input
+                        value={updatedUser.email}
+                        onChange={(e) => setupdatedUser({ ...updatedUser, email: e.target.value })}
+                        id='name'
+                        type='email'
+                        className='h-9 w-full rounded-lg border border-zinc-200 bg-white px-3 text-lg text-zinc-900 outline-hidden focus:ring-2 focus:ring-black/5 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white dark:focus:ring-white/5'
+                        placeholder='Enter your email'
+                      />
+                    </div>
+                    <div className='flex flex-col space-y-4'>
+                      <label htmlFor='name' className='sr-only'>
+                        Username
+                      </label>
+                      <input
+                        value={updatedUser.username}
+                        onChange={(e) => setupdatedUser({ ...updatedUser, username: e.target.value })}
+                        id='name'
+                        type='username'
+                        className='h-9 w-full rounded-lg border border-zinc-200 bg-white px-3 text-lg text-zinc-900 outline-hidden focus:ring-2 focus:ring-black/5 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white dark:focus:ring-white/5'
+                        placeholder='Enter your username'
+                      />
+                    </div>
+                    <div className='flex flex-col space-y-4'>
+                      <label htmlFor='name' className='sr-only'>
+                        Current Password
+                      </label>
+                      <input
+                        value={updatedUser.currentpassword}
+                        onChange={(e) => setupdatedUser({ ...updatedUser, currentpassword: e.target.value })}
+                        id='name'
+                        type='currentpassword'
+                        className='h-9 w-full rounded-lg border border-zinc-200 bg-white px-3 text-lg text-zinc-900 outline-hidden focus:ring-2 focus:ring-black/5 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white dark:focus:ring-white/5'
+                        placeholder='Enter your current password'
+                      />
+                    </div>
+                    <div className='flex flex-col space-y-4'>
+                      <label htmlFor='name' className='sr-only'>
+                        New password
+                      </label>
+                      <input
+                        value={updatedUser.newpassword}
+                        onChange={(e) => setupdatedUser({ ...updatedUser, newpassword: e.target.value })}
+                        id='name'
+                        type='newpassword'
+                        className='h-9 w-full rounded-lg border border-zinc-200 bg-white px-3 text-lg text-zinc-900 outline-hidden focus:ring-2 focus:ring-black/5 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white dark:focus:ring-white/5'
+                        placeholder='Enter your new password'
+                      />
+                    </div>
+                    <div className='flex flex-col space-y-4'>
+                      <label htmlFor='name' className='sr-only'>
+                        Bio
+                      </label>
+                      <input
+                        value={updatedUser.bio}
+                        onChange={(e) => setupdatedUser({ ...updatedUser, bio: e.target.value })}
+                        id='name'
+                        type='bio'
+                        className='h-9 w-full rounded-lg border border-zinc-200 bg-white px-3 text-lg text-zinc-900 outline-hidden focus:ring-2 focus:ring-black/5 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white dark:focus:ring-white/5'
+                        placeholder='Enter your bio'
+                      />
+                    </div>
+                    <div className="mt-4 w-fit ml-auto">
+                      <button onClick={() => handleUpdateUser(updatedUser)} className='bg-zinc-950 text-white rounded-lg px-4 py-2 hover:bg-zinc-900 dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-100'>
+                        Update
+                      </button>
+                    </div>
+                  </DialogContent>
+                </Dialog>
+                </div>
             </div>
             <div className="flex flex-row justify-between items-center mt-3">
               <div className="flex flex-col">
@@ -176,70 +364,182 @@ function SignInSuccessPage() {
                 <span className="">********</span>
               </div>
               <div>
-                <button onClick={() => setmodalOpen(true)} className="border border-black rounded p-1">
-                  <span className="mx-2">Update</span>
-                </button>
-              </div>
+                <Dialog variants={customVariants} transition={customTransition}>
+                  <DialogTrigger className='bg-black p-2 text-white text-md hover:bg-gray-800 rounded'>
+                    <FaGear fontSize={20}/>
+                  </DialogTrigger>
+                  <DialogContent className='w-full max-w-md bg-white p-6 dark:bg-zinc-900'>
+                    <DialogHeader>
+                      <DialogTitle className='text-zinc-900 text-center dark:text-white text-3xl'>
+                        Enter your new credentials
+                      </DialogTitle>
+                    </DialogHeader>
+                    <div className='flex flex-col space-y-4'>
+                      <label htmlFor='name' className='sr-only'>
+                        Email
+                      </label>
+                      <input
+                        value={updatedUser.email}
+                        onChange={(e) => setupdatedUser({ ...updatedUser, email: e.target.value })}
+                        id='name'
+                        type='email'
+                        className='h-9 w-full rounded-lg border border-zinc-200 bg-white px-3 text-lg text-zinc-900 outline-hidden focus:ring-2 focus:ring-black/5 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white dark:focus:ring-white/5'
+                        placeholder='Enter your email'
+                      />
+                    </div>
+                    <div className='flex flex-col space-y-4'>
+                      <label htmlFor='name' className='sr-only'>
+                        Username
+                      </label>
+                      <input
+                        value={updatedUser.username}
+                        onChange={(e) => setupdatedUser({ ...updatedUser, username: e.target.value })}
+                        id='name'
+                        type='username'
+                        className='h-9 w-full rounded-lg border border-zinc-200 bg-white px-3 text-lg text-zinc-900 outline-hidden focus:ring-2 focus:ring-black/5 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white dark:focus:ring-white/5'
+                        placeholder='Enter your username'
+                      />
+                    </div>
+                    <div className='flex flex-col space-y-4'>
+                      <label htmlFor='name' className='sr-only'>
+                        Current Password
+                      </label>
+                      <input
+                        value={updatedUser.currentpassword}
+                        onChange={(e) => setupdatedUser({ ...updatedUser, currentpassword: e.target.value })}
+                        id='name'
+                        type='currentpassword'
+                        className='h-9 w-full rounded-lg border border-zinc-200 bg-white px-3 text-lg text-zinc-900 outline-hidden focus:ring-2 focus:ring-black/5 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white dark:focus:ring-white/5'
+                        placeholder='Enter your current password'
+                      />
+                    </div>
+                    <div className='flex flex-col space-y-4'>
+                      <label htmlFor='name' className='sr-only'>
+                        New password
+                      </label>
+                      <input
+                        value={updatedUser.newpassword}
+                        onChange={(e) => setupdatedUser({ ...updatedUser, newpassword: e.target.value })}
+                        id='name'
+                        type='newpassword'
+                        className='h-9 w-full rounded-lg border border-zinc-200 bg-white px-3 text-lg text-zinc-900 outline-hidden focus:ring-2 focus:ring-black/5 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white dark:focus:ring-white/5'
+                        placeholder='Enter your new password'
+                      />
+                    </div>
+                    <div className='flex flex-col space-y-4'>
+                      <label htmlFor='name' className='sr-only'>
+                        Bio
+                      </label>
+                      <input
+                        value={updatedUser.bio}
+                        onChange={(e) => setupdatedUser({ ...updatedUser, bio: e.target.value })}
+                        id='name'
+                        type='bio'
+                        className='h-9 w-full rounded-lg border border-zinc-200 bg-white px-3 text-lg text-zinc-900 outline-hidden focus:ring-2 focus:ring-black/5 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white dark:focus:ring-white/5'
+                        placeholder='Enter your bio'
+                      />
+                    </div>
+                    <div className="mt-4 w-fit ml-auto">
+                      <button onClick={() => handleUpdateUser(updatedUser)} className='bg-zinc-950 text-white rounded-lg px-4 py-2 hover:bg-zinc-900 dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-100'>
+                        Update
+                      </button>
+                    </div>
+                  </DialogContent>
+                </Dialog>
+                </div>
             </div>
+            <div className="flex flex-row justify-between items-center mt-3">
+              <div className="flex flex-col w-[60%] sm:w-[75%]">
+                <span className="text-gray-500">Bio</span>
+                <span className="w-full break-words whitespace-pre-wrap">{authUser.bio}</span>
+              </div>
+              <div>
+                <Dialog variants={customVariants} transition={customTransition}>
+                  <DialogTrigger className='bg-black p-2 text-white text-md hover:bg-gray-800 rounded'>
+                    <FaGear fontSize={20}/>
+                  </DialogTrigger>
+                  <DialogContent className='w-full max-w-md bg-white p-6 dark:bg-zinc-900'>
+                    <DialogHeader>
+                      <DialogTitle className='text-zinc-900 text-center dark:text-white text-3xl'>
+                        Enter your new credentials
+                      </DialogTitle>
+                    </DialogHeader>
+                    <div className='flex flex-col space-y-4'>
+                      <label htmlFor='name' className='sr-only'>
+                        Email
+                      </label>
+                      <input
+                        value={updatedUser.email}
+                        onChange={(e) => setupdatedUser({ ...updatedUser, email: e.target.value })}
+                        id='name'
+                        type='email'
+                        className='h-9 w-full rounded-lg border border-zinc-200 bg-white px-3 text-lg text-zinc-900 outline-hidden focus:ring-2 focus:ring-black/5 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white dark:focus:ring-white/5'
+                        placeholder='Enter your email'
+                      />
+                    </div>
+                    <div className='flex flex-col space-y-4'>
+                      <label htmlFor='name' className='sr-only'>
+                        Username
+                      </label>
+                      <input
+                        value={updatedUser.username}
+                        onChange={(e) => setupdatedUser({ ...updatedUser, username: e.target.value })}
+                        id='name'
+                        type='username'
+                        className='h-9 w-full rounded-lg border border-zinc-200 bg-white px-3 text-lg text-zinc-900 outline-hidden focus:ring-2 focus:ring-black/5 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white dark:focus:ring-white/5'
+                        placeholder='Enter your username'
+                      />
+                    </div>
+                    <div className='flex flex-col space-y-4'>
+                      <label htmlFor='name' className='sr-only'>
+                        Current Password
+                      </label>
+                      <input
+                        value={updatedUser.currentpassword}
+                        onChange={(e) => setupdatedUser({ ...updatedUser, currentpassword: e.target.value })}
+                        id='name'
+                        type='currentpassword'
+                        className='h-9 w-full rounded-lg border border-zinc-200 bg-white px-3 text-lg text-zinc-900 outline-hidden focus:ring-2 focus:ring-black/5 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white dark:focus:ring-white/5'
+                        placeholder='Enter your current password'
+                      />
+                    </div>
+                    <div className='flex flex-col space-y-4'>
+                      <label htmlFor='name' className='sr-only'>
+                        New password
+                      </label>
+                      <input
+                        value={updatedUser.newpassword}
+                        onChange={(e) => setupdatedUser({ ...updatedUser, newpassword: e.target.value })}
+                        id='name'
+                        type='newpassword'
+                        className='h-9 w-full rounded-lg border border-zinc-200 bg-white px-3 text-lg text-zinc-900 outline-hidden focus:ring-2 focus:ring-black/5 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white dark:focus:ring-white/5'
+                        placeholder='Enter your new password'
+                      />
+                    </div>
+                    <div className='flex flex-col space-y-4'>
+                      <label htmlFor='name' className='sr-only'>
+                        Bio
+                      </label>
+                      <input
+                        value={updatedUser.bio}
+                        onChange={(e) => setupdatedUser({ ...updatedUser, bio: e.target.value })}
+                        id='name'
+                        type='bio'
+                        className='h-9 w-full rounded-lg border border-zinc-200 bg-white px-3 text-lg text-zinc-900 outline-hidden focus:ring-2 focus:ring-black/5 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white dark:focus:ring-white/5'
+                        placeholder='Enter your bio'
+                      />
+                    </div>
+                    <div className="mt-4 w-fit ml-auto">
+                      <button onClick={() => handleUpdateUser(updatedUser)} className='bg-zinc-950 text-white rounded-lg px-4 py-2 hover:bg-zinc-900 dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-100'>
+                        Update
+                      </button>
+                    </div>
+                  </DialogContent>
+                </Dialog>
+                </div>
+            </div>            
           </div>
         </div>
-        <Modal
-          open={modalOpen}
-          onClose={() => setmodalOpen(false)}
-          className="flex items-center"
-        >
-          <div className="w-[70%] sm:w-[50%] h-[12rem] mx-auto bg-white rounded-md p-3">
-            <div className="flex flex-row justify-between items-center space-x-2">
-              <div className="mt-2 w-[50%]">
-                <input
-                  value={updatedUser.name}
-                  onChange={(e) => setupdatedUser({ ...updatedUser, name: e.target.value})}
-                  placeholder={authUser.username}
-                  className="w-full border border-black p-1"
-                />
-              </div>
-              <div className="mt-2 w-[50%]">
-                <input
-                  value={updatedUser.email}
-                  onChange={(e) => setupdatedUser({ ...updatedUser, email: e.target.value})}
-                  placeholder={authUser.email}
-                  className="w-full border border-black p-1"
-                />
-              </div>
-            </div>
-            <div className="flex flex-row justify-between items-center space-x-2">
-              <div className="mt-2 w-[50%]">
-                <input
-                  value={updatedUser.currentpassword}
-                  onChange={(e) => setupdatedUser({ ...updatedUser, currentpassword: e.target.value})}
-                  placeholder={"Current password"}
-                  className="w-full border border-black p-1"
-                />
-              </div>
-              <div className="mt-2 w-[50%]">
-                <input
-                  value={updatedUser.newpassword}
-                  onChange={(e) => setupdatedUser({ ...updatedUser, newpassword: e.target.value})}
-                  placeholder={"New password"}
-                  className="w-full border border-black p-1"
-                />
-              </div>
-            </div>
-            <div className="mt-2">
-              <input
-                value={updatedUser.bio}
-                onChange={(e) => setupdatedUser({ ...updatedUser, bio: e.target.value})}
-                placeholder={updatedUser.bio || "Bio"}
-                className="w-full border border-black p-1"
-              />
-            </div>
-            <div className="flex mt-3 w-full">
-              <button onClick={() => {handleUpdateUser(updatedUser)}} className="bg-black hover:bg-gray-500 rounded ml-auto p-1 w-full">
-                <span className="text-white mx-1">Update</span>
-              </button>
-            </div>
-          </div>
-        </Modal>
       </>
     )
   }

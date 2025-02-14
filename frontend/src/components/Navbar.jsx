@@ -49,7 +49,7 @@ function Navbar() {
         </Box>
         <Box className="mr-10 space-x-3 hidden sm:block">
           <Button>
-            <Link to={'/profile/Munku'} className="text-sky-500 text-md hover:text-black">TEST</Link>
+            <Link to={'/profile/test21'} className="text-sky-500 text-md hover:text-black">TEST</Link>
           </Button>
           <Button className=''>
             <Link to={'/about'} className="text-sky-500 text-md hover:text-black">

@@ -19,13 +19,13 @@ import girl1 from "../assets/girl1.png";
 import girl2 from "../assets/girl2.png";
 import girl3 from "../assets/girl3.png";
 
-import EditProfileModal from '../components/EditProfileModal'
 import {formatMemberSinceDate} from "../utils/date";
 import { AnimatedNumber } from '@/components/ui/animatenumber'
 import { useInView } from 'framer-motion'
 import BlogCard from "../components/BlogCard";
 import UseFollow from "../components/useFollow";
 import RightPanel from '@/components/RightPanel'
+import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogClose } from '../components/ui/dialog';
 
 const ProfilePage = () => {
 
@@ -136,6 +136,72 @@ const ProfilePage = () => {
 	toast.success("Loading more blogs... (Potential error in portal)");
   };
 
+  const [updatedUser, setupdatedUser] = useState({
+	username: authUser?.username,
+	email: authUser?.email,
+	bio: authUser?.bio,
+	currentpassword: '',
+	newpassword: '',
+  });
+
+  const customVariants = {
+	initial: {
+	  opacity: 0,
+	  scale: 0.95,
+	  y: 40,
+	},
+	animate: {
+	  opacity: 1,
+	  scale: 1,
+	  y: 0,
+	},
+	exit: {
+	  opacity: 0,
+	  scale: 0.95,
+	  y: 40,
+	},
+  	};
+
+	const customTransition = {
+	type: 'spring',
+	bounce: 0,
+	duration: 0.25,
+	};
+
+    const {mutate: updateUserMutation} = useMutation({
+		mutationFn: async(updatedUser) => {
+		  try{
+			const res = await fetch(`/api/users/update`,{
+			  method: "POST",
+			  headers:{
+				"Content-Type":"application/json"
+			  },
+			  body: JSON.stringify(updatedUser),
+			});
+			const data = await res.json();
+			if(!res.ok) throw new Error(data.error || "Failed to update user");
+			console.log(data);
+			return data;
+		  }
+		  catch(error){
+			console.error(error);
+			throw error;
+		  }
+		},
+		onSuccess: () => {
+		  toast.success("User updated successfully");
+		  queryClient.invalidateQueries({queryKey:["authUser"]});
+		  queryClient.invalidateQueries({queryKey:["userProfile"]});
+		},
+		onError: (error) => {
+		  toast.error(error.message);
+		},
+	})
+  
+	const handleUpdateUser = async(updatedUser) => {
+		updateUserMutation(updatedUser);
+	};
+
   let displayedBlogs = [];
 
   if(userBlogs){
@@ -150,7 +216,7 @@ const ProfilePage = () => {
 			{user && (
 				<>
 					{/* COVER IMG */}
-					<div className='relative group/cover'>
+					<div className='relative group/cover bg-white'>
 						<img
 							src={coverImg || user?.coverImg || cover}
 							className='h-52 w-full object-cover'
@@ -195,7 +261,92 @@ const ProfilePage = () => {
 						</div>
 					</div>
 					<div className='flex justify-end px-4 mt-5'>
-						{isMyProfile && <EditProfileModal authUser={authUser}/>}
+						{isMyProfile && (
+							<div>
+							<Dialog variants={customVariants} transition={customTransition}>
+							  <DialogTrigger className='bg-white px-4 py-2 text-black text-md hover:bg-gray-300 rounded-xl'>
+								Update
+							  </DialogTrigger>
+							  <DialogContent className='w-full max-w-md bg-white p-6 dark:bg-zinc-900'>
+								<DialogHeader>
+								  <DialogTitle className='text-zinc-900 text-center dark:text-white text-3xl'>
+									Enter your new credentials
+								  </DialogTitle>
+								</DialogHeader>
+								<div className='flex flex-col space-y-4'>
+								  <label htmlFor='name' className='sr-only'>
+									Email
+								  </label>
+								  <input
+									value={updatedUser.email}
+									onChange={(e) => setupdatedUser({ ...updatedUser, email: e.target.value })}
+									id='name'
+									type='email'
+									className='h-9 w-full rounded-lg border border-zinc-200 bg-white px-3 text-lg text-zinc-900 outline-hidden focus:ring-2 focus:ring-black/5 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white dark:focus:ring-white/5'
+									placeholder='Enter your email'
+								  />
+								</div>
+								<div className='flex flex-col space-y-4'>
+								  <label htmlFor='name' className='sr-only'>
+									Username
+								  </label>
+								  <input
+									value={updatedUser.username}
+									onChange={(e) => setupdatedUser({ ...updatedUser, username: e.target.value })}
+									id='name'
+									type='username'
+									className='h-9 w-full rounded-lg border border-zinc-200 bg-white px-3 text-lg text-zinc-900 outline-hidden focus:ring-2 focus:ring-black/5 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white dark:focus:ring-white/5'
+									placeholder='Enter your username'
+								  />
+								</div>
+								<div className='flex flex-col space-y-4'>
+								  <label htmlFor='name' className='sr-only'>
+									Current Password
+								  </label>
+								  <input
+									value={updatedUser.currentpassword}
+									onChange={(e) => setupdatedUser({ ...updatedUser, currentpassword: e.target.value })}
+									id='name'
+									type='currentpassword'
+									className='h-9 w-full rounded-lg border border-zinc-200 bg-white px-3 text-lg text-zinc-900 outline-hidden focus:ring-2 focus:ring-black/5 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white dark:focus:ring-white/5'
+									placeholder='Enter your current password'
+								  />
+								</div>
+								<div className='flex flex-col space-y-4'>
+								  <label htmlFor='name' className='sr-only'>
+									New password
+								  </label>
+								  <input
+									value={updatedUser.newpassword}
+									onChange={(e) => setupdatedUser({ ...updatedUser, newpassword: e.target.value })}
+									id='name'
+									type='newpassword'
+									className='h-9 w-full rounded-lg border border-zinc-200 bg-white px-3 text-lg text-zinc-900 outline-hidden focus:ring-2 focus:ring-black/5 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white dark:focus:ring-white/5'
+									placeholder='Enter your new password'
+								  />
+								</div>
+								<div className='flex flex-col space-y-4'>
+								  <label htmlFor='name' className='sr-only'>
+									Bio
+								  </label>
+								  <input
+									value={updatedUser.bio}
+									onChange={(e) => setupdatedUser({ ...updatedUser, bio: e.target.value })}
+									id='name'
+									type='bio'
+									className='h-9 w-full rounded-lg border border-zinc-200 bg-white px-3 text-lg text-zinc-900 outline-hidden focus:ring-2 focus:ring-black/5 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white dark:focus:ring-white/5'
+									placeholder='Enter your bio'
+								  />
+								</div>
+								<div className="mt-4 w-fit ml-auto">
+								  <button onClick={() => handleUpdateUser(updatedUser)} className='bg-zinc-950 text-white rounded-lg px-4 py-2 hover:bg-zinc-900 dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-100'>
+									Update
+								  </button>
+								</div>
+							  </DialogContent>
+							</Dialog>
+							</div>
+						)}
 						{!isMyProfile && (
 							<button
 								className='border-2 p-2 border-white rounded-xl bg-black text-white hover:bg-gray-700'
@@ -211,7 +362,7 @@ const ProfilePage = () => {
 								className='border-2 border-white px-4 ml-2 bg-black text-white hover:bg-gray-700 rounded-xl'
 								onClick={() => updateProfileMutation()}
 							>
-								{isUpdatingProfile ? "Updating..." : "Update"}
+								{isUpdatingProfile ? "Uploading..." : "Upload"}
 							</button>
 						)}
 					</div>

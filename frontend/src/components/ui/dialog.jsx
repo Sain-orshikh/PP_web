@@ -126,16 +126,10 @@ function DialogDescription({ children, className }) {
   return <p className={cn('description-class', className)}>{children}</p>;
 }
 
-function DialogClose({ className, children, disabled }) {
+function DialogClose() {
   const context = useContext(DialogContext);
   if (!context) throw new Error('DialogClose must be used within Dialog');
-
-  return (
-    <button onClick={() => context.setIsOpen(false)} type='button' disabled={disabled} className={cn('close-button-class', className)}>
-      {children || <X className='icon-class' />}
-      <span className='sr-only'>Close</span>
-    </button>
-  );
+  context.setIsOpen(false);
 }
 
 export { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogClose };

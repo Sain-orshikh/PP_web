@@ -58,7 +58,7 @@ function App() {
         <Box className='flex relative'>
           <Navbar/>
         </Box>
-        <Box className='flex pt-16'>
+        <Box className='flex pt-20'>
           <Routes>
             <Route path='/' element={ <HomePage/>}/>
             <Route path='/create' element={ <CreatePage/>}/>
@@ -68,8 +68,9 @@ function App() {
             <Route path='/profile/:username' element={ <ProfilePage/>}/>
             <Route path='/create/project' element={authUser ? <CreateProjectPage/> : <CreatePage/>}/>
             <Route path='/create/blog' element={authUser ? <CreateBlogPage/> : <CreatePage/>}/>
-            <Route path='/signin' element={authUser ? <SignInSuccessPage/> : <SignInPage/>}/>
-            <Route path='/signup' element={authUser ? <SignInSuccessPage/> : <SignUpPage/>}/>
+            <Route path='/signin' element={<SignInPage/>}/>
+            <Route path='/signup' element={<SignUpPage/>}/>
+            <Route path='/overview' element={<SignInSuccessPage/>}/>
           </Routes> 
           <Toaster/>
         </Box>
