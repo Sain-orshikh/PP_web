@@ -1,13 +1,10 @@
 import React, { useRef, useState } from 'react';
 import { Alert, Button, Snackbar, Modal, Box, ButtonGroup } from '@mui/material';
 import { FaSave, FaEye, FaRegPaperPlane, FaRegEdit } from "react-icons/fa";
-import { IoLinkSharp } from "react-icons/io5";
-import { BiNotepad } from "react-icons/bi";
-import { MdCloudUpload } from "react-icons/md";
-import BlogCard from '../components/BlogCard';
+import { RiUserSmileFill } from "react-icons/ri";
+
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import defaultimg from "../assets/no image1.png";
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
 
@@ -105,27 +102,27 @@ function CreateBlogPage() {
 
     return (
       <>
-        <div className="flex flex-col bg-gray-100 w-full h-full ">
-          <div className="flex mt-5 mr-5 ml-5 rounded bg-white">
+        <div className="flex flex-col bg-gray-100 dark:bg-gray-900 w-full min-h-screen sm:min-h-full">
+          <div className="flex mt-16 sm:mt-5 mr-5 ml-5 rounded bg-white dark:bg-black">
             <div  className="flex flex-col w-full mx-5">
-              <div className="font-bold text-2xl mt-3">
+              <div className="font-bold text-3xl mt-5 sm:mt-3 dark:text-white">
                 Create New Blog
               </div>
-              <div className="mt-3 ml-1 text-xl">
+              <div className="mt-5 sm:mt-3 ml-1 text-xl dark:text-white">
                 Blog Title
               </div>
-              <div className="mt-1">
+              <div className="mt-3 sm:mt-1">
                 <input
                   value={newBlog.title}
                   onChange={(e) => setnewBlog({ ...newBlog, title: e.target.value})}
-                  placeholder=" Enter your blog title"
-                  className="w-full h-8 pb-1 border rounded"
+                  placeholder="Enter your blog title"
+                  className="w-full placeholder:text-gray-500 text-md h-8 pb-1 px-1 border rounded"
                 />
               </div>
-              <div className="mt-1 ml-1 text-xl">
+              <div className="mt-5 sm:mt-1 ml-1 text-xl dark:text-white">
                 Blog Content
               </div>
-              <div className='my-2 overflow-hidden'>
+              <div className='my-4 sm:my-2 overflow-hidden'>
                 <ReactQuill
                   ref={quillRef}
                   theme="snow"
@@ -137,33 +134,37 @@ function CreateBlogPage() {
                   }}
                 />
               </div>
-              <div className='text-xl ml-1'>
+              <div className='text-xl ml-1 dark:text-white'>
                 Featured Image
               </div>
-              <div className='mt-1 mb-5'>
+              <div className='mt-3 sm:mt-1 mb-5'>
                 <input
                   value={newBlog.image}
                   onChange={(e) => setnewBlog({ ...newBlog, image: e.target.value})}
-                  placeholder=" Enter url of the image"
-                  className="w-full h-8 pb-1 border rounded"
+                  placeholder="Enter url of the image"
+                  className="w-full h-8 pb-1 px-1 placeholder:text-gray-500 border rounded"
                 />
               </div>
             </div>
           </div>
-          <div className='flex flex-row items-center justify-between w-full h-[3rem] bg-white border-t'>
+          <div className='flex flex-col items-center justify-between w-full mt-1 h-full bg-white dark:bg-gray-900 border-t dark:border-black'>
             <div className='flex flex-row ml-auto'>
-              <div className='border rounded mr-5 bg-gray-100'>
+              <div className='border rounded mt-5 sm:mt-1 mr-5 bg-gray-100 dark:bg-black dark:border'>
                 <Button onClick={handlePreviewOpen}>
-                  <span className='text-black'><FaEye/></span>
-                  <span className="text-black capitalize ml-1">Preview</span>
+                  <span className='text-black dark:text-white'><FaEye/></span>
+                  <span className="text-black dark:text-white capitalize ml-1">Preview</span>
                 </Button>
               </div>
-              <div className='text-white bg-black rounded mr-10'>
+              <div className='text-white bg-black mt-5 sm:mt-1 dark:bg-gray-100 dark:border rounded mr-10'>
                 <Button onClick={handlePublishBlog}>
-                  <span className='text-white'><FaRegPaperPlane/></span>
-                  <span className='text-white capitalize ml-1'>Publish</span>
+                  <span className='text-white dark:text-black'><FaRegPaperPlane/></span>
+                  <span className='text-white capitalize ml-1 dark:text-black'>Publish</span>
                 </Button>
               </div>
+            </div>
+            <div className='block sm:hidden text-center mb-16 text-3xl dark:text-white'>
+              Oopsie 
+              <RiUserSmileFill className='inline-block ml-1' fontSize={30}/>
             </div>
           </div>
         </div>

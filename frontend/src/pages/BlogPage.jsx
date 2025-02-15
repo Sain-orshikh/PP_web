@@ -43,7 +43,7 @@ function BlogPage() {
   };
   return (
     <>
-      <Box className="flex flex-col justify-between w-full min-h-screen bg-gray-100 pt-3">
+      <Box className="flex flex-col justify-between w-full min-h-screen bg-gray-100 dark:bg-gray-900 pt-3">
         <Table>
           <TableHead>
             <TableRow className='h-[10rem]'>
@@ -63,7 +63,7 @@ function BlogPage() {
           <TableBody className=''>
             <TableRow className='h-[5rem]'>
               <div className='flex flex-row items-center justify-between w-[80%] mx-auto mt-10'>
-                <div className='flex mx-auto text-4xl sm:text-5xl'>
+                <div className='flex mx-auto text-4xl sm:text-5xl text-black dark:text-white'>
                   Latest Blog Posts
                 </div>
               </div>
@@ -71,7 +71,7 @@ function BlogPage() {
             <TableRow className='h-[3rem]'>
               <div className='flex w-[80%] mx-auto mt-5 '>
                 <div className='mx-auto text-center'>
-                  <Typography variant='h6' className='text-gray-500'>
+                  <Typography variant='h6' className='text-gray-700 dark:text-gray-300'>
                    Discover our latest thoughts, ideas and insights about MAIS
                   </Typography>
                 </div>
@@ -96,15 +96,15 @@ function BlogPage() {
             {Blogs && visibleBlogs < Blogs.length && (
             <TableRow>
               <div className='flex flex-row justify-center w-full mt-6'>
-                <div className='bg-black hover:bg-gray-900 rounded'><Button onClick={handleLoadMore}>
-                  <span className='capitalize text-white'>Load more</span>
-                  <span className='text-white ml-1'><TbLoader fontSize={20}/></span>
+                <div className='bg-black dark:bg-white hover:bg-gray-900 dark:hover:bg-gray-200 rounded'><Button onClick={handleLoadMore}>
+                  <span className='capitalize text-white dark:text-black text-lg'>Load more</span>
+                  <span className='text-white dark:text-black ml-1'><TbLoader fontSize={25}/></span>
                 </Button></div>
               </div>
             </TableRow>
             )}
             {Blogs === undefined && (
-              <div className='flex flex-row justify-center w-full mt-10 text-2xl'>
+              <div className='flex flex-row justify-center w-full mt-10 text-2xl dark:text-white'>
                 No blogs found, <button className='text-blue-600 ml-1'><Link to={'/create/blog'}> Create One!</Link></button>
               </div>
             )}

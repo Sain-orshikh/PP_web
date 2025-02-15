@@ -1,27 +1,70 @@
-import { useAtom } from "jotai";
-import { darkModeWithEffectAtom } from "../components/ThemeAtom.js";
+import { useState, useEffect, useRef } from "react";
 
-export default function App() {
-  const [isDarkMode, toggleDarkMode] = useAtom(darkModeWithEffectAtom);
+export default function LaggingSpotlight() {
+  const [mouse, setMouse] = useState({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
+  const spotlightRadius = 300; // Adjust size of the spotlight
+  const spotlightPos = useRef({ x: mouse.x, y: mouse.y });
+
+  useEffect(() => {
+    const updateMousePosition = (e) => {
+      setMouse({ x: e.clientX, y: e.clientY });
+    };
+
+    window.addEventListener("mousemove", updateMousePosition);
+    return () => window.removeEventListener("mousemove", updateMousePosition);
+  }, []);
+
+  useEffect(() => {
+    let animationFrame;
+
+    const moveSpotlight = () => {
+      // Linear Interpolation (Lerp) for smooth movement
+      spotlightPos.current.x += (mouse.x - spotlightPos.current.x) * 0.1; // Adjust the 0.1 for more/less lag
+      spotlightPos.current.y += (mouse.y - spotlightPos.current.y) * 0.1;
+
+      document.documentElement.style.setProperty("--spotlight-x", `${spotlightPos.current.x}px`);
+      document.documentElement.style.setProperty("--spotlight-y", `${spotlightPos.current.y}px`);
+
+      animationFrame = requestAnimationFrame(moveSpotlight);
+    };
+
+    animationFrame = requestAnimationFrame(moveSpotlight);
+    return () => cancelAnimationFrame(animationFrame);
+  }, [mouse]);
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center transition-colors duration-300 bg-white text-black dark:bg-gray-900 dark:text-white">
-      <button
-        onClick={toggleDarkMode}
-        className="px-4 py-2 rounded bg-blue-500 text-white dark:bg-blue-700 hover:bg-blue-600 dark:hover:bg-blue-800 transition-all"
-      >
-        {isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
-      </button>
+    <div className="relative">
+      {/* Overlay */}
+      <div
+        className="fixed inset-0 bg-black pointer-events-none transition-opacity duration-300"
+        style={{
+          WebkitMaskImage: `radial-gradient(circle ${spotlightRadius}px at var(--spotlight-x, 50%) var(--spotlight-y, 50%), transparent 0%, black 100%)`,
+          maskImage: `radial-gradient(circle ${spotlightRadius}px at var(--spotlight-x, 50%) var(--spotlight-y, 50%), transparent 0%, black 100%)`,
+        }}
+      ></div>
 
-      <p className="mt-4">
-        This is an example of Tailwind-powered dark mode with Jotai!
-      </p>
-
-      {/* Example of Tailwind dark mode classes */}
-      <div className="mt-6 p-4 border rounded bg-gray-100 dark:bg-gray-800 dark:border-gray-700">
-        <p className="text-gray-800 dark:text-gray-200">
-          This box changes color in dark mode!
+      {/* Content */}
+      <div className="p-10 space-y-4">
+        <h1 className="text-3xl font-bold text-white">
+          Move your mouse! The spotlight now lags behind.
+        </h1>
+        <p className="text-white">
+          The spotlight follows your mouse but with a smooth delay effect.
         </p>
+
+        {/* Image Div */}
+        <div className="w-64 h-40 bg-gray-300 flex items-center justify-center">
+          <img
+            src="https://via.placeholder.com/150"
+            alt="Sample"
+            className="w-full h-full object-cover"
+          />
+        </div>
+
+        {/* Some more content */}
+        <div className="bg-yellow-400 p-4 rounded-lg text-black text-xl font-bold">
+          Keep moving the mouse to see the lag effect!
+        </div>
       </div>
     </div>
   );

@@ -131,7 +131,7 @@ function HomePage() {
 
   return (
     <>
-      <div className='flex flex-col w-full min-h-screen bg-gray-100 dark:bg-red-300'>
+      <div className='flex flex-col w-full min-h-screen bg-gray-100 dark:bg-gray-900'>
         <div className="w-[90%] sm:w-[50%] mx-auto mt-12">
         <TextEffect
           per='char'
@@ -165,7 +165,7 @@ function HomePage() {
               },
             },
           }}
-          className={`text-5xl sm:text-6xl font-harmonique font-bold text-center`}
+          className={`text-5xl sm:text-6xl text-black dark:text-white font-harmonique font-bold text-center`}
         >
           MAIS's Largest Research Organization
         </TextEffect>
@@ -200,15 +200,15 @@ function HomePage() {
                   },
                 },
               }}
-            className={`text-gray-700 text-xl font-semibold`}
+            className={`text-gray-700 dark:text-gray-300 text-xl font-semibold`}
           >
             We are dedicated to promoting interest in scientific research among the students of MAIS.
           </TextEffect>
         </div>
         <div className="w-[90%] sm:w-[30%] mx-auto mt-5 flex justify-center">
           <Dialog variants={customVariants} transition={customTransition}>
-            <DialogTrigger className='bg-zinc-950 px-4 py-2 text-white text-xl hover:bg-zinc-800 dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-100 rounded-xl'>
-              Become a member
+            <DialogTrigger className='bg-zinc-950 px-4 py-2 text-white text-xl hover:bg-zinc-800 dark:bg-white dark:text-black dark:hover:bg-zinc-200 rounded-xl'>
+              Join our club
             </DialogTrigger>
             <DialogContent className='w-full max-w-md bg-white p-6 dark:bg-zinc-900'>
               <DialogHeader>
@@ -257,7 +257,7 @@ function HomePage() {
           </button>
           </AnimatedGroup>*/}
         </div>
-        <div className="w-[90%] sm:w-[45%] mx-auto mt-10 mb-10">
+        <div className="w-[90%] sm:w-[45%] mx-auto mt-10 mb-10 text-black dark:text-gray-300">
           <InfiniteSlider className={`w-full`} gap={100} autoPlay={true} autoPlaySpeed={3000}
             style={{
               maskImage: "linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 20%, rgba(0, 0, 0, 1) 80%, rgba(0, 0, 0, 0) 100%)",
@@ -272,10 +272,10 @@ function HomePage() {
           </InfiniteSlider>
         </div>
 
-        <div className="w-full mx-auto min-h-[30rem] bg-gray-100">
+        <div className="w-full mx-auto min-h-[30rem] bg-gray-100 dark:bg-gray-900">
           <div className="w-[95%] mx-auto mt-5">
           <div className="flex flex-row justify-between">
-            <div className="text-5xl sm:text-6xl font-harmonique font-bold text-black">
+            <div className="text-5xl sm:text-6xl font-harmonique font-bold text-black dark:text-white">
               <TextEffect
                 per='char'
                 delay={0.2}
@@ -312,14 +312,14 @@ function HomePage() {
             <div>
               <AnimatedGroup>
               <button className={`text-2xl font-harmonique mt-3 rounded-md bg-orange-500 hover:bg-purple-700 text-black px-4`}>
-                <Link to={"/projects"}>
+                <Link to={"/project"}>
                     See All Projects
                 </Link>
               </button>
               </AnimatedGroup>
             </div>
           </div>
-          <div className="text-black text-xl font-semibold mt-5 text-center sm:text-start">
+          <div className="text-black dark:text-white text-xl font-semibold mt-5 text-center sm:text-start">
             <TextEffect
                 per='char'
                 delay={0.2}
@@ -366,26 +366,26 @@ function HomePage() {
           ))}
         </CarouselContent>
         <CarouselNavigation
-          className="absolute -bottom-20 left-auto top-auto w-full justify-end gap-2"
+          className="absolute -bottom-10 sm:-bottom-16 left-auto right-5 top-auto w-full justify-end gap-2"
           classNameButton="bg-zinc-800 *:stroke-zinc-50 dark:bg-zinc-200 dark:*:stroke-zinc-800"
           alwaysShow
         />
       </Carousel>
           </div>
         </div>
-        <div className="w-full h-[15rek] bg-black">
+        <div className="w-full h-[15rek] bg-black dark:bg-gray-900">
           <img
-            src={tornppr}
+            src={isDarkMode ? tornppr1 : tornppr}
             alt="torn paper"
             className="w-full h-full object-cover"
           />
         </div>
         </div>
         
-        <div className="w-full mx-auto min-h-[30rem] bg-black">
+        <div className="w-full mx-auto min-h-[30rem] bg-black dark:bg-gray-100">
           <div className="w-[95%] mx-auto mt-7">
           <div className="flex flex-row justify-between">
-            <div className="text-5xl sm:text-6xl font-harmonique font-bold text-white">
+            <div className="text-5xl sm:text-6xl font-harmonique font-bold text-white dark:text-black">
               Blogs
             </div>
             <div>
@@ -396,11 +396,24 @@ function HomePage() {
               </button>
             </div>
           </div>
-          <div className="text-white text-xl font-semibold mt-5 text-center sm:text-start">
+          <div className="text-white dark:text-black text-xl font-semibold mt-5 text-center sm:text-start">
             Gain insight into the minds of MAIS students
           </div>
-          <div className='flex flex-row justify-evenly w-[95%] mx-auto mt-10 text-white'>
-                <div className=''><Grid2 container spacing={10} columns={12} minHeight={250}>
+          <div className='flex flex-row justify-evenly w-[95%] mx-auto mt-10'>
+            {isDarkMode && (<div className=''><Grid2 container spacing={10} columns={12} minHeight={250}>
+                  {displayedBlogs.map((blog) => (
+                  <Grid2 
+                    xs={12} // 1 column on extra-small screens
+                    sm={4}  // 2 columns on small screens and up
+                    key={blog._id}
+                    className="mx-auto"
+                  >
+                    <BlogCard blog={blog} onUpdate={handleinval} inhomepage={true}/>
+                  </Grid2>
+                  ))}
+                </Grid2></div>
+              )}
+            {!isDarkMode && (<div className='text-white'><Grid2 container spacing={10} columns={12} minHeight={250}>
                   {displayedBlogs.map((blog) => (
                   <Grid2 
                     xs={12} // 1 column on extra-small screens
@@ -412,28 +425,29 @@ function HomePage() {
                   </Grid2>
                   ))}
                 </Grid2></div>
+              )}
               </div>
               {Blogs && visibleBlogs < Blogs?.length && (
               <div className='flex flex-row justify-center w-full mt-3'>
                 <div className='rounded-md hover:bg-gray-900'>
-                <button onClick={handleLoadMore} className="flex flex-row items-center bg-white hover:bg-gray-200 rounded px-2 py-1.5 text-white">
-                  <span className='capitalize text-black'>Load more</span>
-                  <span className='text-black ml-1'><TbLoader fontSize={20}/></span>
+                <button onClick={handleLoadMore} className="flex flex-row items-center bg-white dark:bg-black hover:bg-gray-200 dark:hover:bg-gray-800 rounded px-2 py-1.5 text-white">
+                  <span className='capitalize text-black dark:text-white text-lg'>Load more</span>
+                  <span className='text-black dark:text-white ml-1'><TbLoader fontSize={25}/></span>
                 </button></div>
               </div>
               )}
         </div>
-        <div className="w-full h-[15rem] bg-black">
+        <div className="w-full bg-black dark:bg-gray-900">
           <img
-            src={tornppr1}
+            src={isDarkMode ? tornppr : tornppr1}
             alt="torn paper"
             className="w-full h-full object-cover"
           />
         </div>
         </div>
 
-        <div className="flex flex-col w-full mx-auto min-h-[30rem] bg-gray-100">
-            <div className="w-full mt-0 sm:mt-10 text-center text-black text-5xl sm:text-6xl font-harmonique font-bold">
+        <div className="flex flex-col w-full mx-auto min-h-[30rem] bg-gray-100 dark:bg-gray-900">
+            <div className="w-full mt-0 sm:mt-10 text-center text-black dark:text-white text-5xl sm:text-6xl font-harmonique font-bold">
               What is this club?
             </div>
             <div className="flex flex-col sm:flex-row justify-around items-center w-[95%] mx-auto mt-7 mb-20 text-white text-xl font-semibold">
@@ -444,7 +458,7 @@ function HomePage() {
                   className="w-full h-full"
                 />
               </div>
-              <div className="w-[90%] sm:w-[50%] mt-3 sm:mt-0 text-gray-700">
+              <div className="w-[90%] sm:w-[50%] mt-3 sm:mt-0 text-gray-700 dark:text-gray-200">
                 <div>Oi oi, Jack and Will here.</div>
                 <div className="mt-8">Webflail was born out of frustration. Frustration about how freelancing looked so damn easy according to social media but how hard it was in reality.</div>
                 <div className="mt-8">Will, my brother is the mastermind behind the editing and just generally being a bright bloke while I ask the hard questions to bright Webflowers.</div>
@@ -463,42 +477,42 @@ function HomePage() {
               />
             </div>*/}
         </div>
-        <div className="w-full bg-black border-t border-white">
-          <div className="flex flex-col sm:flex-row justify-between w-[80%] sm:w-[95%] mx-auto mt-7 mb-7">
+        <div className="w-full bg-black dark:bg-gray-100 border-t border-white">
+          <div className="flex flex-col sm:flex-row justify-between w-[85%] sm:w-[95%] mx-auto mt-7 mb-7">
             <div className="w-full">
-              <div className="flex flex-row space-x-4 text-white">
+              <div className="flex flex-row space-x-4 text-white dark:text-black">
                 <FaXTwitter fontSize={30}/>
                 <FaInstagram fontSize={30}/>
                 <FaFacebookSquare fontSize={30}/>
               </div>
-              <div className="mt-5 text-lg text-white">
+              <div className="mt-5 text-lg text-white dark:text-black">
                 © 2025 MAIS. All rights reserved.
               </div>
             </div>
 
-            <div className="flex flex-row w-full h-16 mt-3 sm:mt-0 items-center bg-inherit mx-auto">
+            {/*<div className="flex flex-row w-full h-16 mt-3 sm:mt-0 items-center bg-inherit mx-auto">
               <div className="mx-0 sm:mx-auto flex flex-row">
                 <img src={pplogo} className="w-16 h-16" alt="pplogo"/>
                 <div className="ml-1">
-                  <div className="text-white text-2xl font-semibold">
+                  <div className="text-white dark:text-black text-2xl font-semibold">
                     Passion Project
                   </div>
-                  <p className="text-white mt-1 text-md">
+                  <p className="text-white dark:text-black mt-1 text-md">
                     &copy; 2025 Passion Project club
                   </p>
                 </div>
               </div>
-            </div>
+            </div>*/}
 
-            <div className="flex flex-col w-full mt-3 sm:mt-0">
-              <div className="ml-auto">
-                <div className="flex flex-row text-xl space-x-2 items-center text-white">
+            <div className="flex flex-col w-full mt-5 sm:mt-0">
+              <div className="ml-0 sm:ml-auto">
+                <div className="flex flex-row text-xl space-x-2 items-center text-white dark:text-black">
                   <div>Found a bug?</div>
                   <div><FaBug fontSize={20} /></div>
                   <div className="ml-2">Help us improve</div>
                   <div><FaTools fontSize={20} /></div>
                 </div>
-                <div className="space-y-1 mt-3 text-md sm:mt-1 text-white">
+                <div className="space-y-1 mt-3 text-md sm:mt-1 text-white dark:text-black">
                   <div>26b_sain-orshikh.n@mongolaspiration.edu.mn</div>
                   <div>26b_sayan.b@mongolaspiration.edu.mn</div>
                   <div>27b_tsegts.a@mongolaspiration.edu.mn</div>

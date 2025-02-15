@@ -113,66 +113,66 @@ const SignInSuccessPage = () => {
 
     return (
       <>
-        <div className="w-full min-h-screen flex flex-col bg-gray-100">
-          <div className="flex flex-row justify-between w-[95%] h-[5rem] bg-white mt-7 mx-auto rounded-md">
+        <div className="w-full min-h-screen flex flex-col bg-gray-100 dark:bg-gray-900">
+          <div className="flex flex-row justify-between w-[95%] h-[5rem] bg-white dark:bg-black mt-7 mx-auto rounded-md">
             <div className="ml-5 w-[60%]">
-              <span className="block font-bold text-xl sm:text-2xl mt-3">Welcome back, {authUser.username}!</span>
-              <span className="block text-gray-500">Successfully signed in</span>
+              <span className="block font-bold text-xl sm:text-2xl mt-3 dark:text-white">Welcome back, {authUser.username}!</span>
+              <span className="block text-gray-500 dark:text-gray-200">Successfully signed in</span>
             </div>
             <div className="flex items-center h-full">
-              <button onClick={handleSignOut} className="bg-black text-white rounded p-1.5 mr-5 hover:bg-gray-800">
+              <button onClick={handleSignOut} className="bg-black dark:bg-white text-white dark:text-black rounded p-1.5 mr-5 hover:bg-gray-800 dark:hover:bg-gray-200">
                 <span className="mx-2">Sign Out</span>
               </button>
             </div>
           </div>
           <div className="flex flex-col justify-evenly sm:flex-row w-[95%] mx-auto mt-7 space-y-2">
-            <div className="w-[90%] sm:w-[28%] min-h-[10rem] mx-auto sm:mx-0 bg-white rounded-md">
-              <div className="w-full h-full p-4"><div>
+            <div className="w-[90%] sm:w-[28%] min-h-[10rem] mx-auto sm:mx-0 bg-white dark:bg-black rounded-md">
+              <div className="w-full h-full p-4 dark:text-white"><div>
                 <FaHome fontSize={30}/>
               </div>
-              <div className="mt-2 text-xl font-bold">
+              <div className="mt-2 text-xl dark:text-white font-bold">
                 Homepage
               </div>
-              <div className="mt-1 text-gray-500">
+              <div className="mt-1 text-gray-500 dark:text-gray-200">
                 Discover the latest updates and new projects
               </div>
-              <div className="flex flex-row items-center font-bold mt-2">
+              <div className="flex flex-row items-center font-bold mt-2 dark:text-white">
                 <button><Link to={"/"} className="flex flex-row items-center">Visit Homepage <FaLongArrowAltRight fontSize={15} className="mt-1 ml-1"/></Link></button>
               </div></div>
             </div>
-            <div className="w-[90%] sm:w-[28%] min-h-[10rem] mx-auto sm:mx-0 bg-white rounded-md space-y-2">
-              <div className="w-full h-full p-4"><div>
+            <div className="w-[90%] sm:w-[28%] min-h-[10rem] mx-auto sm:mx-0 bg-white dark:bg-black rounded-md space-y-2">
+              <div className="w-full h-full p-4 dark:text-white"><div>
                 <FaBookReader fontSize={30}/>
               </div>
-              <div className="mt-2 text-xl font-bold">
+              <div className="mt-2 text-xl font-bold dark:text-white">
                 Blog Explorer
               </div>
-              <div className="mt-1 text-gray-500">
+              <div className="mt-1 text-gray-500 dark:text-gray-200">
                 Read interesting articles from our community
               </div>
-              <div className="flex flex-row items-center font-bold mt-2">
+              <div className="flex flex-row items-center font-bold mt-2 dark:text-white">
                 <button><Link to={"/blog"} className="flex flex-row items-center">Explore Blogs <FaLongArrowAltRight fontSize={15} className="mt-1 ml-1"/></Link></button>
               </div></div>
             </div>
-            <div className="w-[90%] sm:w-[28%] min-h-[10rem] mx-auto sm:mx-0 bg-white rounded-md space-y-2">
-              <div className="w-full h-full p-4"><div>
+            <div className="w-[90%] sm:w-[28%] min-h-[10rem] mx-auto sm:mx-0 bg-white dark:bg-black rounded-md space-y-2">
+              <div className="w-full h-full p-4 dark:text-white"><div>
                 <FaRegEdit fontSize={30}/>
               </div>
-              <div className="mt-2 text-xl font-bold">
+              <div className="mt-2 text-xl font-bold dark:text-white">
                 Create Blog
               </div>
-              <div className="mt-1 text-gray-500">
+              <div className="mt-1 text-gray-500 dark:text-gray-200">
                 Share your thoughts with MAIS
               </div>
-              <div className="flex flex-row items-center font-bold mt-2">
+              <div className="flex flex-row items-center font-bold mt-2 dark:text-white">
                 <button><Link to={"/create/blog"} className="flex flex-row items-center">Start writing <FaLongArrowAltRight fontSize={15} className="mt-1 ml-1"/></Link></button>
               </div></div>
             </div>
           </div>
-          <div className="flex flex-col w-[95%] min-h-[15rem] bg-white rounded-md mx-auto mt-7 p-4">
+          <div className="flex flex-col w-[95%] min-h-[15rem] bg-white dark:bg-black rounded-md mx-auto mt-7 p-4">
             <div className="mt-1 flex justify-between">
-              <span className="font-bold text-xl">Profile Information</span>
-              <button className="rounded bg-black text-white px-4 py-1.5 hover:bg-gray-800">
+              <span className="font-bold text-xl dark:text-white">Profile Information</span>
+              <button className="rounded bg-black dark:bg-white text-white dark:text-black px-4 py-1.5 hover:bg-gray-800 dark:hover:bg-gray-200">
                 <Link to={`/profile/${authUser?.username}`}>
                   To Profile
                 </Link>
@@ -180,12 +180,12 @@ const SignInSuccessPage = () => {
             </div>
             <div className="flex flex-row justify-between items-center mt-3">
               <div className="flex flex-col w-[60%] sm:w-[75%]">
-                <span className="text-gray-500">Username</span>
-                <span className="w-full break-words whitespace-pre-wrap">{authUser.username}</span>
+                <span className="text-gray-500 dark:text-gray-200">Username</span>
+                <span className="w-full break-words whitespace-pre-wrap dark:text-white">{authUser.username}</span>
               </div>
               <div>
                 <Dialog variants={customVariants} transition={customTransition}>
-                  <DialogTrigger className='bg-black p-2 text-white text-md hover:bg-gray-800 rounded'>
+                  <DialogTrigger className='bg-black dark:bg-white p-2 text-white dark:text-black text-md hover:bg-gray-800 dark:hover:bg-gray-200 rounded'>
                     <FaGear fontSize={20}/>
                   </DialogTrigger>
                   <DialogContent className='w-full max-w-md bg-white p-6 dark:bg-zinc-900'>
@@ -270,12 +270,12 @@ const SignInSuccessPage = () => {
             </div>
             <div className="flex flex-row justify-between items-center mt-3">
               <div className="flex flex-col w-[60%] sm:w-[75%]">
-                <span className="text-gray-500">Email</span>
-                <span className="w-full break-words whitespace-pre-wrap">{authUser.email}</span>
+                <span className="text-gray-500 dark:text-gray-200">Email</span>
+                <span className="w-full break-words whitespace-pre-wrap dark:text-white">{authUser.email}</span>
               </div>
               <div>
                 <Dialog variants={customVariants} transition={customTransition}>
-                  <DialogTrigger className='bg-black p-2 text-white text-md hover:bg-gray-800 rounded'>
+                  <DialogTrigger className='bg-black dark:bg-white p-2 text-white dark:text-black text-md hover:bg-gray-800 dark:hover:bg-gray-200 rounded'>
                     <FaGear fontSize={20}/>
                   </DialogTrigger>
                   <DialogContent className='w-full max-w-md bg-white p-6 dark:bg-zinc-900'>
@@ -360,12 +360,12 @@ const SignInSuccessPage = () => {
             </div>
             <div className="flex flex-row justify-between items-center mt-3">
               <div className="flex flex-col">
-                <span className="text-gray-500">Password</span>
-                <span className="">********</span>
+                <span className="text-gray-500 dark:text-gray-200">Password</span>
+                <span className="dark:text-white">********</span>
               </div>
               <div>
                 <Dialog variants={customVariants} transition={customTransition}>
-                  <DialogTrigger className='bg-black p-2 text-white text-md hover:bg-gray-800 rounded'>
+                  <DialogTrigger className='bg-black dark:bg-white p-2 text-white dark:text-black text-md hover:bg-gray-800 dark:hover:bg-gray-200 rounded'>
                     <FaGear fontSize={20}/>
                   </DialogTrigger>
                   <DialogContent className='w-full max-w-md bg-white p-6 dark:bg-zinc-900'>
@@ -450,12 +450,12 @@ const SignInSuccessPage = () => {
             </div>
             <div className="flex flex-row justify-between items-center mt-3">
               <div className="flex flex-col w-[60%] sm:w-[75%]">
-                <span className="text-gray-500">Bio</span>
-                <span className="w-full break-words whitespace-pre-wrap">{authUser.bio}</span>
+                <span className="text-gray-500 dark:text-gray-200">Bio</span>
+                <span className="w-full break-words whitespace-pre-wrap dark:text-white">{authUser.bio}</span>
               </div>
               <div>
                 <Dialog variants={customVariants} transition={customTransition}>
-                  <DialogTrigger className='bg-black p-2 text-white text-md hover:bg-gray-800 rounded'>
+                  <DialogTrigger className='bg-black dark:bg-white p-2 text-white dark:text-black text-md hover:bg-gray-800 dark:hover:bg-gray-200 rounded'>
                     <FaGear fontSize={20}/>
                   </DialogTrigger>
                   <DialogContent className='w-full max-w-md bg-white p-6 dark:bg-zinc-900'>

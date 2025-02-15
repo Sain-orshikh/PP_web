@@ -1,10 +1,20 @@
 import * as React from 'react';
 import { useState } from 'react'
+import { useAtom } from 'jotai';
+import { darkModeWithEffectAtom } from './ThemeAtom';
+
 import { ButtonGroup, Button, Box, Menu, MenuItem } from '@mui/material'
 import { Link } from 'react-router-dom'
 import { FaUserCircle, FaHome, FaPenSquare,  } from "react-icons/fa";
-import { FaBookOpen } from "react-icons/fa6";
+import { FaBookOpen, FaM } from "react-icons/fa6";
 import { FaInfo } from "react-icons/fa";
+
+import { WiLunarEclipse } from "react-icons/wi";
+import { FaSun } from "react-icons/fa";
+import { FaMoon } from "react-icons/fa";
+import { IoCloudyNightSharp } from "react-icons/io5";
+import { WiDayCloudy } from "react-icons/wi";
+
 
 import { BsFillInfoSquareFill } from "react-icons/bs";
 import { VscSignIn } from "react-icons/vsc";
@@ -24,6 +34,16 @@ function Navbar() {
   const [anchorEl, setAnchorEl] = useState(null);
   const [open, setOpen] = useState(false);
 
+  const [isDarkMode, setDarkMode] = useAtom(darkModeWithEffectAtom);
+  
+    if (isDarkMode) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    };
+
+  const [isSolarMode, setSolarMode] = useState(false);
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget); // Set the button as the anchor
     setOpen(true); // Open the menu
@@ -32,10 +52,18 @@ function Navbar() {
   const handleClose = () => {
     setOpen(false); // Close the menu
   };
+
+  const handleSolarMode = () => {
+    setSolarMode(!isSolarMode);
+  };
+
+  const handleDarkMode = () => {
+    setDarkMode();
+  };
   return (
     <>
-      <div className="flex flex-row justify-between items-center w-full bg-white p-1 shadow-md z-50 fixed top-0">
-        <Box className="flex justify-between items-center">
+      <div className="flex flex-row justify-between items-center w-full bg-white dark:bg-gray-100 p-1 shadow-md z-50 fixed top-0">
+        <Box className="flex justify-start items-center w-[80%] sm:w-[30%]">
           {/*<img>Passion project logo has to go here</img>*/}
           <button><Link to={"/"}><img src={pp_logo} className=""/></Link></button>
           <button><Link to={"/"}><TextShimmer
@@ -47,11 +75,8 @@ function Navbar() {
             Passion Project
           </TextShimmer></Link></button>
         </Box>
-        <Box className="mr-10 space-x-3 hidden sm:block">
-          <Button>
-            <Link to={'/profile/test21'} className="text-sky-500 text-md hover:text-black">TEST</Link>
-          </Button>
-          <Button className=''>
+        <Box className="flex flex-row text-end items-center text-black hidden space-x-3 sm:block ">
+        <Button className=''>
             <Link to={'/about'} className="text-sky-500 text-md hover:text-black">
               About
             </Link>
@@ -71,8 +96,21 @@ function Navbar() {
               Project
             </Link>
           </Button>
+          <Button style={{color: 'black'}}>
+            {isDarkMode ? (
+              <FaMoon fontSize={30} onClick={handleDarkMode} className='text-gray-400 hover:text-blue-500'/>
+            ) : (
+              <FaSun fontSize={30} onClick={handleDarkMode} className='text-amber-500 hover:text-blue-500'/>
+            )}
+            {isSolarMode && isDarkMode && (
+              <IoCloudyNightSharp fontSize={40} onClick={handleSolarMode} className='hover:text-blue-500'/>
+            )}
+            {isSolarMode && !isDarkMode && (
+            <WiDayCloudy fontSize={50} onClick={handleSolarMode} className='hover:text-blue-500'/>
+            )}
+          </Button>
           <Button>
-            <Link to={'/signin'} className='text-black hover:text-blue-500'>
+            <Link to={'/signin'} className='w-full ml-auto text-black hover:text-blue-500'>
             {authUser ? (
               <FaUserCircle fontSize={30} />
             ) : (
@@ -99,9 +137,6 @@ function Navbar() {
         }}
       >
         <MenuItem onClick={handleClose}>
-          <Link to={"/"} className='text-sky-500'><FaHome fontSize={30}/></Link>
-        </MenuItem>
-        <MenuItem onClick={handleClose}>
           <Link to={"/blog"} className='text-indigo-500'><FaBookOpen fontSize={30}/></Link>
         </MenuItem>
         <MenuItem onClick={handleClose}>
@@ -112,6 +147,15 @@ function Navbar() {
         </MenuItem>
         <MenuItem onClick={handleClose}>
           <Link to={"/about"} className='text-yellow-400'><BsFillInfoSquareFill fontSize={30}/></Link>
+        </MenuItem>
+        <MenuItem>
+          <button onClick={handleDarkMode}>
+            {isDarkMode ? (
+              <FaMoon fontSize={30} className='text-gray-400'/>
+            ) : (
+              <FaSun fontSize={30} className='text-amber-500'/>
+            )}
+          </button>
         </MenuItem>
         <MenuItem onClick={handleClose}>
           <Link to={"/signin"}>
