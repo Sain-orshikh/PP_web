@@ -32,6 +32,8 @@ import ProjectCard from "@/components/ProjectCard";
 import BlogCard from "@/components/BlogCard";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
+import { useAtom } from "jotai";
+import { darkModeAtom } from "@/components/ThemeAtom";
 
 function HomePage() {
 
@@ -93,6 +95,14 @@ function HomePage() {
     setScramble(!Scramble);
   }
 
+  const [isDarkMode, setDarkMode] = useAtom(darkModeAtom);
+
+  if (isDarkMode) {
+    document.documentElement.classList.add("dark");
+  } else {
+    document.documentElement.classList.remove("dark");
+  };
+
   const [notifyemail, setNotifyemail] = useState('');
 
   const {data:blogs} = useQuery({queryKey: ['blogs']});
@@ -121,7 +131,7 @@ function HomePage() {
 
   return (
     <>
-      <div className='flex flex-col w-full min-h-screen bg-gray-100'>
+      <div className='flex flex-col w-full min-h-screen bg-gray-100 dark:bg-red-300'>
         <div className="w-[90%] sm:w-[50%] mx-auto mt-12">
         <TextEffect
           per='char'

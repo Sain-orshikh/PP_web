@@ -38,13 +38,13 @@ export function Spotlight({ size = 200, springOptions = { bounce: 0 } }) {
 
 export default function AboutPage() {
   return (
-    <div className="relative w-screen h-screen flex items-center justify-center bg-black text-black overflow-hidden">
+    <div className="relative w-screen h-screen flex items-center justify-center bg-black text-black overflow-hidden z-10">
       {/* Dark Overlay */}
       <div className="absolute inset-0 bg-black opacity-90 pointer-events-none" />
       {/* Spotlight Effect */}
       <Spotlight size={300} />
       {/* Content */}
-      <div className="z-10">
+      <div className="z-20">
         <img src="https://plus.unsplash.com/premium_photo-1683134240084-ba074973f75e?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Y2FyfGVufDB8fDB8fHww" alt="Example" className="w-64 h-auto mb-4" />
         <h1 className="text-3xl font-bold">Dark Mode Spotlight Effect</h1>
       </div>

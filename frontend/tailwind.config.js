@@ -2,7 +2,7 @@
 const plugin = require('tailwindcss/plugin');
 export default {
   purge: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
-  darkMode: true,
+  darkMode: "class",
   theme: {
     extend: {
       colors: {
