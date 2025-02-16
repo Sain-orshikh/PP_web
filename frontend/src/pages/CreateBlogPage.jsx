@@ -2,11 +2,14 @@ import React, { useRef, useState } from 'react';
 import { Alert, Button, Snackbar, Modal, Box, ButtonGroup } from '@mui/material';
 import { FaSave, FaEye, FaRegPaperPlane, FaRegEdit } from "react-icons/fa";
 import { RiUserSmileFill } from "react-icons/ri";
+import { useAtom } from 'jotai';
+import { solarModeAtom } from '@/components/ThemeAtom';
 
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
+import SpotlightEffect from '@/components/SpotLight';
 
 function CreateBlogPage() {
 
@@ -55,6 +58,8 @@ function CreateBlogPage() {
     const [severityType, setseverityType] = useState("");
     const [alertMessage, setalertMessage] = useState("");
     
+    const [isSolarMode, setSolarMode] = useAtom(solarModeAtom);
+
     const handlePublishBlog = async() => {
       const editor = quillRef.current.getEditor();
       const contentHtml = editor.root.innerHTML; // Get content as HTML
@@ -102,6 +107,7 @@ function CreateBlogPage() {
 
     return (
       <>
+        {isSolarMode && (<SpotlightEffect />)}
         <div className="flex flex-col bg-gray-100 dark:bg-gray-900 w-full min-h-screen sm:min-h-full">
           <div className="flex mt-16 sm:mt-5 mr-5 ml-5 rounded bg-white dark:bg-black">
             <div  className="flex flex-col w-full mx-5">

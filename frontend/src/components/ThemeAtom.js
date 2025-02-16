@@ -16,3 +16,13 @@ export const darkModeWithEffectAtom = atom(
     }
   }
 );
+
+export const solarModeAtom = atomWithStorage(false);
+
+export const solarModeWithEffectAtom = atom(
+  (get) => get(solarModeAtom),
+  (get, set) => {
+    const newMode = !get(solarModeAtom);
+    set(solarModeAtom, newMode);
+  }
+);

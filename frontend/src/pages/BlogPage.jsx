@@ -1,11 +1,13 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Link } from 'react-router-dom';
-import { ButtonGroup, Button, Box, Input, Table, TableRow, Typography, TableHead, TableBody, TableFooter, Grid, Grid2 } from '@mui/material'
-import { CiSearch } from "react-icons/ci";
+import { Button, Box, Table, TableRow, Typography, TableHead, TableBody, Grid2 } from '@mui/material'
 import BGpic from "../assets/starry night.jpg"
 import BlogCard from '../components/BlogCard';
 import { TbLoader } from "react-icons/tb";
 import { useQuery, useQueryClient } from '@tanstack/react-query';
+import SpotlightEffect from '@/components/SpotLight';
+import { useAtom } from 'jotai';
+import { solarModeAtom } from '@/components/ThemeAtom';
 
 function BlogPage() {
 
@@ -38,9 +40,13 @@ function BlogPage() {
   if(Blogs){
     displayedBlogs = [...Blogs].slice(0, visibleBlogs);
   }
+
+  const [isSolarMode, setSolarMode] = useAtom(solarModeAtom);
+
   const handleinval = () => {
     queryClient.invalidateQueries({queryKey: ['blogs']});
   };
+
   return (
     <>
       <Box className="flex flex-col justify-between w-full min-h-screen bg-gray-100 dark:bg-gray-900 pt-3">
@@ -57,6 +63,7 @@ function BlogPage() {
                 <div className='flex items-center w-[90%] h-[10rem] rounded bg-blue-500 bg-cover bg-center' style={{ backgroundImage: `url(${BGpic})` }}>
                   <h1 className='w-[80%] ml-auto text-white text-4xl sm:text-5xl font-bold mt-10'>Read Our Blog</h1>
                 </div>
+                {isSolarMode && (<SpotlightEffect radius={200} />)}
               </div>
             </TableRow>
           </TableHead>

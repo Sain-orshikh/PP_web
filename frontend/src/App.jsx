@@ -14,6 +14,7 @@ import SignUpPage from './pages/SignUpPage'
 import SignInSuccessPage from './pages/SignInSuccessPage'
 import ProfilePage from './pages/ProfilePage'
 import AboutPage from './pages/AboutPage'
+import TestPage from './pages/TestPage'
 import { Toaster } from "react-hot-toast";
 import { useQuery } from "@tanstack/react-query"
 
@@ -71,6 +72,7 @@ function App() {
             <Route path='/signin' element={<SignInPage/>}/>
             <Route path='/signup' element={<SignUpPage/>}/>
             <Route path='/overview' element={<SignInSuccessPage/>}/>
+            <Route path='/test' element={<TestPage/>}/>
           </Routes> 
           <Toaster/>
         </Box>
