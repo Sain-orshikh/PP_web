@@ -5,6 +5,9 @@ import blog_bg from "../assets/blogbg.jpg";
 import project_bg from "../assets/orangeproject_bg.png";
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
+import { useAtom } from 'jotai';
+import { solarModeAtom } from '@/components/ThemeAtom';
+import SpotlightEffect from '@/components/SpotLight';
 
 function CreatePage() {
 
@@ -21,8 +24,11 @@ function CreatePage() {
     }
   };
 
+  const [isSolarMode] = useAtom(solarModeAtom);
+
   return (
     <>
+      {isSolarMode && <SpotlightEffect />}
       <div className="flex flex-col md:flex-row w-full min-h-screen bg-gray-100">
         {/* First Section - Project */}
         <div

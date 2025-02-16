@@ -8,6 +8,10 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogClose } from "@/components/ui/dialog";
 
+import { useAtom } from "jotai";
+import { solarModeAtom } from "@/components/ThemeAtom";
+import SpotlightEffect from "@/components/SpotLight";
+
 const SignInSuccessPage = () => {
 
   const navigate = useNavigate();
@@ -111,8 +115,11 @@ const SignInSuccessPage = () => {
       updateUserMutation(updatedUser);
     };
 
+    const [isSolarMode] = useAtom(solarModeAtom);
+
     return (
       <>
+        {isSolarMode && <SpotlightEffect />}
         <div className="w-full min-h-screen flex flex-col bg-gray-100 dark:bg-gray-900">
           <div className="flex flex-row justify-between w-[95%] h-[5rem] bg-white dark:bg-black mt-7 mx-auto rounded-md">
             <div className="ml-5 w-[60%]">

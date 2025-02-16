@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 
-export default function SpotlightEffect({ radius = 200 }) {
+export default function SpotlightEffect({ radius = 250 }) {
   const [mouse, setMouse] = useState({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
   const spotlightPos = useRef({ x: mouse.x, y: mouse.y });
 
@@ -33,7 +33,7 @@ export default function SpotlightEffect({ radius = 200 }) {
 
   return (
     <div
-      className="fixed inset-0 bg-black pointer-events-none"
+      className="fixed inset-0 bg-black pointer-events-none z-40"
       style={{
         WebkitMaskImage: `radial-gradient(circle ${radius}px at var(--spotlight-x, 50%) var(--spotlight-y, 50%), transparent 99%, black 100%)`,
         maskImage: `radial-gradient(circle ${radius}px at var(--spotlight-x, 50%) var(--spotlight-y, 50%), transparent 99%, black 100%)`,

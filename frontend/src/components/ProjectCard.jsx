@@ -1,12 +1,16 @@
 import React from 'react'
 import Tilt from './ui/tilt'
 import { useAtom } from 'jotai'
-import { darkModeAtom } from './ThemeAtom'
+import { solarModeAtom } from './ThemeAtom'
+import SpotlightEffect from './SpotLight'
 
 const ProjectCard = ({project, bg}) => {
 
+    const [isSolarMode] = useAtom(solarModeAtom)
+
     return (
     <>
+        {isSolarMode && <SpotlightEffect />}
         <Tilt rotationFactor={6} isRevese>
             <div className={`w-full min-h-[22rem] shadow-lg rounded-lg overflow-hidden dark:border dark:border-gray-200`}>
                 <div className={`border-b-2 border-black dark:border-gray-200`}>

@@ -8,14 +8,9 @@ import { ButtonGroup, Button, Box, Menu, MenuItem } from '@mui/material'
 import { Link } from 'react-router-dom'
 import { FaUserCircle, FaHome, FaPenSquare,  } from "react-icons/fa";
 import { FaBookOpen, FaM } from "react-icons/fa6";
-import { FaInfo } from "react-icons/fa";
 
-import { WiLunarEclipse } from "react-icons/wi";
 import { FaSun } from "react-icons/fa";
 import { FaMoon } from "react-icons/fa";
-import { IoCloudyNightSharp } from "react-icons/io5";
-import { WiDayCloudy } from "react-icons/wi";
-
 import { BsLightbulb } from "react-icons/bs";
 import { BsLightbulbFill } from "react-icons/bs";
 import { BsLightbulbOff } from "react-icons/bs";
@@ -25,7 +20,8 @@ import { BsFillInfoSquareFill } from "react-icons/bs";
 import { VscSignIn } from "react-icons/vsc";
 import { MdMenu } from "react-icons/md";
 import pp_logo from "../assets/pp-logo.png"
-import { useEffect } from 'react';
+
+import { motion, AnimatePresence } from 'framer-motion';
 import { useQuery } from '@tanstack/react-query';
 import { TextShimmer } from './ui/shimmertext';
 import { LuNewspaper } from "react-icons/lu";
@@ -78,9 +74,43 @@ function Navbar() {
   const handleDarkMode = () => {
     setDarkMode();
   };
+
+  const [showSolarButton, setShowSolarButton] = useState(false);
+  const [touchStartX, setTouchStartX] = useState(null);
+
+  const handleTouchStart = (e) => {
+    setTouchStartX(e.touches[0].clientX);
+  };
+
+  const handleTouchEnd = (e) => {
+    if (!touchStartX) return;
+
+    const touchEndX = e.changedTouches[0].clientX;
+    const diffX = touchEndX - touchStartX;
+
+    if (diffX > 50) {
+      setShowSolarButton(false);
+    } else if (diffX < -50) {
+      setShowSolarButton(true);
+    } else {
+      if (showSolarButton) {
+        handleSolarMode();
+      } else {
+        handleDarkMode();
+      }
+    }
+
+    setTouchStartX(null);
+
+    isProccessingRef.current = true;
+
+    setTimeout(() => {
+      isProccessingRef.current = false;
+    }, 1000);
+  };  
   return (
     <>
-      <div className="flex flex-row justify-between items-center w-full bg-white dark:bg-gray-100 p-1 shadow-md z-50 fixed top-0">
+      <div className="flex flex-row justify-between items-center w-full bg-white dark:bg-gray-100 p-1 shadow-md z-30 fixed top-0">
         <Box className="flex justify-start items-center w-[80%] sm:w-[30%]">
           {/*<img>Passion project logo has to go here</img>*/}
           <button><Link to={"/"}><img src={pp_logo} className=""/></Link></button>
@@ -94,6 +124,11 @@ function Navbar() {
           </TextShimmer></Link></button>
         </Box>
         <Box className="flex flex-row text-end items-center text-black hidden space-x-3 sm:block ">
+          <Button className=''>
+            <Link to={'/test'} className="text-sky-500 text-md hover:text-black">
+              Test
+            </Link>
+          </Button>
           <Button className=''>
             <Link to={'/about'} className="text-sky-500 text-md hover:text-black">
               About
@@ -204,16 +239,69 @@ function Navbar() {
             <Link to={"/about"} className='text-yellow-400'><BsFillInfoSquareFill fontSize={30}/></Link>
           </MenuItem>
           <MenuItem>
-            <button onClick={handleDarkMode}>
-              {isDarkMode ? (
-                <FaMoon fontSize={30} className='text-gray-400'/>
-              ) : (
-                <FaSun fontSize={30} className='text-amber-500'/>
-              )}
-            </button>
-          </MenuItem>
-          <MenuItem onClick={handleClose}>
-            <Link to={"/signin"}>
+        <div
+          className=""
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+        >
+          <AnimatePresence mode="wait">
+            {showSolarButton ? (
+              <motion.button
+                key="solar"
+                exit={{ opacity: 0, x: -10 }}
+                transition={{ duration: 0.3 }}
+                className=""
+                onClick={() => {
+                  if (!isProccessingRef.current){
+                  handleSolarMode();
+                  isProccessingRef.current = true;
+                  setTimeout(() => {
+                    isProccessingRef.current = false;
+                  }, 1000);
+                }
+                }}
+              >
+                {isDarkMode && isSolarMode && (
+                  <BsLightbulbOffFill fontSize={30} className='hover:text-blue-500'/>
+                )}
+                {!isDarkMode && isSolarMode && (
+                  <BsLightbulbOff fontSize={30} className='hover:text-blue-500'/>
+                )}
+                {isDarkMode && !isSolarMode && (
+                  <BsLightbulbFill fontSize={30} className='hover:text-blue-500'/>
+                )}
+                {!isDarkMode && !isSolarMode && (
+                  <BsLightbulb fontSize={30} className='hover:text-blue-500'/>
+                )}
+              </motion.button>
+            ) : (
+              <motion.button
+                key="dark"
+                exit={{ opacity: 0, x: 10 }}
+                transition={{ duration: 0.3 }}
+                className=""
+                onClick={() => {
+                  if (!isProccessingRef.current){
+                  handleDarkMode();
+                  isProccessingRef.current = true;
+                  setTimeout(() => {
+                    isProccessingRef.current = false;
+                  }, 1000);
+                }
+                }}
+              >
+                {isDarkMode ? (
+                  <FaMoon fontSize={30} className="text-gray-400" />
+                ) : (
+                  <FaSun fontSize={30} className="text-amber-500" />
+                )}
+              </motion.button>
+            )}
+          </AnimatePresence>
+        </div>
+      </MenuItem>
+          <MenuItem onClick={handleClose} style={{borderTop: '1px solid #ccc'}}>
+            <Link to={"/signin"} className='mt-1.5'>
             {authUser ? (
               <FaUserCircle fontSize={30}/>
             ) : (

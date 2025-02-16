@@ -27,6 +27,10 @@ import UseFollow from "../components/useFollow";
 import RightPanel from '@/components/RightPanel'
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogClose } from '../components/ui/dialog';
 
+import { useAtom } from 'jotai'
+import { solarModeAtom } from '@/components/ThemeAtom'
+import SpotlightEffect from '@/components/SpotLight'
+
 const ProfilePage = () => {
 
 	const queryClient = useQueryClient();
@@ -208,8 +212,11 @@ const ProfilePage = () => {
     displayedBlogs = [...userBlogs].slice(0, visibleBlogs);
   }
 
+  const [isSolarMode] = useAtom(solarModeAtom)
+
   return (
 	<>
+	{isSolarMode && <SpotlightEffect />}
 	<div className='flex-[4_4_0] flex flex-row border-r border-gray-700 min-h-screen'>
 		{!user && <p className='text-center text-lg mt-4'>User not found</p>}
 		<div className='flex flex-col w-full sm:w-[80%] bg-black border-x border-gray-700'>

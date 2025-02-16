@@ -175,7 +175,7 @@ function BlogCard({blog, onUpdate, inprofile, inhomepage}) {
               </div>
             </button>
           <div className="flex flex-row">
-            <div><button onClick={handleEditOpen} className={`ml-2 dark:text-white ${inprofile ? `text-white` : ``} ${inhomepage ? `dark:text-black` : ``}`}><FaRegEdit fontSize={25}/></button></div>  
+            <div><button onClick={handleEditOpen} className={`ml-2 ${inprofile ? `text-white` : ``} ${inhomepage ? `dark:text-black` : `dark:text-white`}`}><FaRegEdit fontSize={25}/></button></div>  
             <div><h6 className={`mx-1 mb-1 text-xl dark:text-white ${inprofile ? `text-white` : ``} ${inhomepage ? `dark:text-black` : ``}`}>{blog.title}</h6></div>
           </div>
         </Box>

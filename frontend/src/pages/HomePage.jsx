@@ -404,7 +404,7 @@ function HomePage() {
             Gain insight into the minds of MAIS students
           </div>
           <div className='flex flex-row justify-evenly w-[95%] mx-auto mt-10'>
-            {isDarkMode && (<div className=''><Grid2 container spacing={10} columns={12} minHeight={250}>
+            {isDarkMode && (<div className='text-black'><Grid2 container spacing={10} columns={12} minHeight={250}>
                   {displayedBlogs.map((blog) => (
                   <Grid2 
                     xs={12} // 1 column on extra-small screens
