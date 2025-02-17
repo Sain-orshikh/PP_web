@@ -63,35 +63,6 @@ function HomePage() {
     duration: 0.25,
   };
 
-  const {mutate: addEmail} = useMutation({
-    mutationFn: async (email) => {
-      try {
-        const res = await fetch('/api/notifyuser/add', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({email}),
-        });
-        const data = await res.json();
-        if(!res.ok) throw new Error(data.error || "Failed to create account");
-				console.log(data);
-        return data;
-
-      } catch (error) {
-        console.error(error);
-        throw error;
-      }
-    },
-    onSuccess: () => {
-      toast.success('Email added successfully');
-      setNotifyemail('');
-    },
-    onError: (error) => {
-      toast.error(error.message);
-    },
-  });
-
   const [Scramble, setScramble] = useState(false);
   const handleScramble = () => {
     setScramble(!Scramble);
@@ -129,7 +100,8 @@ function HomePage() {
   };
 
   const handleSubmit = async (email) => {
-    addEmail(email);
+    console.log(email);
+    //add the adding email funtion here. For sayan
   };
 
   return (
