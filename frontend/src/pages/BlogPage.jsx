@@ -8,7 +8,6 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import SpotlightEffect from '@/components/SpotLight';
 import { useAtom } from 'jotai';
 import { solarModeAtom } from '@/components/ThemeAtom';
-import pp_logo from '@/assets/pp_logo.png';
 
 function BlogPage() {
 

@@ -26,3 +26,13 @@ export const solarModeWithEffectAtom = atom(
     set(solarModeAtom, newMode);
   }
 );
+
+export const flashlightModeAtom = atomWithStorage(false);
+
+export const flashlightModeWithEffectAtom = atom(
+  (get) => get(flashlightModeAtom),
+  (get, set) => {
+    const newMode = !get(flashlightModeAtom);
+    set(flashlightModeAtom, newMode);
+  }
+);

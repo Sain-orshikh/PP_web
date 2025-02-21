@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useState } from 'react'
 import { useAtom } from 'jotai';
+import { flashlightModeWithEffectAtom } from './ThemeAtom';
 import { darkModeWithEffectAtom } from './ThemeAtom';
 import { solarModeWithEffectAtom } from './ThemeAtom';
 
@@ -15,6 +16,11 @@ import { BsLightbulb } from "react-icons/bs";
 import { BsLightbulbFill } from "react-icons/bs";
 import { BsLightbulbOff } from "react-icons/bs";
 import { BsLightbulbOffFill } from "react-icons/bs";
+
+import { MdFlashlightOff } from "react-icons/md";
+import { MdFlashlightOn } from "react-icons/md";
+import { MdOutlineFlashlightOff } from "react-icons/md";
+import { MdOutlineFlashlightOn } from "react-icons/md";
 
 import { BsFillInfoSquareFill } from "react-icons/bs";
 import { VscSignIn } from "react-icons/vsc";
@@ -40,6 +46,12 @@ function Navbar() {
   const [position, setPosition] = useState({ top: 0, left: 0 });
 
   const [isSolarMode, setSolarMode] = useAtom(solarModeWithEffectAtom);
+
+  const [isFlashlightMode, setFlashlightMode] = useAtom(flashlightModeWithEffectAtom);
+  
+  React.useEffect(() => {
+    console.log("this is flafhlightmode:",isFlashlightMode);
+  }, [isFlashlightMode]);
 
   const [isDarkMode, setDarkMode] = useAtom(darkModeWithEffectAtom);
   
@@ -69,6 +81,10 @@ function Navbar() {
 
   const handleSolarMode = () => {
     setSolarMode();
+  };
+
+  const handleFlashlightMode = () => {
+    setFlashlightMode();
   };
 
   const handleDarkMode = () => {
@@ -194,6 +210,20 @@ function Navbar() {
               )}
               {!isDarkMode && !isSolarMode && (
                 <BsLightbulb fontSize={30} onClick={handleSolarMode} className='hover:text-blue-500'/>
+              )}
+            </MenuItem>
+            <MenuItem>
+              {isDarkMode && isFlashlightMode && (
+                <MdFlashlightOff fontSize={30} onClick={handleFlashlightMode} className='hover:text-blue-500'/>
+              )}
+              {!isDarkMode && isFlashlightMode && (
+                <MdOutlineFlashlightOff fontSize={30} onClick={handleFlashlightMode} className='hover:text-blue-500'/>
+              )}
+              {isDarkMode && !isFlashlightMode && (
+                <MdFlashlightOn fontSize={30} onClick={handleFlashlightMode} className='hover:text-blue-500'/>
+              )}
+              {!isDarkMode && !isFlashlightMode && (
+                <MdOutlineFlashlightOn fontSize={30} onClick={handleFlashlightMode} className='hover:text-blue-500'/>
               )}
             </MenuItem>
           </Menu>

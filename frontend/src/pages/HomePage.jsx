@@ -25,6 +25,7 @@ import { MdOutlineScience } from "react-icons/md";
 import { TbLoader } from "react-icons/tb";
 import {Button} from "@mui/material";
 import SpotlightEffect from '@/components/SpotLight';
+import FlashlightEffect from '@/components/Flashlight';
 
 import { AnimatedGroup } from "@/components/ui/animateimage";
 import { InfiniteSlider } from "@/components/ui/infinite-slider";
@@ -34,6 +35,7 @@ import BlogCard from "@/components/BlogCard";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { useAtom } from 'jotai';
+import { flashlightModeAtom } from "@/components/ThemeAtom";
 import { solarModeAtom } from '@/components/ThemeAtom';
 import { darkModeAtom } from "@/components/ThemeAtom";
 
@@ -70,6 +72,7 @@ function HomePage() {
 
   const [isDarkMode, setDarkMode] = useAtom(darkModeAtom);
   const [isSolarMode, setSolarMode] = useAtom(solarModeAtom);
+  const [isFlashlightMode, setFlashlightMode] = useAtom(flashlightModeAtom);
 
   if (isDarkMode) {
     document.documentElement.classList.add("dark");
@@ -106,7 +109,8 @@ function HomePage() {
 
   return (
     <>
-      {isSolarMode && (<SpotlightEffect />)}
+      {isSolarMode && !isFlashlightMode && (<SpotlightEffect />)}
+      {isFlashlightMode && !isSolarMode && (<FlashlightEffect />)}
       <div className='flex flex-col w-full min-h-screen bg-gray-100 dark:bg-gray-900'>
         <div className="w-[90%] sm:w-[50%] mx-auto mt-12">
         <TextEffect
