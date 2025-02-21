@@ -48,10 +48,6 @@ function Navbar() {
   const [isSolarMode, setSolarMode] = useAtom(solarModeWithEffectAtom);
 
   const [isFlashlightMode, setFlashlightMode] = useAtom(flashlightModeWithEffectAtom);
-  
-  React.useEffect(() => {
-    console.log("this is flafhlightmode:",isFlashlightMode);
-  }, [isFlashlightMode]);
 
   const [isDarkMode, setDarkMode] = useAtom(darkModeWithEffectAtom);
   
@@ -91,11 +87,28 @@ function Navbar() {
     setDarkMode();
   };
 
+  const [showDarkMode, setShowDarkMode] = useState(true);
   const [showSolarButton, setShowSolarButton] = useState(false);
+  const [showFlashLightButton, setShowFlashLightButton] = useState(false);
   const [touchStartX, setTouchStartX] = useState(null);
 
   const handleTouchStart = (e) => {
     setTouchStartX(e.touches[0].clientX);
+  };
+
+  const handleSwipe = () => {
+    if(showFlashLightButton){
+      setShowFlashLightButton(false);
+      setShowDarkMode(true);
+    }
+    else if(showDarkMode){
+      setShowDarkMode(false);
+      setShowSolarButton(true);
+    }
+    else{
+      setShowSolarButton(false);
+      setShowFlashLightButton(true);
+    }
   };
 
   const handleTouchEnd = (e) => {
@@ -105,13 +118,15 @@ function Navbar() {
     const diffX = touchEndX - touchStartX;
 
     if (diffX > 50) {
-      setShowSolarButton(false);
-    } else if (diffX < -50) {
-      setShowSolarButton(true);
+      handleSwipe();
     } else {
       if (showSolarButton) {
         handleSolarMode();
-      } else {
+      }
+      else if(showFlashLightButton){
+        handleFlashlightMode();
+      }
+      else {
         handleDarkMode();
       }
     }
@@ -123,7 +138,8 @@ function Navbar() {
     setTimeout(() => {
       isProccessingRef.current = false;
     }, 1000);
-  };  
+  };
+
   return (
     <>
       <div className="flex flex-row justify-between items-center w-full bg-white dark:bg-gray-100 p-1 shadow-md z-30 fixed top-0">
@@ -275,7 +291,7 @@ function Navbar() {
           onTouchEnd={handleTouchEnd}
         >
           <AnimatePresence mode="wait">
-            {showSolarButton ? (
+            {showSolarButton && (
               <motion.button
                 key="solar"
                 exit={{ opacity: 0, x: -10 }}
@@ -304,10 +320,11 @@ function Navbar() {
                   <BsLightbulb fontSize={30} className='hover:text-blue-500'/>
                 )}
               </motion.button>
-            ) : (
+            )}
+            {showDarkMode && (
               <motion.button
                 key="dark"
-                exit={{ opacity: 0, x: 10 }}
+                exit={{ opacity: 0, x: -10 }}
                 transition={{ duration: 0.3 }}
                 className=""
                 onClick={() => {
@@ -324,6 +341,36 @@ function Navbar() {
                   <FaMoon fontSize={30} className="text-gray-400" />
                 ) : (
                   <FaSun fontSize={30} className="text-amber-500" />
+                )}
+              </motion.button>
+            )}
+            {showFlashLightButton && (
+              <motion.button
+                key="flashlight"
+                exit={{ opacity: 0, x: -10 }}
+                transition={{ duration: 0.3 }}
+                className=""
+                onClick={() => {
+                  if (!isProccessingRef.current){
+                  handleFlashlightMode();
+                  isProccessingRef.current = true;
+                  setTimeout(() => {
+                    isProccessingRef.current = false;
+                  }, 1000);
+                }
+                }}
+              >
+                {isDarkMode && isFlashlightMode && (
+                  <MdFlashlightOff fontSize={30} className='hover:text-blue-500'/>
+                )}
+                {!isDarkMode && isFlashlightMode && (
+                  <MdFlashlightOn fontSize={30} className='hover:text-blue-500'/>
+                )}
+                {isDarkMode && !isFlashlightMode && (
+                  <MdOutlineFlashlightOff fontSize={30} className='hover:text-blue-500'/>
+                )}
+                {!isDarkMode && !isFlashlightMode && (
+                  <MdOutlineFlashlightOn fontSize={30} className='hover:text-blue-500'/>
                 )}
               </motion.button>
             )}
