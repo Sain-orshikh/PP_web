@@ -8,6 +8,8 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import SpotlightEffect from '@/components/SpotLight';
 import { useAtom } from 'jotai';
 import { solarModeAtom } from '@/components/ThemeAtom';
+import { flashlightModeAtom } from '@/components/ThemeAtom';
+import LaggingSpotlight from '@/components/FlashLight';
 
 function BlogPage() {
 
@@ -42,6 +44,7 @@ function BlogPage() {
   }
 
   const [isSolarMode, setSolarMode] = useAtom(solarModeAtom);
+  const [isFlashlightMode, setFlashlightMode] = useAtom(flashlightModeAtom);
 
   const handleinval = () => {
     queryClient.invalidateQueries({queryKey: ['blogs']});
@@ -63,7 +66,8 @@ function BlogPage() {
                 <div className='flex items-center w-[90%] h-[10rem] rounded bg-blue-500 bg-cover bg-center' style={{ backgroundImage: `url(${BGpic})` }}>
                   <h1 className='w-[80%] ml-auto text-white text-4xl sm:text-5xl font-bold mt-10'>Read Our Blog</h1>
                 </div>
-                {isSolarMode && (<SpotlightEffect radius={200} />)}
+                {isSolarMode && (<SpotlightEffect />)}
+                {isFlashlightMode && (<LaggingSpotlight />)}
               </div>
             </TableRow>
           </TableHead>

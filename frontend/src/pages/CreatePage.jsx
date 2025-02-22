@@ -8,6 +8,8 @@ import toast from 'react-hot-toast';
 import { useAtom } from 'jotai';
 import { solarModeAtom } from '@/components/ThemeAtom';
 import SpotlightEffect from '@/components/SpotLight';
+import LaggingSpotlight from '@/components/FlashLight';
+import { flashlightModeAtom } from '@/components/ThemeAtom';
 
 function CreatePage() {
 
@@ -25,10 +27,12 @@ function CreatePage() {
   };
 
   const [isSolarMode] = useAtom(solarModeAtom);
+  const [isFlashlightMode] = useAtom(flashlightModeAtom);
 
   return (
     <>
       {isSolarMode && <SpotlightEffect />}
+      {isFlashlightMode && <LaggingSpotlight />}
       <div className="flex flex-col md:flex-row w-full min-h-screen bg-gray-100">
         {/* First Section - Project */}
         <div

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, memo } from "react";
 import { data, Link } from "react-router-dom";
 import { TextEffect } from "@/components/ui/texteffect";
 import { Carousel, CarouselContent, CarouselItem, CarouselNavigation } from "@/components/ui/carousel";
@@ -39,7 +39,116 @@ import { flashlightModeAtom } from "@/components/ThemeAtom";
 import { solarModeAtom } from '@/components/ThemeAtom';
 import { darkModeAtom } from "@/components/ThemeAtom";
 
+// Memoized components
+const MemoizedTextEffect = memo(TextEffect);
+
+const HeroSection = memo(() => (
+  <>
+    <div className="w-[90%] sm:w-[50%] mx-auto mt-12">
+      <MemoizedTextEffect
+        per='char'
+        delay={0.2}
+        preset="blur"
+        variants={{
+          container: {
+            hidden: { opacity: 0 },
+            visible: {
+              opacity: 1,
+              transition: { staggerChildren: 0.05 }
+            }
+          },
+          item: {
+            hidden: {
+              opacity: 0,
+              rotateX: 90,
+              y: 10
+            },
+            visible: {
+              opacity: 1,
+              rotateX: 0,
+              y: 0,
+              transition: { duration: 0.2 }
+            }
+          }
+        }}
+        className={`text-5xl sm:text-6xl text-black dark:text-white font-harmonique font-bold text-center`}
+      >
+        MAIS's Largest Research Organization
+      </MemoizedTextEffect>
+    </div>
+    <div className="w-[90%] sm:w-[35%] mx-auto mt-3 text-center">
+      <MemoizedTextEffect
+        per='char'
+        delay={0.2}
+        preset="blur"
+        variants={{
+          container: {
+            hidden: { opacity: 0 },
+            visible: { opacity: 1 }
+          },
+          item: {
+            hidden: {
+              opacity: 0,
+              rotateX: 90,
+              y: 10
+            },
+            visible: {
+              opacity: 1,
+              rotateX: 0,
+              y: 0,
+              transition: { duration: 0.1 }
+            }
+          }
+        }}
+        className={`text-gray-700 dark:text-gray-300 text-xl font-semibold`}
+      >
+        We are dedicated to promoting interest in scientific research among the students of MAIS.
+      </MemoizedTextEffect>
+    </div>
+  </>
+));
+
+const MemoizedDialog = memo(({ variants, transition, email, onEmailChange, onSubmit }) => (
+  <Dialog variants={variants} transition={transition}>
+    <DialogTrigger className='bg-zinc-950 px-4 py-2 text-white text-xl hover:bg-zinc-800 dark:bg-white dark:text-black dark:hover:bg-zinc-200 rounded-xl'>
+      Join our club
+    </DialogTrigger>
+    <DialogContent className='w-full max-w-md bg-white p-6 dark:bg-zinc-900'>
+      <DialogHeader>
+        <DialogTitle className='text-zinc-900 text-center dark:text-white text-3xl'>
+          Join the aspiring researchers
+        </DialogTitle>
+        <DialogDescription className='text-zinc-600 mt-1 text-center dark:text-zinc-400 text-xl'>
+          Enter your email address to join our club.
+        </DialogDescription>
+      </DialogHeader>
+      <div className='mt-1 flex flex-col space-y-4'>
+        <label htmlFor='name' className='sr-only'>
+          Email
+        </label>
+        <input
+          value={email}
+          onChange={(e) => onEmailChange(e.target.value)}
+          id='name'
+          type='email'
+          className='h-9 w-full rounded-lg border border-zinc-200 bg-white px-3 text-lg text-zinc-900 outline-hidden focus:ring-2 focus:ring-black/5 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white dark:focus:ring-white/5'
+          placeholder='Enter your email'
+        />
+        <button
+          className='inline-flex items-center justify-center self-end rounded-lg bg-black px-4 py-1 text-lg font-medium text-zinc-50 dark:bg-white dark:text-zinc-900'
+          type='submit'
+          onClick={() => onSubmit(email)}
+        >
+          Join now
+        </button>
+      </div>
+    </DialogContent>
+  </Dialog>
+));
+
 function HomePage() {
+
+  const [notifyemail, setNotifyemail] = useState('');
 
   const customVariants = {
     initial: {
@@ -80,8 +189,6 @@ function HomePage() {
     document.documentElement.classList.remove("dark");
   };
 
-  const [notifyemail, setNotifyemail] = useState('');
-
   const {data:blogs} = useQuery({queryKey: ['blogs']});
 
   const Blogs = blogs?.data;
@@ -112,130 +219,15 @@ function HomePage() {
       {isSolarMode && !isFlashlightMode && (<SpotlightEffect />)}
       {isFlashlightMode && !isSolarMode && (<FlashlightEffect />)}
       <div className='flex flex-col w-full min-h-screen bg-gray-100 dark:bg-gray-900'>
-        <div className="w-[90%] sm:w-[50%] mx-auto mt-12">
-        <TextEffect
-          per='char'
-          delay={0.2}
-          preset="blur"
-          variants={{
-            container: {
-              hidden: {
-                opacity: 0,
-              },
-              visible: {
-                opacity: 1,
-                transition: {
-                  staggerChildren: 0.05,
-                },
-              },
-            },
-            item: {
-              hidden: {
-                opacity: 0,
-                rotateX: 90,
-                y: 10,
-              },
-              visible: {
-                opacity: 1,
-                rotateX: 0,
-                y: 0,
-                transition: {
-                  duration: 0.2,
-                },
-              },
-            },
-          }}
-          className={`text-5xl sm:text-6xl text-black dark:text-white font-harmonique font-bold text-center`}
-        >
-          MAIS's Largest Research Organization
-        </TextEffect>
-        </div>
-        <div className="w-[90%] sm:w-[35%] mx-auto mt-3 text-center">
-          <TextEffect
-            per='char'
-            delay={0.2}
-            preset="blur"
-            variants={{
-              container: {
-                hidden: {
-                  opacity: 0,
-                },
-                visible: {
-                  opacity: 1,
-                },
-                },
-                item: {
-                  hidden: {
-                    opacity: 0,
-                    rotateX: 90,
-                    y: 10,
-                  },
-                  visible: {
-                    opacity: 1,
-                    rotateX: 0,
-                    y: 0,
-                    transition: {
-                      duration: 0.1,
-                    },
-                  },
-                },
-              }}
-            className={`text-gray-700 dark:text-gray-300 text-xl font-semibold`}
-          >
-            We are dedicated to promoting interest in scientific research among the students of MAIS.
-          </TextEffect>
-        </div>
+        <HeroSection />
         <div className="w-[90%] sm:w-[30%] mx-auto mt-5 flex justify-center">
-          <Dialog variants={customVariants} transition={customTransition}>
-            <DialogTrigger className='bg-zinc-950 px-4 py-2 text-white text-xl hover:bg-zinc-800 dark:bg-white dark:text-black dark:hover:bg-zinc-200 rounded-xl'>
-              Join our club
-            </DialogTrigger>
-            <DialogContent className='w-full max-w-md bg-white p-6 dark:bg-zinc-900'>
-              <DialogHeader>
-                <DialogTitle className='text-zinc-900 text-center dark:text-white text-3xl'>
-                  Join the aspiring researchers
-                </DialogTitle>
-                <DialogDescription className='text-zinc-600 mt-1 text-center dark:text-zinc-400 text-xl'>
-                  Enter your email address to join our club.
-                </DialogDescription>
-              </DialogHeader>
-              <div className='mt-1 flex flex-col space-y-4'>
-                <label htmlFor='name' className='sr-only'>
-                  Email
-                </label>
-                <input
-                  value={notifyemail}
-                  onChange={(e) => setNotifyemail(e.target.value)}
-                  id='name'
-                  type='email'
-                  className='h-9 w-full rounded-lg border border-zinc-200 bg-white px-3 text-lg text-zinc-900 outline-hidden focus:ring-2 focus:ring-black/5 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white dark:focus:ring-white/5'
-                  placeholder='Enter your email'
-                />
-                <button
-                  className='inline-flex items-center justify-center self-end rounded-lg bg-black px-4 py-1 text-lg font-medium text-zinc-50 dark:bg-white dark:text-zinc-900'
-                  type='submit'
-                  onClick={() => {handleSubmit(notifyemail)}}
-                >
-                  Join now
-                </button>
-              </div>
-            </DialogContent>
-          </Dialog>
-          {/*<AnimatedGroup className={`w-[70%]`}>
-          <input
-            value={notifyemail}
-            onChange={(e) => setNotifyemail(e.target.value)}
-            placeholder="Email"
-            className="w-full h-[2.5rem] text-black p-2 text-lg rounded-md border border-gray-300"
+          <MemoizedDialog 
+            variants={customVariants} 
+            transition={customTransition}
+            email={notifyemail}
+            onEmailChange={setNotifyemail}
+            onSubmit={handleSubmit}
           />
-          </AnimatedGroup>
-          <AnimatedGroup className={`w-[25%]`}>
-          <button className="w-full h-[2.5rem] bg-orange-500 hover:bg-purple-700 text-black font-harmonique text-lg rounded-md" onClick={() => {handleSubmit(notifyemail)}}>
-            <span className="text-xl">
-              Submit
-            </span>
-          </button>
-          </AnimatedGroup>*/}
         </div>
         <div className="w-[90%] sm:w-[45%] mx-auto mt-10 mb-10 text-black dark:text-gray-300">
           <InfiniteSlider className={`w-full`} gap={100} autoPlay={true} autoPlaySpeed={3000}
@@ -353,7 +345,7 @@ function HomePage() {
       </Carousel>
           </div>
         </div>
-        <div className="w-full h-[15rek] bg-black dark:bg-gray-900">
+        <div className="w-full bg-black dark:bg-gray-900">
           <img
             src={isDarkMode ? tornppr1 : tornppr}
             alt="torn paper"
@@ -466,7 +458,7 @@ function HomePage() {
                 <FaFacebookSquare fontSize={30}/>
               </div>
               <div className="mt-5 text-lg text-white dark:text-black">
-                © 2025 MAIS. All rights reserved.
+                2025 MAIS. All rights reserved.
               </div>
             </div>
 
@@ -478,7 +470,7 @@ function HomePage() {
                     Passion Project
                   </div>
                   <p className="text-white dark:text-black mt-1 text-md">
-                    &copy; 2025 Passion Project club
+                    2025 Passion Project club
                   </p>
                 </div>
               </div>

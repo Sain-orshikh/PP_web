@@ -28,6 +28,8 @@ import {toast} from "react-hot-toast";
 import { useAtom } from "jotai";
 import { solarModeAtom } from "../components/ThemeAtom";
 import SpotlightEffect from "@/components/SpotLight";
+import LaggingSpotlight from "@/components/FlashLight";
+import { flashlightModeAtom } from '@/components/ThemeAtom';
 
 const SignUpPage = () => {
 
@@ -150,10 +152,12 @@ const SignUpPage = () => {
 	};
 
 	const [isSolarMode] = useAtom(solarModeAtom);
+	const [isFlashlightMode] = useAtom(flashlightModeAtom);
 
 	return (
 	  <>
 	  	{isSolarMode && <SpotlightEffect />}	
+	  	{isFlashlightMode && <LaggingSpotlight />}
 		<div className="w-full min-h-screen flex flex-col sm:flex-row justify-center bg-cover bg-center" style={{backgroundImage: `url(${backgroundImage})`}}>
 			{spawnplane ? <Magnetic color={planecolor} isRemoved={IsRemoved}/> : null}
 			<div className={`flex flex-col justify-center w-[80%] sm:w-[40%] mx-auto sm:mr-auto ${ spawnplane === true ? `sm:ml-8` : `sm:ml-24`} my-3`}>

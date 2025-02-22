@@ -29,7 +29,9 @@ import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, Dialog
 
 import { useAtom } from 'jotai'
 import { solarModeAtom } from '@/components/ThemeAtom'
+import LaggingSpotlight from '@/components/FlashLight'
 import SpotlightEffect from '@/components/SpotLight'
+import { flashlightModeAtom } from '@/components/ThemeAtom'
 
 const ProfilePage = () => {
 
@@ -213,10 +215,12 @@ const ProfilePage = () => {
   }
 
   const [isSolarMode] = useAtom(solarModeAtom)
+  const [isFlashlightMode] = useAtom(flashlightModeAtom)
 
   return (
 	<>
 	{isSolarMode && <SpotlightEffect />}
+	{isFlashlightMode && <LaggingSpotlight />}
 	<div className='flex-[4_4_0] flex flex-row border-r border-gray-700 min-h-screen'>
 		{!user && <p className='text-center text-lg mt-4'>User not found</p>}
 		<div className='flex flex-col w-full sm:w-[80%] bg-black border-x border-gray-700'>

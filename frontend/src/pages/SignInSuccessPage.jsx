@@ -11,6 +11,8 @@ import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, Dialog
 import { useAtom } from "jotai";
 import { solarModeAtom } from "@/components/ThemeAtom";
 import SpotlightEffect from "@/components/SpotLight";
+import LaggingSpotlight from "@/components/FlashLight";
+import { flashlightModeAtom } from '@/components/ThemeAtom';
 
 const SignInSuccessPage = () => {
 
@@ -116,10 +118,12 @@ const SignInSuccessPage = () => {
     };
 
     const [isSolarMode] = useAtom(solarModeAtom);
+    const [isFlashlightMode] = useAtom(flashlightModeAtom);
 
     return (
       <>
         {isSolarMode && <SpotlightEffect />}
+        {isFlashlightMode && <LaggingSpotlight />}
         <div className="w-full min-h-screen flex flex-col bg-gray-100 dark:bg-gray-900">
           <div className="flex flex-row justify-between w-[95%] h-[5rem] bg-white dark:bg-black mt-7 mx-auto rounded-md">
             <div className="ml-5 w-[60%]">

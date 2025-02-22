@@ -33,10 +33,12 @@ export default function SpotlightEffect({ radius = 250 }) {
 
   return (
     <div
-      className="fixed inset-0 bg-black pointer-events-none z-40"
+      className="fixed inset-0 bg-black pointer-events-none z-20"
       style={{
         WebkitMaskImage: `radial-gradient(circle ${radius}px at var(--spotlight-x, 50%) var(--spotlight-y, 50%), transparent 99%, black 100%)`,
         maskImage: `radial-gradient(circle ${radius}px at var(--spotlight-x, 50%) var(--spotlight-y, 50%), transparent 99%, black 100%)`,
+        transform: 'translate3d(0,0,0)',
+        WebkitTransform: 'translate3d(0,0,0)'
       }}
     />
   );

@@ -4,6 +4,8 @@ import { FaSave, FaEye, FaRegPaperPlane, FaRegEdit } from "react-icons/fa";
 import { RiUserSmileFill } from "react-icons/ri";
 import { useAtom } from 'jotai';
 import { solarModeAtom } from '@/components/ThemeAtom';
+import { flashlightModeAtom } from '@/components/ThemeAtom';
+import LaggingSpotlight from '@/components/FlashLight';
 
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
@@ -59,6 +61,7 @@ function CreateBlogPage() {
     const [alertMessage, setalertMessage] = useState("");
     
     const [isSolarMode, setSolarMode] = useAtom(solarModeAtom);
+    const [isFlashlightMode, setFlashlightMode] = useAtom(flashlightModeAtom);
 
     const handlePublishBlog = async() => {
       const editor = quillRef.current.getEditor();
@@ -108,6 +111,7 @@ function CreateBlogPage() {
     return (
       <>
         {isSolarMode && (<SpotlightEffect />)}
+        {isFlashlightMode && (<LaggingSpotlight />)}
         <div className="flex flex-col bg-gray-100 dark:bg-gray-900 w-full min-h-screen sm:min-h-full">
           <div className="flex mt-16 sm:mt-5 mr-5 ml-5 rounded bg-white dark:bg-black">
             <div  className="flex flex-col w-full mx-5">
