@@ -210,8 +210,40 @@ function HomePage() {
   };
 
   const handleSubmit = async (email) => {
-    console.log(email);
-    //add the adding email funtion here. For sayan
+    if (!email || email.trim() === '') {
+      toast.error('Please enter your email address');
+      return;
+    }
+
+    // email format shalgadag ym 
+    const emailRegex = /^[^\s@]+@gmail\.com$/;
+    const schoolRegex = /^[^\s@]+@mongolaspiration\.edu\.mn$/;
+    if (!(emailRegex.test(email) || schoolRegex.test(email))) {
+      toast.error('Please enter a valid Gmail or School email address');
+      return;
+    }
+
+    try {
+      const response = await fetch('http://localhost:5000/api/joins', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ gmail: email }),
+      });
+
+      const data = await response.json();
+      
+      if (response.ok) {
+        toast.success('Thank you for joining our club! We will soon notify you with updates');
+        setNotifyemail(''); 
+      } else {
+        toast.error(data.message || 'Failed to join');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      toast.error('Failed to connect to server');
+    }
   };
 
   return (
