@@ -1,7 +1,12 @@
-import React from 'react'
+import React, { memo } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query';
 import { formatMemberSinceDate } from '@/utils/date';
+
+import { solarModeAtom, flashlightModeAtom } from '@/components/ThemeAtom';
+import { useAtom } from 'jotai';
+import SpotlightEffect from '@/components/SpotLight';
+import LaggingSpotlight from '@/components/FlashLight';
 
 const ViewBlogPage = () => {
 
@@ -37,14 +42,19 @@ const ViewBlogPage = () => {
   const fallbackImage = "https://shorturl.at/6w7NB";
 
   const blogSinceDate = formatMemberSinceDate(blog?.createdAt);
-  console.log(blog?.content);
+
+  const [solarMode, setSolarMode] = useAtom(solarModeAtom);
+  const [flashlightMode, setFlashlightMode] = useAtom(flashlightModeAtom);
+
   return (
     <>
-      <div className='w-full min-h-screen'>
-        <div className="relative w-[60%] my-10 mx-auto bg-white">
+      {solarMode && <SpotlightEffect />}
+      {flashlightMode && <LaggingSpotlight />}
+      <div className='w-full min-h-screen bg-gray-100 dark:bg-gray-900'>
+        <div className="relative w-[60%] my-10 mx-auto bg-gray-100 dark:bg-gray-900">
           <div className="relative h-fit-content bg-cover bg-center">
             <div className="break-words whitespace-normal">
-              <h2 className="text-3xl sm:text-4xl font-bold text-black">{blog?.title}</h2>
+              <h2 className="text-3xl sm:text-4xl font-bold text-black dark:text-white">{blog?.title}</h2>
             </div>
             <div className='flex flex-row items-center mt-5'>
               <img
@@ -52,10 +62,10 @@ const ViewBlogPage = () => {
                 alt={ownerInfo?.username}
                 className="w-8 h-8 rounded-full"
               />
-              <button className="text-black hover:text-gray-700 text-lg ml-2"><Link to={`/profile/${ownerInfo?.username}`}>          
+              <button className="text-black hover:text-gray-700 dark:text-white dark:hover:text-gray-300 text-lg ml-2"><Link to={`/profile/${ownerInfo?.username}`}>          
                 <span>{ownerInfo?.username}</span>
               </Link></button>
-              <div className='ml-auto text-gray-500 text-lg'>
+              <div className='ml-auto text-gray-500 dark:text-gray-400 text-lg'>
                 {blogSinceDate}
               </div>
             </div>
@@ -70,7 +80,7 @@ const ViewBlogPage = () => {
           </div>
 
           <div className="mt-5 bg">
-            <div className='text-black text-lg'>
+            <div className='text-black text-lg dark:text-white'>
             <div dangerouslySetInnerHTML={{ __html: blog?.content }} />
             </div>
           </div>
