@@ -6,6 +6,7 @@ import HomePage from './pages/HomePage'
 import { Route, Routes } from 'react-router-dom'
 import BlogCard from './components/BlogCard'
 import SignInPage from './pages/SignInPage'
+import ViewBlogPage from './pages/ViewBlogPage'
 import BlogPage from './pages/BlogPage'
 import ProjectPage from './pages/ProjectPage'
 import CreateBlogPage from './pages/CreateBlogPage'
@@ -73,6 +74,7 @@ function App() {
             <Route path='/signup' element={<SignUpPage/>}/>
             <Route path='/overview' element={<SignInSuccessPage/>}/>
             <Route path='/test' element={<TestPage/>}/>
+            <Route path='/viewblog/:id' element={<ViewBlogPage/>}/>
           </Routes> 
           <Toaster/>
         </Box>

@@ -387,7 +387,7 @@ const ProfilePage = () => {
 						<div className='flex gap-2 flex-wrap'>
 							<div className='flex gap-2 items-center'>
 								<IoCalendarOutline className='w-4 h-4 text-slate-500' />
-								<span className='text-md text-slate-500'>{memberSinceDate}</span>
+								<span className='text-md text-slate-500'>Joined {memberSinceDate}</span>
 							</div>
 						</div>
 						<div className='flex gap-2'>

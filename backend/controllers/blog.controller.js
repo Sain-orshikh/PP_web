@@ -3,6 +3,21 @@ import {v2 as cloudinary} from "cloudinary";
 import User from "../models/user.model.js";
 import Blog from "../models/blog.model.js";
 
+export const fetchBlog = async (req,res) => {
+	const blogId = req.params.id;
+	try {
+		const blog = await Blog.findById(blogId).populate({
+			path: "ownerId",
+			select: "username",
+		});
+		if(!blog) return res.status(404).json({error: "Blog not found"});
+		res.status(200).json(blog);
+	} catch (error) {
+		console.log("error in fetching blog:", error.message);
+		res.status(500).json({ success: false, message: "Server Error" });
+	}
+}
+
 export const fetchBlogs = async (req, res) => {
 	try {
 		const blogs = await Blog.find().sort({createdAt: -1}).populate({

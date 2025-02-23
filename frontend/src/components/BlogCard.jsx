@@ -34,21 +34,6 @@ function BlogCard({blog, onUpdate, inprofile, inhomepage}) {
         }
       },
     });
-    const {data: ownerInfo} = useQuery({
-      queryKey: ["ownerInfo", blog.ownerId.username],
-      queryFn: async () => {
-        try {
-          const res = await fetch(`/api/users/profile/${blog.ownerId.username}`);
-          const data = await res.json();
-          if (!res.ok) throw new Error(data.error || "Failed to fetch user");
-          console.log("Owner info:", data);
-          return data;
-        } catch (error) {
-          console.error("Error fetching owner info:", error);
-          throw error;
-        }
-      },
-    });
 
     const {mutate: updateBlog} = useMutation({
       mutationFn: async (updatedBlog) => {
@@ -127,7 +112,6 @@ function BlogCard({blog, onUpdate, inprofile, inhomepage}) {
       setmodalOpen(false)
     };
 
-    const [viewBlogModal, setviewBlogModal] = useState(false);
     const fallbackImage = "https://shorturl.at/6w7NB";
     
     const [previewModalBodyOpen, setpreviewModalBodyOpen] = useState(false);
@@ -161,7 +145,8 @@ function BlogCard({blog, onUpdate, inprofile, inhomepage}) {
     return (
       <>
           <Box className="w-[22rem] min-h-[14rem] rounded-sm border border-gray-500 transition-transform transform hover:-translate-y-1.5">
-            <button onClick={() => {setviewBlogModal(true)}} className="w-full h-[12rem] border-b border-gray-500">
+            <button className="w-full h-[12rem] border-b border-gray-500">
+              <Link to={`/viewblog/${blog?._id}`}>
               <div className="w-full h-[12rem] border-b border-gray-500">
                 <img
                   src={blog.image}
@@ -173,6 +158,7 @@ function BlogCard({blog, onUpdate, inprofile, inhomepage}) {
                   }}
                 />
               </div>
+              </Link>
             </button>
           <div className="flex flex-row">
             <div><button onClick={handleEditOpen} className={`ml-2 ${inprofile ? `text-white` : ``} ${inhomepage ? `dark:text-black` : `dark:text-white`}`}><FaRegEdit fontSize={25}/></button></div>  
@@ -243,41 +229,6 @@ function BlogCard({blog, onUpdate, inprofile, inhomepage}) {
                     <span className='text-white capitalize ml-1'>Cancel</span>
                   </Button>
                 </div>
-              </div>
-            </div>
-          </div>
-        </Modal>
-        <Modal
-          open={viewBlogModal}
-          onClose={() => {setviewBlogModal(false)}}
-          className="overflow-y-auto" 
-        >
-          <div className="relative w-[70%] min-h-[50%] sm:min-h-[80%] mx-auto my-10 bg-white shadow-lg rounded-lg">
-            <div className="relative h-40 sm:h-80 bg-cover bg-center">
-              <img 
-                src={blog.image}
-                className="w-full h-full"
-                onError={(e) => {
-                  e.target.onerror = null; // Prevent infinite loop if fallback fails
-                  e.target.src = fallbackImage; // Fallback image URL
-                }}
-              />
-              <button className="z-10 text-black"><Link to={`/profile/${ownerInfo?.username}`}>By: {ownerInfo?.username}</Link></button>
-              <div className="absolute inset-0 bg-gradient-to-b from-black/0 to-black/10"></div>
-              <button
-                className="absolute top-4 right-4 text-white hover:text-gray-300"
-                onClick={() => {setviewBlogModal(false)}}
-              >
-                <i className="fas fa-times text-2xl"></i>
-              </button>
-              <div className="absolute bottom-0 left-0 right-0 p-6 break-words whitespace-normal">
-                <h2 className="text-3xl sm:text-4xl font-bold text-white">{blog.title}</h2>
-              </div>
-            </div>
-
-            <div className="p-4 sm:p-8">
-              <div className="break-words whitespace-pre-wrap text-sm sm:text-md">
-                <div dangerouslySetInnerHTML={{ __html: blog.content }} />
               </div>
             </div>
           </div>

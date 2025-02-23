@@ -38,6 +38,7 @@ export default {
     'text-white',
   ],
   plugins: [
+    require('@tailwindcss/typography'),
     plugin(function({ addBase }) {
       addBase({
         ':root': {
@@ -49,4 +50,3 @@ export default {
     }),
   ],
 }
-

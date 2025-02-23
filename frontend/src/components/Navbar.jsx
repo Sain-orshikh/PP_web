@@ -31,12 +31,18 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useQuery } from '@tanstack/react-query';
 import { TextShimmer } from './ui/shimmertext';
 import { LuNewspaper } from "react-icons/lu";
+import toast from 'react-hot-toast';
 
 //import IsSmallScreen from '../modes/isSmallScreen'
 
 function Navbar() {
 
   const {data:authUser} = useQuery({queryKey:["authUser"]});
+
+  const [showToast, setShowToast] = useState(() => {
+    const hasShownToast = localStorage.getItem('hasShownDarkModeToast');
+    return hasShownToast === null;
+  });
 
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -85,6 +91,11 @@ function Navbar() {
 
   const handleDarkMode = () => {
     setDarkMode();
+    if(showToast){
+      setShowToast(false);
+      localStorage.setItem('hasShownDarkModeToast', 'true');
+      toast.success("Try swiping!");
+    }
   };
 
   const [showDarkMode, setShowDarkMode] = useState(true);
@@ -393,6 +404,3 @@ function Navbar() {
 }
 
 export default Navbar
-
-
-
