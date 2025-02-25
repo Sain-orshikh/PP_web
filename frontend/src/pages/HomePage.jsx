@@ -394,7 +394,7 @@ function HomePage() {
             </div>
             <div>
               <button className={`text-2xl font-harmonique mt-3 rounded-md bg-orange-500 hover:bg-purple-700 text-black px-4`}>
-                <Link to={"/blogs"}>
+                <Link to={"/blog"}>
                     See All Blogs
                 </Link>
               </button>

@@ -1,71 +1,109 @@
-import { useState, useEffect, useRef } from "react";
+import React from 'react';
+import tropiccity from "../assets/tropiccity.jpg";
+import hat from "../assets/hat2.png";
+import pxlmoon from "../assets/pxlmoon.jpg";
+import skybg from "../assets/skybg.jpg";
+import tornppr from "../assets/starry night.jpg";
+import wood from "../assets/wood.jpg";
+import ocean from "../assets/ocean.jpg";
 
-export default function LaggingSpotlight() {
-  const [mouse, setMouse] = useState({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
-  const spotlightRadius = 300; // Adjust size of the spotlight
-  const spotlightPos = useRef({ x: mouse.x, y: mouse.y });
+import biology from "../assets/leave.png";
+import chemistry from "../assets/chemical-reaction.png";
+import physics from "../assets/atom.png";
+import economy from "../assets/economy.png";
+import environment from "../assets/planet-earth.png";
 
-  useEffect(() => {
-    const updateMousePosition = (e) => {
-      setMouse({ x: e.clientX, y: e.clientY });
-    };
+import { InfiniteSlider } from "../components/ui/infinite-slider";
 
-    window.addEventListener("mousemove", updateMousePosition);
-    return () => window.removeEventListener("mousemove", updateMousePosition);
-  }, []);
-
-  useEffect(() => {
-    let animationFrame;
-
-    const moveSpotlight = () => {
-      // Linear Interpolation (Lerp) for smooth movement
-      spotlightPos.current.x += (mouse.x - spotlightPos.current.x) * 0.1; // Adjust the 0.1 for more/less lag
-      spotlightPos.current.y += (mouse.y - spotlightPos.current.y) * 0.1;
-
-      document.documentElement.style.setProperty("--spotlight-x", `${spotlightPos.current.x}px`);
-      document.documentElement.style.setProperty("--spotlight-y", `${spotlightPos.current.y}px`);
-
-      animationFrame = requestAnimationFrame(moveSpotlight);
-    };
-
-    animationFrame = requestAnimationFrame(moveSpotlight);
-    return () => cancelAnimationFrame(animationFrame);
-  }, [mouse]);
+const ProjectPage = () => {
 
   return (
-    <div className="relative">
-      {/* Overlay */}
-      <div
-        className="fixed inset-0 bg-black pointer-events-none transition-opacity duration-300"
-        style={{
-          WebkitMaskImage: `radial-gradient(circle ${spotlightRadius}px at var(--spotlight-x, 50%) var(--spotlight-y, 50%), transparent 0%, black 100%)`,
-          maskImage: `radial-gradient(circle ${spotlightRadius}px at var(--spotlight-x, 50%) var(--spotlight-y, 50%), transparent 0%, black 100%)`,
-        }}
-      ></div>
-
-      {/* Content */}
-      <div className="p-10 space-y-4">
-        <h1 className="text-3xl font-bold text-white">
-          Move your mouse! The spotlight now lags behind.
-        </h1>
-        <p className="text-white">
-          The spotlight follows your mouse but with a smooth delay effect.
-        </p>
-
-        {/* Image Div */}
-        <div className="w-64 h-40 bg-gray-300 flex items-center justify-center">
+    <>
+      <div className='flex flex-col w-full min-h-screen bg-gray-100 dark:bg-gray-900'>
+        <div className='flex flex-col justify-center items-center min-h-[18rem]'>
           <img
-            src="https://via.placeholder.com/150"
-            alt="Sample"
-            className="w-full h-full object-cover"
+            src={hat}
+            alt="hand"
+            className='w-[25%]'
           />
+          <div className='text-5xl font-harmonique font-bold mt-10'>
+            Student research hub
+          </div>
         </div>
 
-        {/* Some more content */}
-        <div className="bg-yellow-400 p-4 rounded-lg text-black text-xl font-bold">
-          Keep moving the mouse to see the lag effect!
+        {/* The photos from the process will be here */}
+        <div className="w-full py-12 space-y-8">
+          <InfiniteSlider duration={60}>
+            <img src={pxlmoon} alt="Pixel Moon" className="w-[500px] h-[300px] object-cover rounded-lg" />
+            <img src={skybg} alt="Pixel Moon" className="w-[500px] h-[300px] object-cover rounded-lg" />
+            <img src={tornppr} alt="Pixel Moon" className="w-[500px] h-[300px] object-cover rounded-lg" />
+            <img src={wood} alt="Pixel Moon" className="w-[500px] h-[300px] object-cover rounded-lg" />
+            <img src={ocean} alt="Pixel Moon" className="w-[500px] h-[300px] object-cover rounded-lg" />
+          </InfiniteSlider>
+          <InfiniteSlider duration={60} reverse={true}>
+            <img src={pxlmoon} alt="Pixel Moon" className="w-[500px] h-[300px] object-cover rounded-lg" />
+            <img src={skybg} alt="Pixel Moon" className="w-[500px] h-[300px] object-cover rounded-lg" />
+            <img src={tornppr} alt="Pixel Moon" className="w-[500px] h-[300px] object-cover rounded-lg" />
+            <img src={wood} alt="Pixel Moon" className="w-[500px] h-[300px] object-cover rounded-lg" />
+            <img src={ocean} alt="Pixel Moon" className="w-[500px] h-[300px] object-cover rounded-lg" />
+          </InfiniteSlider>
+        </div>
+
+        <div className='flex flex-row justify-evenly items-center w-full h-[24rem] mt-5' style={{backgroundImage: `url(${tropiccity})`, backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat" }}>
+          <div className='w-[15%]'>
+            <img
+            src={physics}
+            alt="Physics"
+            className="w-full"
+            />
+            <div className='flex justify-center text-3xl font-bold'>
+              Physics
+            </div>
+          </div>
+          <div className='w-[15%]'>
+            <img
+            src={biology}
+            alt="Biology"
+            className="w-full"  
+            />
+            <div className='flex justify-center'>
+              Biology
+            </div>
+          </div>
+          <div className='w-[15%]'>
+            <img
+            src={chemistry}
+            alt="Chemistry"
+            className="w-full"
+            />
+            <div className='flex justify-center'>
+              Chemistry
+            </div>
+          </div>
+          <div className='w-[15%]'>
+            <img
+            src={economy}
+            alt="Economy"
+            className="w-full"
+            />
+            <div className='flex justify-center'>
+              Economy
+            </div>
+          </div>
+          <div className='w-[15%]'>
+            <img
+            src={environment}
+            alt="Environment"
+            className="w-full"
+            />
+            <div className='flex justify-center'>
+              Environment
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  );
+    </>
+  )
 }
+
+export default ProjectPage
