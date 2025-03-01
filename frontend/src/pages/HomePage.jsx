@@ -510,7 +510,7 @@ function HomePage() {
 
             <div className="flex flex-col w-full mt-5 sm:mt-0">
               <div className="ml-0 sm:ml-auto">
-                <div className="flex flex-row text-xl space-x-2 items-center text-white dark:text-black">
+                <div className="flex flex-row text-md xs:text-xl space-x-2 items-center text-white dark:text-black">
                   <div>Found a bug?</div>
                   <div><FaBug fontSize={20} /></div>
                   <div className="ml-2">Help us improve</div>

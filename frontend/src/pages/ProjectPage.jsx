@@ -1,15 +1,15 @@
 import React from 'react';
 
-import { Grid2 } from '@mui/material';
+import { Grid2, Dialog, DialogTitle, DialogContent } from '@mui/material';
 import toast from 'react-hot-toast';
 
 import { solarModeAtom, flashlightModeAtom } from '@/components/ThemeAtom';
 import { useAtom } from 'jotai';
 import SpotlightEffect from '@/components/SpotLight';
 import LaggingSpotlight from '@/components/FlashLight';
+import ProjectCard from '@/components/ProjectCard';
 
-import tropiccity from "../assets/tropiccity.jpg";
-import hat from "../assets/hat2.png";
+import hat from "../assets/hat3.png";
 import pxlmoon from "../assets/pxlmoon.jpg";
 import skybg from "../assets/skybg.jpg";
 import tornppr from "../assets/starry night.jpg";
@@ -28,17 +28,37 @@ import { FaInstagram } from "react-icons/fa"
 import { FaFacebookSquare } from "react-icons/fa";
 import { FaBug } from "react-icons/fa6";
 import { FaTools } from "react-icons/fa";
+import { TbLoader } from "react-icons/tb";
 
 import { InfiniteSlider } from "../components/ui/infinite-slider";
+import { useState } from "react";
 
 const ProjectPage = () => {
 
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  const [category, setCategory] = useState('');
+  
   const handleButtonClick = (category) => {
-    toast.success(`Clicked on ${category}`);
+    setCategory(category);
+    handleOpen();
   };
 
   const [isSolarMode] = useAtom(solarModeAtom);
   const [isFlashLightMode] = useAtom(flashlightModeAtom);
+
+  const [visibleProjects, setVisibleProjects] = useState(2);
+
+  const handleShowMore = () => {
+    setVisibleProjects(prev => prev + 2);
+  };
+
+  let displayedProjects = [];
+
+  {//displayedProjects = projects.filter(project => project.category === category).slice(0, visibleProjects);
+  }
 
   return (
     <>
@@ -233,7 +253,7 @@ const ProjectPage = () => {
             </div>
             <div className="flex flex-col w-full mt-5 sm:mt-0">
               <div className="ml-0 sm:ml-auto">
-                <div className="flex flex-row text-xl space-x-2 items-center text-black dark:text-white">
+                <div className="flex flex-row text-md xs:text-xl space-x-2 items-center text-black dark:text-white">
                   <div>Found a bug?</div>
                   <div><FaBug fontSize={20} /></div>
                   <div className="ml-2">Help us improve</div>
@@ -249,6 +269,37 @@ const ProjectPage = () => {
           </div>
         </div>
       </div>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        maxWidth="lg"
+        fullWidth
+        scroll="paper"
+      >
+        <DialogTitle className='bg-white dark:bg-black'>
+          <span className='text-4xl font-bold dark:text-white'>
+            {category}
+          </span>
+        </DialogTitle>
+        <DialogContent dividers className='dark:bg-gray-900'>
+          <Grid2 container spacing={2} className='w-full flex justify-evenly'>
+            <Grid2 xs={12} sm={6}>
+              <ProjectCard />  
+            </Grid2>
+            <Grid2 xs={12} sm={6}>
+              <ProjectCard />  
+            </Grid2>
+          </Grid2>
+          <div className='flex flex-row justify-center w-full mt-5'>
+            <div className='rounded-md hover:bg-gray-200'>
+              <button onClick={handleShowMore} className="flex flex-row items-center bg-black dark:bg-white hover:bg-gray-900 dark:hover:bg-gray-200 rounded px-2 py-1.5 text-white">
+                <span className='capitalize text-white dark:text-black text-lg'>Load more</span>
+                <span className='text-white dark:text-black ml-1'><TbLoader fontSize={25}/></span>
+              </button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </>
   )
 }

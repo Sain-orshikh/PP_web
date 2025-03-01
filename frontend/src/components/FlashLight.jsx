@@ -34,7 +34,7 @@ export default function LaggingSpotlight() {
 
   return (
       <div
-        className="fixed inset-0 bg-black pointer-events-none z-40"
+        className="fixed inset-0 bg-black pointer-events-none z-20"
         style={{
           WebkitMaskImage: `radial-gradient(circle ${spotlightRadius}px at var(--spotlight-x, 50%) var(--spotlight-y, 50%), transparent 0%, black 100%)`,
           maskImage: `radial-gradient(circle ${spotlightRadius}px at var(--spotlight-x, 50%) var(--spotlight-y, 50%), transparent 0%, black 100%)`,

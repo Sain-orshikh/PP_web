@@ -24,7 +24,7 @@ const ProjectCard = ({project, bg}) => {
                     <div className='text-gray-700 dark:text-gray-200 ml-1'>Author name</div>
                     <div className='rounded-md bg-pink-200 p-2 mr-1'>Project type</div>
                 </div>
-                <div className={`text-black dark:text-white font-harmonique text-xl ml-1`}>Project title</div>
+                <div className={`text-black dark:text-white text-xl ml-1`}>Project title</div>
                 <div className='text-gray-700 dark:text-gray-200 ml-1 mb-3'>Project date</div>
             </div>
         </Tilt>
