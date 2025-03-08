@@ -2,6 +2,8 @@ import React from 'react'
 
 import { lineSpinner } from 'ldrs'
 
+import TransitionAnimation from '../components/TransitionAnimation'
+
 lineSpinner.register()
 
 // Default values shown
@@ -11,6 +13,7 @@ const TestPage = () => {
   const content = '<p>ASSSSn asdasda    askkdksdksdka   asjdaljsdlkajsdlkad     asjdalsdaskdadsa    <strong>  asdadsad</strong></p>';
   return (
     <>
+    <TransitionAnimation></TransitionAnimation>
     <l-line-spinner
       size="40"
       stroke="3"
