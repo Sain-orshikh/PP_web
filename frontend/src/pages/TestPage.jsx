@@ -10,10 +10,21 @@ lineSpinner.register()
 
 
 const TestPage = () => {
+
   const content = '<p>ASSSSn asdasda    askkdksdksdka   asjdaljsdlkajsdlkad     asjdalsdaskdadsa    <strong>  asdadsad</strong></p>';
+  
+  const [render, setRender] = React.useState(false);
+  React.useEffect(() => {
+    setTimeout(() => {
+      setRender(true);
+    }, 200);
+  }, []);
+
   return (
     <>
     <TransitionAnimation></TransitionAnimation>
+    {render && (
+    <>
     <l-line-spinner
       size="40"
       stroke="3"
@@ -22,6 +33,8 @@ const TestPage = () => {
     ></l-line-spinner>
     <div>TestPage</div>
     <div dangerouslySetInnerHTML={{ __html: content }} />
+    </>
+    )}
     </>
   )
 }

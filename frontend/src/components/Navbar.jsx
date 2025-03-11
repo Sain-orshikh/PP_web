@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useAtom } from 'jotai';
 import { flashlightModeWithEffectAtom } from './ThemeAtom';
 import { darkModeWithEffectAtom } from './ThemeAtom';
@@ -63,6 +63,12 @@ function Navbar() {
       document.documentElement.classList.remove("dark");
     };
 
+  const [isSmall, setIsSmall] = useState(false);
+
+  useEffect(() => {
+    setIsSmall(window.innerWidth <= 640);
+  }, []);
+
   const handleOpen = (event) => {
     setAnchorEl(event.currentTarget); // Set the button as the anchor
   };
@@ -91,7 +97,7 @@ function Navbar() {
 
   const handleDarkMode = () => {
     setDarkMode();
-    if(showToast){
+    if(showToast && isSmall){
       setShowToast(false);
       localStorage.setItem('hasShownDarkModeToast', 'true');
       toast.success("Try swiping!");

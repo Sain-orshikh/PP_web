@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom';
 import { Button, Box, Table, TableRow, Typography, TableHead, TableBody, Grid2 } from '@mui/material'
 import BGpic from "../assets/starry night.jpg"
@@ -10,6 +10,7 @@ import { useAtom } from 'jotai';
 import { solarModeAtom } from '@/components/ThemeAtom';
 import { flashlightModeAtom } from '@/components/ThemeAtom';
 import LaggingSpotlight from '@/components/FlashLight';
+import TransitionAnimation from '@/components/TransitionAnimation';
 
 function BlogPage() {
 
@@ -50,8 +51,18 @@ function BlogPage() {
     queryClient.invalidateQueries({queryKey: ['blogs']});
   };
 
+  const [render, setRender] = useState(false);
+  useEffect(() => {
+    setTimeout(() => {
+      setRender(true);
+    }, 200);
+  }, []);
+
   return (
     <>
+    <TransitionAnimation></TransitionAnimation>
+      {render && (
+      <>
       <Box className="flex flex-col justify-between w-full min-h-screen bg-gray-100 dark:bg-gray-900 pt-3">
         <Table>
           <TableHead>
@@ -128,6 +139,8 @@ function BlogPage() {
         </Table>
       </Box>
       {/*<div className='flex flex-row h-[5rem] w-full bg-white'></div>*/}
+      </>
+    )}
     </>
   )
 }
