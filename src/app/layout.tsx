@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+
+import Navbar from "@/components/Navbar";
 import "./globals.css";
+
+import ReactQueryProvider from '@/components/ReactQueryProvider';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -17,6 +21,8 @@ export const metadata: Metadata = {
   description: "A modern portfolio and blog platform built with Next.js",
 };
 
+
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -24,10 +30,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <ReactQueryProvider>
+          <Navbar />
+          {children}
+        </ReactQueryProvider>
       </body>
     </html>
   );

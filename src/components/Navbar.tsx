@@ -1,40 +1,34 @@
+'use client';
+
 import * as React from 'react';
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react';
 import { useAtom } from 'jotai';
-import { flashlightModeWithEffectAtom } from './ThemeAtom';
-import { darkModeWithEffectAtom } from './ThemeAtom';
-import { solarModeWithEffectAtom } from './ThemeAtom';
-
-import { Button, Box, Menu, MenuItem } from '@mui/material'
-import Link from 'next/link'
-import { FaUserCircle, FaPenSquare } from "react-icons/fa";
-import { FaBookOpen } from "react-icons/fa6";
-
-import { FaSun } from "react-icons/fa";
-import { FaMoon } from "react-icons/fa";
-import { BsLightbulb } from "react-icons/bs";
-import { BsLightbulbFill } from "react-icons/bs";
-import { BsLightbulbOff } from "react-icons/bs";
-import { BsLightbulbOffFill } from "react-icons/bs";
-
-import { MdFlashlightOff } from "react-icons/md";
-import { MdFlashlightOn } from "react-icons/md";
-import { MdOutlineFlashlightOff } from "react-icons/md";
-import { MdOutlineFlashlightOn } from "react-icons/md";
-
+import { flashlightModeWithEffectAtom, darkModeWithEffectAtom, solarModeWithEffectAtom } from './ThemeAtom';
+import { Button, Menu, MenuItem } from '@mui/material';
+import Link from 'next/link';
+import Image from 'next/image';
+import { FaUserCircle, FaPenSquare, FaBookOpen, FaSun, FaMoon, FaUser, FaSignOutAlt } from "react-icons/fa";
+import { BsLightbulb, BsLightbulbFill } from "react-icons/bs";
+import { MdFlashlightOff, MdFlashlightOn, MdOutlineFlashlightOff, MdOutlineFlashlightOn, MdMenu, MdClose } from "react-icons/md";
 import { BsFillInfoSquareFill } from "react-icons/bs";
 import { VscSignIn } from "react-icons/vsc";
-import { MdMenu } from "react-icons/md";
-
-import { motion, AnimatePresence } from 'framer-motion';
-import { useQuery } from '@tanstack/react-query';
-import { TextShimmer } from './ui/shimmertext';
 import { LuNewspaper } from "react-icons/lu";
+import { motion, AnimatePresence } from 'framer-motion';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { TextShimmer } from './ui/shimmertext';
 import toast from 'react-hot-toast';
+import AuthDialogs from './auth/AuthDialogs';
+
+interface AuthUser {
+  _id: string;
+  username: string;
+  email: string;
+  fullName: string;
+}
 
 const Navbar: React.FC = () => {
-
-  const {data:authUser} = useQuery({queryKey:["authUser"]});
+  const { data: authUser } = useQuery<AuthUser>({ queryKey: ["authUser"] });
+  const queryClient = useQueryClient();
 
   const [showToast, setShowToast] = useState(() => {
     const hasShownToast = localStorage.getItem('hasShownDarkModeToast');
@@ -42,369 +36,343 @@ const Navbar: React.FC = () => {
   });
 
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
-  const open = Boolean(anchorEl);
-
-  const [anchorEl2, setAnchorEl2] = useState<HTMLElement | null>(null);
-  const open2 = Boolean(anchorEl2);
-  const [position, setPosition] = useState({ top: 0, left: 0 });
-  const isProccessingRef = useRef(false);
+  const [userMenuAnchor, setUserMenuAnchor] = useState<HTMLElement | null>(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
 
   const [isSolarMode, setSolarMode] = useAtom(solarModeWithEffectAtom);
-
   const [isFlashlightMode, setFlashlightMode] = useAtom(flashlightModeWithEffectAtom);
-
   const [isDarkMode, setDarkMode] = useAtom(darkModeWithEffectAtom);
-  
+
+  // Logout mutation
+  const { mutate: logout } = useMutation({
+    mutationFn: async () => {
+      const res = await fetch("/api/auth/logout", {
+        method: "POST",
+      });
+      if (!res.ok) {
+        throw new Error("Something went wrong");
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["authUser"] });
+      toast.success("Logged out successfully");
+    },
+    onError: () => {
+      toast.error("Error logging out");
+    },
+  });
+
+  // Apply dark mode class
+  useEffect(() => {
     if (isDarkMode) {
       document.documentElement.classList.add("dark");
     } else {
       document.documentElement.classList.remove("dark");
-    };
+    }
+  }, [isDarkMode]);
 
-  const [isSmall, setIsSmall] = useState(false);
-
+  // Handle scroll effect
   useEffect(() => {
-    setIsSmall(window.innerWidth <= 640);
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const handleOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget); // Set the button as the anchor
+  const handleThemeMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
   };
 
-  const handleClose = () => {
+  const handleThemeMenuClose = () => {
     setAnchorEl(null);
   };
 
-  const handleOpen2 = (event: React.MouseEvent<HTMLButtonElement>) => {
-    const rect = event.currentTarget.getBoundingClientRect();
-    setPosition({ top: rect.bottom, left: rect.left }); // Store button's position
-    setAnchorEl2(event.currentTarget);
+  const handleUserMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setUserMenuAnchor(event.currentTarget);
   };
 
-  const handleClose2 = () => {
-    setAnchorEl2(null); 
+  const handleUserMenuClose = () => {
+    setUserMenuAnchor(null);
   };
 
   const handleSolarMode = () => {
     setSolarMode();
+    handleThemeMenuClose();
   };
 
   const handleFlashlightMode = () => {
     setFlashlightMode();
+    handleThemeMenuClose();
   };
 
   const handleDarkMode = () => {
     setDarkMode();
-    if(showToast && isSmall){
+    handleThemeMenuClose();
+    if (showToast) {
       setShowToast(false);
       localStorage.setItem('hasShownDarkModeToast', 'true');
-      toast.success("Try swiping!");
+      toast.success('Dark mode enabled!');
     }
   };
 
-  const [showDarkMode, setShowDarkMode] = useState(true);
-  const [showSolarButton, setShowSolarButton] = useState(false);
-  const [showFlashLightButton, setShowFlashLightButton] = useState(false);
-  const [touchStartX, setTouchStartX] = useState<number | null>(null);
-
-  const handleTouchStart = (e: React.TouchEvent) => {
-    setTouchStartX(e.touches[0].clientX);
-  };
-
-  const handleSwipe = () => {
-    if(showFlashLightButton){
-      setShowFlashLightButton(false);
-      setShowDarkMode(true);
-    }
-    else if(showDarkMode){
-      setShowDarkMode(false);
-      setShowSolarButton(true);
-    }
-    else{
-      setShowSolarButton(false);
-      setShowFlashLightButton(true);
-    }
-  };
-
-  const handleTouchEnd = (e: React.TouchEvent) => {
-    if (!touchStartX) return;
-
-    const touchEndX = e.changedTouches[0].clientX;
-    const diffX = touchEndX - touchStartX;
-
-    if (diffX > 50) {
-      handleSwipe();
-    } else {
-      if (showSolarButton) {
-        handleSolarMode();
-      }
-      else if(showFlashLightButton){
-        handleFlashlightMode();
-      }
-      else {
-        handleDarkMode();
-      }
-    }
-
-    setTouchStartX(null);
-
-    isProccessingRef.current = true;
-
-    setTimeout(() => {
-      isProccessingRef.current = false;
-    }, 1000);
+  const toggleMobileMenu = () => {
+    setMobileMenuOpen(!mobileMenuOpen);
   };
 
   return (
-    <>
-      <div className="flex flex-row justify-between items-center w-full bg-white dark:bg-gray-100 p-1 shadow-md z-30 fixed top-0">
-        <Box className="flex justify-start items-center w-[80%] sm:w-[30%]">
-          {/*<img>Passion project logo has to go here</img>*/}
-          <button><Link href={"/"}><img src="/assets/pp-logo.png" className=""/></Link></button>
-          <button><Link href={"/"}><TextShimmer
-            as="span"
-            duration={1.5}
-            className="text-3xl     [--base-color:theme(colors.cyan.400)] 
-          [--base-gradient-color:theme(colors.blue.500)] font-harmonique ml-5"
-          >
-            Passion Project
-          </TextShimmer></Link></button>
-        </Box>
-        <Box className="flex flex-row text-end items-center text-black hidden space-x-3 sm:block ">
-          <Button className=''>
-            <Link href={'/test'} className="text-sky-500 text-md hover:text-black">
-              Test
+    <motion.nav
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
+        isScrolled
+          ? 'bg-white/90 dark:bg-gray-900/90 backdrop-blur-md shadow-lg'
+          : 'bg-transparent'
+      }`}
+    >
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-16">
+          {/* Logo */}
+          <Link href="/" className="flex items-center space-x-3">
+            <div className="relative w-10 h-10">
+              <Image
+                src="/assets/pp-logo.png"
+                alt="PP Logo"
+                width={40}
+                height={40}
+                className="rounded-lg"
+              />
+            </div>
+            <TextShimmer className="text-xl font-bold text-gray-900 dark:text-white">
+              PeerPro
+            </TextShimmer>
+          </Link>
+
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center space-x-8">
+            <Link
+              href="/blog"
+              className="flex items-center space-x-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200"
+            >
+              <LuNewspaper size={18} />
+              <span>Blog</span>
             </Link>
-          </Button>
-          <Button className=''>
-            <Link href={'/about'} className="text-sky-500 text-md hover:text-black">
-              About
+            <Link
+              href="/projects"
+              className="flex items-center space-x-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200"
+            >
+              <FaBookOpen size={18} />
+              <span>Projects</span>
             </Link>
-          </Button>
-          <Button>
-            <Link href={'/blog'} className="text-indigo-500 text-md hover:text-black">
-              Blog
+            <Link
+              href="/create"
+              className="flex items-center space-x-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200"
+            >
+              <FaPenSquare size={18} />
+              <span>Create</span>
             </Link>
-          </Button>
-          <Button>
-            <Link href={'/create'} className="text-emerald-500 text-md hover:text-black">{/* text-amber-500 */}
-              Create
+            <Link
+              href="/about"
+              className="flex items-center space-x-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200"
+            >
+              <BsFillInfoSquareFill size={18} />
+              <span>About</span>
             </Link>
-          </Button>
-          <Button>
-            <Link href={'/project'} className='text-amber-500 text-md hover:text-black'>
-              Project
-            </Link>
-          </Button>
-          <Button 
-            id="menu-button-2"
-            aria-controls={open2 ? 'menu-2' : undefined}
-            aria-haspopup="true"
-            aria-expanded={open2 ? 'true' : undefined}
-            onClick={handleOpen2}
-          >
-            {isDarkMode && (
-              <FaMoon fontSize={30} className='text-gray-400 hover:text-blue-500'/>
-            )}
-            {!isDarkMode && (
-              <FaSun fontSize={30} className='text-amber-500 hover:text-blue-500'/>
-            )}
-          </Button>
-          <Menu
-            id='menu-2'
-            anchorEl={anchorEl2}
-            open={open2}
-            onClose={handleClose2}
-            MenuListProps={{
-              'aria-labelledby': 'menu-button-2',
-            }}
-            anchorReference='anchorPosition'
-            anchorPosition={{ top: position.top, left: position.left }}
-          >
-            <MenuItem>
-              {isDarkMode && (
-                <FaMoon fontSize={30} onClick={handleDarkMode} className='text-gray-400 hover:text-blue-500'/>
-              )}
-              {!isDarkMode && (
-                <FaSun fontSize={30} onClick={handleDarkMode} className='text-amber-500 hover:text-blue-500'/>
-              )}
-            </MenuItem>
-            <MenuItem>
+          </div>
+
+          {/* Right Side - Theme Toggle & Auth */}
+          <div className="flex items-center space-x-4">
+            {/* Theme Toggle Button */}
+            <Button
+              onClick={handleThemeMenuOpen}
+              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200"
+            >
               {isDarkMode && isSolarMode && (
-                <BsLightbulbOffFill fontSize={30} onClick={handleSolarMode} className='hover:text-blue-500'/>
-              )}
-              {!isDarkMode && isSolarMode && (
-                <BsLightbulbOff fontSize={30} onClick={handleSolarMode} className='hover:text-blue-500'/>
+                <BsLightbulbFill className="text-yellow-500" size={20} />
               )}
               {isDarkMode && !isSolarMode && (
-                <BsLightbulbFill fontSize={30} onClick={handleSolarMode} className='hover:text-blue-500'/>
+                <FaMoon className="text-blue-400" size={20} />
+              )}
+              {!isDarkMode && isSolarMode && (
+                <BsLightbulb className="text-yellow-600" size={20} />
               )}
               {!isDarkMode && !isSolarMode && (
-                <BsLightbulb fontSize={30} onClick={handleSolarMode} className='hover:text-blue-500'/>
+                <FaSun className="text-yellow-500" size={20} />
               )}
-            </MenuItem>
-            <MenuItem>
+            </Button>
+
+            {/* Flashlight Toggle */}
+            <Button
+              onClick={handleFlashlightMode}
+              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200"
+            >
               {isDarkMode && isFlashlightMode && (
-                <MdFlashlightOff fontSize={30} onClick={handleFlashlightMode} className='hover:text-blue-500'/>
+                <MdFlashlightOff className="text-gray-400" size={20} />
               )}
               {!isDarkMode && isFlashlightMode && (
-                <MdOutlineFlashlightOff fontSize={30} onClick={handleFlashlightMode} className='hover:text-blue-500'/>
+                <MdOutlineFlashlightOff className="text-gray-600" size={20} />
               )}
               {isDarkMode && !isFlashlightMode && (
-                <MdFlashlightOn fontSize={30} onClick={handleFlashlightMode} className='hover:text-blue-500'/>
+                <MdFlashlightOn className="text-yellow-400" size={20} />
               )}
               {!isDarkMode && !isFlashlightMode && (
-                <MdOutlineFlashlightOn fontSize={30} onClick={handleFlashlightMode} className='hover:text-blue-500'/>
+                <MdOutlineFlashlightOn className="text-gray-600" size={20} />
               )}
-            </MenuItem>
-          </Menu>
-          <Button>
-            <Link href={'/signin'} className='w-full ml-auto text-black hover:text-blue-500'>
-            {authUser ? (
-              <FaUserCircle fontSize={30} />
-            ) : (
-              <VscSignIn fontSize={30}/>
-            )}
-            </Link>
-          </Button>
-        </Box>
-        <Box className="flex items-center text-black block sm:hidden">
-          <Button
-            id='menu-button-1'
-            aria-controls={open ? 'menu-1' : undefined}
-            aria-haspopup="true"
-            aria-expanded={open ? 'true' : undefined}
-            onClick={handleOpen}>
-            <MdMenu fontSize={40} className='mr-5 text-black'/>
-          </Button>
-        </Box>
-        <Menu
-          id="menu-1"
-          anchorEl={anchorEl}
-          open={open}
-          onClose={handleClose}
-          MenuListProps={{
-            'aria-labelledby': 'menu-button-1',
-          }}
-        >
-          <MenuItem onClick={handleClose}>
-            <Link href={"/blog"} className='text-indigo-500'><FaBookOpen fontSize={30}/></Link>
-          </MenuItem>
-          <MenuItem onClick={handleClose}>
-            <Link href={"/create"} className='text-emerald-500'><FaPenSquare fontSize={30}/></Link>
-          </MenuItem>
-          <MenuItem onClick={handleClose}>
-            <Link href={"/project"} className='text-amber-500'><LuNewspaper fontSize={30}/></Link>
-          </MenuItem>
-          <MenuItem onClick={handleClose}>
-            <Link href={"/about"} className='text-yellow-400'><BsFillInfoSquareFill fontSize={30}/></Link>
-          </MenuItem>
-          <MenuItem>
-        <div
-          className=""
-          onTouchStart={handleTouchStart}
-          onTouchEnd={handleTouchEnd}
-        >
-          <AnimatePresence mode="wait">
-            {showSolarButton && (
-              <motion.button
-                key="solar"
-                exit={{ opacity: 0, x: -10 }}
-                transition={{ duration: 0.3 }}
-                className=""
-                onClick={() => {
-                  if (!isProccessingRef.current){
-                  handleSolarMode();
-                  isProccessingRef.current = true;
-                  setTimeout(() => {
-                    isProccessingRef.current = false;
-                  }, 1000);
-                }
-                }}
-              >
-                {isDarkMode && isSolarMode && (
-                  <BsLightbulbOffFill fontSize={30} className='hover:text-blue-500'/>
-                )}
-                {!isDarkMode && isSolarMode && (
-                  <BsLightbulbOff fontSize={30} className='hover:text-blue-500'/>
-                )}
-                {isDarkMode && !isSolarMode && (
-                  <BsLightbulbFill fontSize={30} className='hover:text-blue-500'/>
-                )}
-                {!isDarkMode && !isSolarMode && (
-                  <BsLightbulb fontSize={30} className='hover:text-blue-500'/>
-                )}
-              </motion.button>
-            )}
-            {showDarkMode && (
-              <motion.button
-                key="dark"
-                exit={{ opacity: 0, x: -10 }}
-                transition={{ duration: 0.3 }}
-                className=""
-                onClick={() => {
-                  if (!isProccessingRef.current){
-                  handleDarkMode();
-                  isProccessingRef.current = true;
-                  setTimeout(() => {
-                    isProccessingRef.current = false;
-                  }, 1000);
-                }
-                }}
-              >
-                {isDarkMode ? (
-                  <FaMoon fontSize={30} className="text-gray-400" />
-                ) : (
-                  <FaSun fontSize={30} className="text-amber-500" />
-                )}
-              </motion.button>
-            )}
-            {showFlashLightButton && (
-              <motion.button
-                key="flashlight"
-                exit={{ opacity: 0, x: -10 }}
-                transition={{ duration: 0.3 }}
-                className=""
-                onClick={() => {
-                  if (!isProccessingRef.current){
-                  handleFlashlightMode();
-                  isProccessingRef.current = true;
-                  setTimeout(() => {
-                    isProccessingRef.current = false;
-                  }, 1000);
-                }
-                }}
-              >
-                {isDarkMode && isFlashlightMode && (
-                  <MdFlashlightOff fontSize={30} className='hover:text-blue-500'/>
-                )}
-                {!isDarkMode && isFlashlightMode && (
-                  <MdFlashlightOn fontSize={30} className='hover:text-blue-500'/>
-                )}
-                {isDarkMode && !isFlashlightMode && (
-                  <MdOutlineFlashlightOff fontSize={30} className='hover:text-blue-500'/>
-                )}
-                {!isDarkMode && !isFlashlightMode && (
-                  <MdOutlineFlashlightOn fontSize={30} className='hover:text-blue-500'/>
-                )}
-              </motion.button>
-            )}
-          </AnimatePresence>
-        </div>
-      </MenuItem>
-          <MenuItem onClick={handleClose} style={{borderTop: '1px solid #ccc'}}>
-            <Link href={"/signin"} className='mt-1.5'>
-            {authUser ? (
-              <FaUserCircle fontSize={30}/>
-            ) : (
-              <VscSignIn fontSize={30}/>
-            )}
-            </Link>
-          </MenuItem>
-        </Menu>
-      </div>
-    </>
-  )
-}
+            </Button>
 
-export default Navbar
+            {/* Auth Button */}
+            {authUser ? (
+              <Button
+                onClick={handleUserMenuOpen}
+                className="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200"
+              >
+                <FaUserCircle className="text-gray-700 dark:text-gray-300" size={24} />
+              </Button>
+            ) : (
+              <AuthDialogs mode="signin">
+                <div className="flex items-center space-x-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors duration-200 cursor-pointer">
+                  <VscSignIn size={18} />
+                  <span className="hidden sm:inline">Sign In</span>
+                </div>
+              </AuthDialogs>
+            )}
+
+            {/* Mobile Menu Button */}
+            <Button
+              onClick={toggleMobileMenu}
+              className="md:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200"
+            >
+              {mobileMenuOpen ? (
+                <MdClose className="text-gray-700 dark:text-gray-300" size={24} />
+              ) : (
+                <MdMenu className="text-gray-700 dark:text-gray-300" size={24} />
+              )}
+            </Button>
+          </div>
+        </div>
+
+        {/* Mobile Menu */}
+        <AnimatePresence>
+          {mobileMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              className="md:hidden bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700"
+            >
+              <div className="px-4 py-6 space-y-4">
+                <Link
+                  href="/blog"
+                  className="flex items-center space-x-3 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200"
+                  onClick={toggleMobileMenu}
+                >
+                  <LuNewspaper size={20} />
+                  <span>Blog</span>
+                </Link>
+                <Link
+                  href="/projects"
+                  className="flex items-center space-x-3 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200"
+                  onClick={toggleMobileMenu}
+                >
+                  <FaBookOpen size={20} />
+                  <span>Projects</span>
+                </Link>
+                <Link
+                  href="/create"
+                  className="flex items-center space-x-3 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200"
+                  onClick={toggleMobileMenu}
+                >
+                  <FaPenSquare size={20} />
+                  <span>Create</span>
+                </Link>
+                <Link
+                  href="/about"
+                  className="flex items-center space-x-3 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200"
+                  onClick={toggleMobileMenu}
+                >
+                  <BsFillInfoSquareFill size={20} />
+                  <span>About</span>
+                </Link>
+                {authUser && (
+                  <>
+                    <hr className="border-gray-200 dark:border-gray-700" />
+                    <Link
+                      href="/profile"
+                      className="flex items-center space-x-3 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200"
+                      onClick={toggleMobileMenu}
+                    >
+                      <FaUser size={20} />
+                      <span>Profile</span>
+                    </Link>
+                    <button
+                      onClick={() => {
+                        logout();
+                        toggleMobileMenu();
+                      }}
+                      className="flex items-center space-x-3 text-red-600 hover:text-red-700 transition-colors duration-200 w-full text-left"
+                    >
+                      <FaSignOutAlt size={20} />
+                      <span>Sign Out</span>
+                    </button>
+                  </>
+                )}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
+      {/* Theme Menu */}
+      <Menu
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={handleThemeMenuClose}
+        PaperProps={{
+          className: 'mt-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg'
+        }}
+      >
+        <MenuItem onClick={handleDarkMode} className="flex items-center space-x-3 px-4 py-3">
+          <FaMoon className="text-blue-400" size={18} />
+          <span className="text-gray-700 dark:text-gray-300">Dark Mode</span>
+        </MenuItem>
+        <MenuItem onClick={handleSolarMode} className="flex items-center space-x-3 px-4 py-3">
+          <BsLightbulb className="text-yellow-500" size={18} />
+          <span className="text-gray-700 dark:text-gray-300">Solar Mode</span>
+        </MenuItem>
+      </Menu>
+
+      {/* User Menu */}
+      <Menu
+        anchorEl={userMenuAnchor}
+        open={Boolean(userMenuAnchor)}
+        onClose={handleUserMenuClose}
+        PaperProps={{
+          className: 'mt-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg'
+        }}
+      >
+        <MenuItem onClick={handleUserMenuClose}>
+          <Link
+            href="/profile"
+            className="flex items-center space-x-3 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200"
+          >
+            <FaUser size={18} />
+            <span>Profile</span>
+          </Link>
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            logout();
+            handleUserMenuClose();
+          }}
+          className="flex items-center space-x-3 text-red-600 hover:text-red-700 transition-colors duration-200"
+        >
+          <FaSignOutAlt size={18} />
+          <span>Sign Out</span>
+        </MenuItem>
+      </Menu>
+    </motion.nav>
+  );
+};
+
+export default Navbar;

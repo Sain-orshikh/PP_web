@@ -97,9 +97,9 @@ const DialogTrigger: React.FC<DialogTriggerProps> = ({ children, className }) =>
   if (!context) throw new Error('DialogTrigger must be used within Dialog');
 
   return (
-    <button onClick={context.handleTrigger} className={cn('button-class', className)}>
+    <div onClick={context.handleTrigger} className={cn('cursor-pointer', className)}>
       {children}
-    </button>
+    </div>
   );
 };
 
@@ -145,7 +145,7 @@ const DialogContent: React.FC<DialogContentProps> = ({ children, className, cont
             variants={variants}
             transition={transition}
             onAnimationComplete={onAnimationComplete}
-            className={cn('dialog-class', className)}
+            className={cn('fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4', className)}
           >
             <div>{children}</div>
           </motion.dialog>
@@ -161,7 +161,7 @@ interface DialogHeaderProps {
 }
 
 const DialogHeader: React.FC<DialogHeaderProps> = ({ children, className }) => {
-  return <div className={cn('header-class', className)}>{children}</div>;
+  return <div className={cn('space-y-2', className)}>{children}</div>;
 };
 
 interface DialogTitleProps {
@@ -170,7 +170,7 @@ interface DialogTitleProps {
 }
 
 const DialogTitle: React.FC<DialogTitleProps> = ({ children, className }) => {
-  return <h2 className={cn('title-class', className)}>{children}</h2>;
+  return <h2 className={cn('text-xl font-semibold', className)}>{children}</h2>;
 };
 
 interface DialogDescriptionProps {
@@ -179,7 +179,7 @@ interface DialogDescriptionProps {
 }
 
 const DialogDescription: React.FC<DialogDescriptionProps> = ({ children, className }) => {
-  return <p className={cn('description-class', className)}>{children}</p>;
+  return <p className={cn('text-sm text-gray-600 dark:text-gray-400', className)}>{children}</p>;
 };
 
 const DialogClose: React.FC = () => {
