@@ -6,18 +6,19 @@ import { getUserFromRequest } from "@/utils/auth";
 // GET /api/blogs/[id]/owner - Check if user owns the blog
 export async function GET(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
         await connectMongoDB();
         
+        const { id } = await params;
         const user = await getUserFromRequest(request);
         if (!user) {
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
         }
 
         const ownerId = user._id;
-        const blogId = params.id;
+        const blogId = id;
 
         const blog = await Blog.findById(blogId);
         if (!blog) {

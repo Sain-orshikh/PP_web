@@ -1,85 +1,261 @@
-export default function Home() {
+'use client';
+
+import React, { useEffect, useState, memo } from "react";
+import Link from "next/link";
+import { TextEffect } from "@/components/ui/texteffect";
+
+import { FaXTwitter } from "react-icons/fa6";
+import { FaInstagram } from "react-icons/fa"
+import { FaFacebookSquare } from "react-icons/fa";
+
+import { PiMoneyFill } from "react-icons/pi";
+import { GiAtom } from "react-icons/gi";
+import { FaTree } from "react-icons/fa6";
+import { MdOutlineWaterDrop } from "react-icons/md";
+import { PiBirdFill } from "react-icons/pi";
+import { MdOutlineScience } from "react-icons/md";
+import {Button} from "@mui/material";
+import SpotlightEffect from '@/components/SpotLight';
+import FlashlightEffect from '@/components/Flashlight';
+
+import { useQuery } from "@tanstack/react-query";
+import { useAtom } from 'jotai';
+import { flashlightModeAtom } from "@/components/ThemeAtom";
+import { solarModeAtom } from '@/components/ThemeAtom';
+import { darkModeAtom } from "@/components/ThemeAtom";
+
+// Memoized components
+const MemoizedTextEffect = memo(TextEffect);
+
+const HeroSection = memo(function HeroSection() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
-      <div className="container mx-auto px-4 py-8">
-        <header className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-800 mb-4">
-            Welcome to PP Web
-          </h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Your portfolio and blog platform has been successfully migrated to Next.js with serverless functions!
-          </p>
-        </header>
+    <>
+      <div className="w-[90%] sm:w-[50%] mx-auto mt-12">
+        <MemoizedTextEffect
+          per='char'
+          delay={0.2}
+          preset="blur"
+          className="text-5xl sm:text-6xl md:text-7xl xl:text-8xl font-semibold text-center tracking-tight text-black dark:text-white"
+        >
+          Portal to Projects
+        </MemoizedTextEffect>
+      </div>
+    </>
+  );
+});
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <h3 className="text-xl font-semibold text-gray-800 mb-3">✅ Backend Migrated</h3>
-            <p className="text-gray-600">
-              All your backend routes have been converted to Next.js API routes (serverless functions):
-            </p>
-            <ul className="mt-3 text-sm text-gray-500 space-y-1">
-              <li>• /api/auth/* - Authentication endpoints</li>
-              <li>• /api/blogs/* - Blog management</li>
-              <li>• /api/users/* - User management</li>
-              <li>• /api/join - Newsletter signup</li>
-            </ul>
-          </div>
+const HomePage: React.FC = () => {
+  const [isSolarMode] = useAtom(solarModeAtom);
+  const [isFlashLightMode] = useAtom(flashlightModeAtom);
+  const [isDarkMode] = useAtom(darkModeAtom);
 
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <h3 className="text-xl font-semibold text-gray-800 mb-3">✅ Database Ready</h3>
-            <p className="text-gray-600">
-              MongoDB models have been converted to TypeScript and are ready to use with proper connection pooling for serverless functions.
-            </p>
-          </div>
+  const [bgImages] = useState<string[]>([
+    "/assets/skybg.jpg",
+    "/assets/ocean.jpg",
+    "/assets/cliff.jpg",
+    "/assets/moon.jpg",
+    "/assets/city.jpg",
+    "/assets/wood.jpg",
+    "/assets/starry night.jpg"
+  ]);
+  const [selectedBg, setSelectedBg] = useState<string>(bgImages[0]);
 
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <h3 className="text-xl font-semibold text-gray-800 mb-3">✅ Frontend Components</h3>
-            <p className="text-gray-600">
-              Your React components have been copied over and are ready to be integrated into the Next.js app structure.
-            </p>
+  const projectIcons = [
+    <MdOutlineScience key="science" className="w-12 h-12" />,
+    <PiMoneyFill key="money" className="w-12 h-12" />,
+    <GiAtom key="atom" className="w-12 h-12" />,
+    <FaTree key="tree" className="w-12 h-12" />,
+    <MdOutlineWaterDrop key="water" className="w-12 h-12" />,
+    <PiBirdFill key="bird" className="w-12 h-12" />
+  ];
+
+  useEffect(() => {
+    const checkScreenSize = () => {
+      // This function can be used later if needed
+    };
+
+    checkScreenSize();
+    window.addEventListener('resize', checkScreenSize);
+
+    return () => window.removeEventListener('resize', checkScreenSize);
+  }, []);
+
+  // Fetch projects
+  useQuery({
+    queryKey: ["projects"],
+    queryFn: async () => {
+      try {
+        const res = await fetch("/api/projects");
+        const data = await res.json();
+        if (!res.ok) {
+          throw new Error(data.error || "Something went wrong");
+        }
+        return data;
+      } catch (error) {
+        throw new Error(error as string);
+      }
+    },
+  });
+
+  // Fetch blogs
+  useQuery({
+    queryKey: ["blogs"],
+    queryFn: async () => {
+      try {
+        const res = await fetch("/api/blogs");
+        const data = await res.json();
+        if (!res.ok) {
+          throw new Error(data.error || "Something went wrong");
+        }
+        return data;
+      } catch (error) {
+        throw new Error(error as string);
+      }
+    },
+  });
+
+  const handleBgChange = (image: string) => {
+    setSelectedBg(image);
+  };
+
+  return (
+    <>
+      {isSolarMode && <SpotlightEffect />}
+      {isFlashLightMode && <FlashlightEffect />}
+      
+      <div className="flex flex-col min-h-screen bg-gray-100 dark:bg-gray-900">
+        {/* Hero Section */}
+        <div className="relative">
+          <HeroSection />
+          
+          {/* Background selector */}
+          <div className="flex justify-center mt-8 space-x-2">
+            {bgImages.map((image, index) => (
+              <button
+                key={index}
+                onClick={() => handleBgChange(image)}
+                className={`w-12 h-8 rounded border-2 ${selectedBg === image ? 'border-blue-500' : 'border-gray-300'} bg-cover bg-center`}
+                style={{ backgroundImage: `url(${image})` }}
+              />
+            ))}
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow-md p-8">
-          <h2 className="text-2xl font-bold text-gray-800 mb-4">Next Steps</h2>
-          <div className="space-y-4 text-gray-600">
-            <div className="flex items-start space-x-3">
-              <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-sm font-medium">1</span>
-              <div>
-                <strong>Configure Environment Variables:</strong>
-                <p>Update your .env.local file with your MongoDB URI and JWT secret.</p>
+        {/* Main content section with background */}
+        <div 
+          className="flex-1 bg-cover bg-center relative"
+          style={{ backgroundImage: `url(${selectedBg})` }}
+        >
+          <div className="bg-black bg-opacity-50 min-h-full">
+            {/* Navigation Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-8 max-w-6xl mx-auto">
+              {/* Torn paper decorative elements */}
+              <div className="absolute top-4 left-4">
+                <img
+                  src={isDarkMode ? "/assets/tornppr1.png" : "/assets/tornppr.png"}
+                  alt="torn paper"
+                  className="w-20 h-20 opacity-70"
+                />
               </div>
-            </div>
-            <div className="flex items-start space-x-3">
-              <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-sm font-medium">2</span>
-              <div>
-                <strong>Migrate Pages:</strong>
-                <p>Convert your React Router pages to Next.js app router structure.</p>
+              
+              {/* Projects Section */}
+              <div className="bg-white bg-opacity-90 dark:bg-gray-800 dark:bg-opacity-90 rounded-lg p-6 shadow-lg">
+                <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-4">
+                  Explore Projects
+                </h2>
+                <div className="grid grid-cols-3 gap-4 mb-4">
+                  {projectIcons.map((icon, index) => (
+                    <div key={index} className="flex justify-center text-blue-600 dark:text-blue-400">
+                      {icon}
+                    </div>
+                  ))}
+                </div>
+                <Link href="/projects">
+                  <Button 
+                    variant="contained" 
+                    className="w-full bg-blue-600 hover:bg-blue-700"
+                  >
+                    View All Projects
+                  </Button>
+                </Link>
               </div>
-            </div>
-            <div className="flex items-start space-x-3">
-              <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-sm font-medium">3</span>
-              <div>
-                <strong>Update Component Imports:</strong>
-                <p>Update import paths in your components to work with the new structure.</p>
-              </div>
-            </div>
-            <div className="flex items-start space-x-3">
-              <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-sm font-medium">4</span>
-              <div>
-                <strong>Test API Endpoints:</strong>
-                <p>Test your API endpoints to ensure they work correctly.</p>
-              </div>
-            </div>
-          </div>
-        </div>
 
-        <div className="mt-8 text-center">
-          <p className="text-gray-500">
-            Your project structure is now ready for Next.js development! 🚀
-          </p>
+              {/* Blogs Section */}
+              <div className="bg-white bg-opacity-90 dark:bg-gray-800 dark:bg-opacity-90 rounded-lg p-6 shadow-lg">
+                <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-4">
+                  Latest Blogs
+                </h2>
+                <div className="mb-4">
+                  <img
+                    src="/assets/duo.jpg"
+                    alt="blog preview"
+                    className="w-full h-32 object-cover rounded"
+                  />
+                </div>
+                <Link href="/blog">
+                  <Button 
+                    variant="contained" 
+                    className="w-full bg-green-600 hover:bg-green-700"
+                  >
+                    Read Blogs
+                  </Button>
+                </Link>
+              </div>
+            </div>
+
+            {/* Featured Content */}
+            <div className="max-w-6xl mx-auto p-8">
+              <div className="bg-white bg-opacity-90 dark:bg-gray-800 dark:bg-opacity-90 rounded-lg p-6 shadow-lg">
+                <h2 className="text-3xl font-bold text-center text-gray-800 dark:text-white mb-6">
+                  Featured Content
+                </h2>
+                
+                {/* Decorative image */}
+                <div className="flex justify-center mb-6">
+                  <img
+                    src="/assets/tornppr2.png"
+                    alt="featured decoration"
+                    className="w-32 h-32 opacity-80"
+                  />
+                </div>
+
+                {/* Action buttons */}
+                <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                  <Link href="/create">
+                    <Button variant="outlined" className="border-blue-600 text-blue-600 hover:bg-blue-50">
+                      Create Content
+                    </Button>
+                  </Link>
+                  <Link href="/about">
+                    <Button variant="outlined" className="border-green-600 text-green-600 hover:bg-green-50">
+                      About Us
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+            </div>
+
+            {/* Footer section */}
+            <footer className="bg-black bg-opacity-80 text-white p-8">
+              <div className="max-w-6xl mx-auto text-center">
+                <div className="flex justify-center mb-4">
+                  <img src="/assets/pp-logo.png" className="w-16 h-16" alt="pplogo"/>
+                </div>
+                <div className="flex justify-center space-x-6 mb-4">
+                  <FaXTwitter className="w-6 h-6 hover:text-blue-400 cursor-pointer" />
+                  <FaInstagram className="w-6 h-6 hover:text-pink-400 cursor-pointer" />
+                  <FaFacebookSquare className="w-6 h-6 hover:text-blue-600 cursor-pointer" />
+                </div>
+                <p className="text-sm opacity-80">
+                  © 2025 Portal to Projects. All rights reserved.
+                </p>
+              </div>
+            </footer>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
-}
+};
+
+export default HomePage;

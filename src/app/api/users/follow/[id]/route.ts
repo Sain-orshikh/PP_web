@@ -6,17 +6,16 @@ import { getUserFromRequest } from "@/utils/auth";
 // POST /api/users/follow/[id] - Follow/Unfollow a user
 export async function POST(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
         await connectMongoDB();
         
+        const { id } = await params;
         const currentUser = await getUserFromRequest(request);
         if (!currentUser) {
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
         }
-
-        const { id } = params;
         
         if (id === currentUser._id.toString()) {
             return NextResponse.json({ error: "You can't follow/unfollow yourself" }, { status: 400 });

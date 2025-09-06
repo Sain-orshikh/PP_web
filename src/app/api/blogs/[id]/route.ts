@@ -7,12 +7,13 @@ import { getUserFromRequest } from "@/utils/auth";
 // GET /api/blogs/[id] - Fetch a specific blog
 export async function GET(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
         await connectMongoDB();
         
-        const blog = await Blog.findById(params.id).populate({
+        const { id } = await params;
+        const blog = await Blog.findById(id).populate({
             path: "ownerId",
             select: "username",
         });
@@ -31,18 +32,19 @@ export async function GET(
 // PUT /api/blogs/[id] - Update a blog
 export async function PUT(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
         await connectMongoDB();
         
+        const { id } = await params;
         const user = await getUserFromRequest(request);
         if (!user) {
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
         }
 
         const { title, content, image } = await request.json();
-        const blogId = params.id;
+        const blogId = id;
 
         let blog = await Blog.findById(blogId);
         if (!blog) {
@@ -81,17 +83,19 @@ export async function PUT(
 // DELETE /api/blogs/[id] - Delete a blog
 export async function DELETE(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
         await connectMongoDB();
+        
+        const { id } = await params;
         
         const user = await getUserFromRequest(request);
         if (!user) {
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
         }
 
-        const blogId = params.id;
+        const blogId = id;
         const ownerId = user._id.toString();
 
         const userDoc = await User.findById(ownerId);
@@ -110,7 +114,7 @@ export async function DELETE(
         }
 
         // Remove blog from user's blogs array
-        userDoc.blogs = userDoc.blogs.filter((id) => id.toString() !== blogId);
+        userDoc.blogs = userDoc.blogs.filter((id: string) => id.toString() !== blogId);
         await userDoc.save();
 
         await Blog.findByIdAndDelete(blogId);
