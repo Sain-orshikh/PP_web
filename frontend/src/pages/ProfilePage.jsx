@@ -23,7 +23,7 @@ import {formatMemberSinceDate} from "../utils/date";
 import { AnimatedNumber } from '@/components/ui/animatenumber'
 import { useInView } from 'framer-motion'
 import BlogCard from "../components/BlogCard";
-import UseFollow from "../components/useFollow";
+import useFollow from "../components/useFollow";
 import RightPanel from '@/components/RightPanel'
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogClose } from '../components/ui/dialog';
 
@@ -117,7 +117,7 @@ const ProfilePage = () => {
 
 	const memberSinceDate = formatMemberSinceDate(user?.createdAt);
 
-	const {followUser, isPending} = UseFollow();
+	const {followUser, isPending} = useFollow();
 
 	const amIFollowing = authUser?.following.includes(user?._id);
 
