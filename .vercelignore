@@ -1,0 +1,32 @@
+# Node modules
+node_modules
+**/node_modules
+
+# Environment files
+.env
+.env.local
+.env*.local
+
+# Development files
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Build artifacts (will be rebuilt)
+frontend/dist
+frontend/.vite
+
+# Git
+.git
+.gitignore
