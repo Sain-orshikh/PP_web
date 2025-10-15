@@ -25,7 +25,7 @@ import { MdOutlineScience } from "react-icons/md";
 import { TbLoader } from "react-icons/tb";
 import {Button} from "@mui/material";
 import SpotlightEffect from '@/components/SpotLight';
-import FlashlightEffect from '@/components/Flashlight';
+import FlashlightEffect from '@/components/FlashLight';
 
 import { AnimatedGroup } from "@/components/ui/animateimage";
 import { InfiniteSlider } from "@/components/ui/infinite-slider";
