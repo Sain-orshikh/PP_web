@@ -12,36 +12,7 @@ import {  Box, Image, Text, Container, SimpleGrid } from "@chakra-ui/react";
 import { useState } from "react";
 
 const members = [
-  { id: 1, name: "Zlog's", photo: "/src/assets/manlai.jpg", role: "President" },
-  { id: 2, name: "Zlog", photo: "/src/assets/zlog.jpg", role: "President" },
-  { id: 3, name: "Bilgee the companion", photo: "/src/assets/annoying-frog.jpg", role: "Member" },
-  { id: 4, name: "Sain-Orshih", photo: "/src/assets/sainorshihi.jpg", role: "Web Developer" },
-  { id: 5, name: "Sayan", photo: "/src/assets/sayan.jpg", role: "Web Developer" },
-  { id: 6, name: "Arig the cheerleader", photo: "/src/assets/arig.jpg", role: "Member" },
-  { id: 7, name: "Bilguun skibidi", photo: "/src/assets/bilguun.jpg", role: "Member" },
-  { id: 8, name: "Sans the GOAT", photo: "/src/assets/sans.jpg", role: "Member" },
-  { id: 9, name: "Undyne the true hero", photo: "/src/assets/undyne.jpg", role: "Member" },
-  { id: 10, name: "Mettaton NEO!!!", photo: "/src/assets/mettaton.jpg", role: "Member" },
-  { id: 11, name: "If", photo: "/src/assets/annoying-frog.jpg", role: "Member" },
-  { id: 12, name: "You", photo: "/src/assets/annoying-frog.jpg", role: "Member" },
-  { id: 13, name: "Are", photo: "/src/assets/annoying-frog.jpg", role: "Member" },
-  { id: 14, name: "Reading", photo: "/src/assets/annoying-frog.jpg", role: "Member" },
-  { id: 15, name: "This", photo: "/src/assets/annoying-frog.jpg", role: "Member" },
-  { id: 16, name: "It", photo: "/src/assets/annoying-frog.jpg", role: "Member" },
-  { id: 17, name: "Means", photo: "/src/assets/annoying-frog.jpg", role: "Member" },
-  { id: 18, name: "You", photo: "/src/assets/annoying-frog.jpg", role: "Member" },
-  { id: 19, name: "Have", photo: "/src/assets/annoying-frog.jpg", role: "Member" },
-  { id: 20, name: "Successfully", photo: "/src/assets/annoying-frog.jpg", role: "Member" },
-  { id: 21, name: "Wasted", photo: "/src/assets/annoying-frog.jpg", role: "Member" },
-  { id: 22, name: "Your", photo: "/src/assets/annoying-frog.jpg", role: "Member" },
-  { id: 23, name: "Precious", photo: "/src/assets/annoying-frog.jpg", role: "Member" },
-  { id: 24, name: "10", photo: "/src/assets/annoying-frog.jpg", role: "Member" },
-  { id: 25, name: "Seconds", photo: "/src/assets/annoying-frog.jpg", role: "Member" },
-  { id: 26, name: "Stu", photo: "/src/assets/annoying-frog.jpg", role: "Member" },
-  { id: 27, name: "Lol", photo: "/src/assets/annoying-frog.jpg", role: "Member" },
-  { id: 28, name: "E", photo: "/src/assets/annoying-frog.jpg", role: "Member" },
-  { id: 29, name: "Manlai", photo: "/src/assets/annoying-frog.jpg", role: "Member" },
-  { id: 30, name: "Hahah", photo: "/src/assets/annoying-frog.jpg", role: "Member" },
+  { id: 1, name: "Zlog's", photo: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.flaticon.com%2Ffree-icon%2Fnot-found_7010170&psig=AOvVaw3rV9n6u5OvgYVCavN9hldd&ust=1761914200021000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCNjj4IP4y5ADFQAAAAAdAAAAABAE", role: "President" },
 ];
 
 
