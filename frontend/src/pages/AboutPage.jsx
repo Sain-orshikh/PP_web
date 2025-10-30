@@ -12,8 +12,8 @@ import {  Box, Image, Text, Container, SimpleGrid } from "@chakra-ui/react";
 import { useState } from "react";
 
 const members = [
-  { id: 1, name: "Zlog's slave Manlai", photo: "/src/assets/manlai.jpg", role: "President" },
-  { id: 2, name: "Zlog the multiverse conqueror", photo: "/src/assets/zlog.jpg", role: "President" },
+  { id: 1, name: "Zlog's", photo: "/src/assets/manlai.jpg", role: "President" },
+  { id: 2, name: "Zlog", photo: "/src/assets/zlog.jpg", role: "President" },
   { id: 3, name: "Bilgee the companion", photo: "/src/assets/annoying-frog.jpg", role: "Member" },
   { id: 4, name: "Sain-Orshih", photo: "/src/assets/sainorshihi.jpg", role: "Web Developer" },
   { id: 5, name: "Sayan", photo: "/src/assets/sayan.jpg", role: "Web Developer" },
@@ -37,10 +37,10 @@ const members = [
   { id: 23, name: "Precious", photo: "/src/assets/annoying-frog.jpg", role: "Member" },
   { id: 24, name: "10", photo: "/src/assets/annoying-frog.jpg", role: "Member" },
   { id: 25, name: "Seconds", photo: "/src/assets/annoying-frog.jpg", role: "Member" },
-  { id: 26, name: "Stupid", photo: "/src/assets/annoying-frog.jpg", role: "Member" },
+  { id: 26, name: "Stu", photo: "/src/assets/annoying-frog.jpg", role: "Member" },
   { id: 27, name: "Lol", photo: "/src/assets/annoying-frog.jpg", role: "Member" },
-  { id: 28, name: "Ezzzz", photo: "/src/assets/annoying-frog.jpg", role: "Member" },
-  { id: 29, name: "Manlai barigdsn", photo: "/src/assets/annoying-frog.jpg", role: "Member" },
+  { id: 28, name: "E", photo: "/src/assets/annoying-frog.jpg", role: "Member" },
+  { id: 29, name: "Manlai", photo: "/src/assets/annoying-frog.jpg", role: "Member" },
   { id: 30, name: "Hahah", photo: "/src/assets/annoying-frog.jpg", role: "Member" },
 ];
 
